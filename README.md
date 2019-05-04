@@ -30,7 +30,7 @@ To authenticate with the Payload API, you'll need a live or test API key. API
 keys are accessible from within the Payload dashboard.
 
 ```java
-com.payload.pl;
+import com.payload.pl;
 
 pl.api_key = "secret_key_3bW9JMZtPVDOfFNzwRdfE";
 ```
@@ -51,7 +51,7 @@ pl.Customer customer = new pl.Customer(){{
 
 ```java
 // Create a Payment
-pl.Payme payment = new pl.Payment{{
+pl.Payme payment = new pl.Payment(){{
     set("amount", 100.0);
     set("payment_method, new pl.Card{{
         set("card_number, "4242 4242 4242 4242");
@@ -83,9 +83,9 @@ Objects can be selected using any of their attributes.
 
 ```java
 // Select a customer by email
-pl.Customer customers = pl.Customer.filter_by(new {
+pl.Customer customers = pl.Customer.filter_by(
     "email", "matt.perez@example.com"
-});
+);
 ```
 
 Use the `pl.attr` attribute helper
@@ -96,7 +96,7 @@ pl.Payment payments = pl.Payments.filter_by(
     pl.attr("amount").gt(100),
     pl.attr("amount").lt(200),
     pl.attr("description").contains("Test"),
-    pl.attr("created_at").gt(LocalDate.of(2019, 02, 20);)
+    pl.attr("created_at").gt(LocalDate.of(2019, 02, 20))
 ).all();
 ```
 
