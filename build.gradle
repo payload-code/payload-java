@@ -1,0 +1,17 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'test.PayloadTest'
+
+repositories {
+    mavenCentral()
+}
+
+jar {
+    baseName = 'payload'
+    version =  '0.1.0'
+}
+
+dependencies {
+	compile 'org.json:json:20180813'
+}
