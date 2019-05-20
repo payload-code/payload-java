@@ -51,7 +51,7 @@ pl.Customer customer = new pl.Customer(){{
 
 ```java
 // Create a Payment
-pl.Payme payment = new pl.Payment(){{
+pl.Payment payment = new pl.Payment(){{
     set("amount", 100.0);
     set("payment_method, new pl.Card{{
         set("card_number, "4242 4242 4242 4242");
