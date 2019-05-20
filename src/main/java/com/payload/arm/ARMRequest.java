@@ -22,9 +22,11 @@ import java.util.Base64;
 import java.util.ArrayList;
 import java.nio.charset.StandardCharsets;
 import javax.xml.ws.ProtocolException;
+import java.lang.reflect.InvocationTargetException;
 import org.json.*;
 
 import com.payload.arm.ARMObject;
+import com.payload.Exceptions;
 import com.payload.pl;
 
 public class ARMRequest<T> {
@@ -36,7 +38,7 @@ public class ARMRequest<T> {
 		this.cls = cls;
 	}
 
-	public Object _request( String method, String id, String json) throws IOException {
+	public Object _request( String method, String id, String json) throws Exceptions.PayloadError {
 		String endpoint = "";
 
 		try {
@@ -99,38 +101,62 @@ public class ARMRequest<T> {
 				out.close();
 			}
 
-			int status = con.getResponseCode();
-			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-			String inputLine;
-			StringBuilder content = new StringBuilder();
-			while ((inputLine = in.readLine()) != null) {
-				content.append(inputLine);
-			}
-			in.close();
-
-			JSONObject obj = new JSONObject(content.toString());
-
 			try {
-				if ( obj.getString("object").equals("list") ) {
-					List<T> result = new ArrayList<T>();
-					JSONArray lst = obj.getJSONArray("values");
+				int status = con.getResponseCode();
+				BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+				String inputLine;
+				StringBuilder content = new StringBuilder();
+				while ((inputLine = in.readLine()) != null) {
+					content.append(inputLine);
+				}
+				in.close();
 
-					for (int i = 0 ; i < lst.length(); i++) {
-						obj = lst.getJSONObject(i);
-						result.add((T)((ARMObject)this.cls.newInstance()).setJson(obj));
+				JSONObject obj = new JSONObject(content.toString());
+
+				try {
+					if ( obj.getString("object").equals("list") ) {
+						List<T> result = new ArrayList<T>();
+						JSONArray lst = obj.getJSONArray("values");
+
+						for (int i = 0 ; i < lst.length(); i++) {
+							obj = lst.getJSONObject(i);
+							result.add((T)((ARMObject)this.cls.newInstance()).setJson(obj));
+						}
+
+						return result;
+					} else
+						return (T)((ARMObject)this.cls.newInstance()).setJson(obj);
+				} catch ( InstantiationException | IllegalAccessException exc ) {
+					System.out.println(exc);
+					return null;
+				}
+
+			} catch (IOException exc) {
+				try {
+					System.out.println(exc);
+					int status = con.getResponseCode();
+					BufferedReader in = new BufferedReader(new InputStreamReader(con.getErrorStream()));
+					String inputLine;
+					StringBuilder content = new StringBuilder();
+					while ((inputLine = in.readLine()) != null) {
+						content.append(inputLine);
 					}
+					in.close();
+					System.out.println(content.toString());
 
-					return result;
-				} else
-					return (T)((ARMObject)this.cls.newInstance()).setJson(obj);
-			} catch ( InstantiationException | IllegalAccessException exc ) {
-				System.out.println(exc);
-				return null;
+					JSONObject err = new JSONObject(content.toString());
+
+					if ( Exceptions.excmap.containsKey(err.getString("error_type")) )
+						throw (Exceptions.PayloadError)Exceptions.excmap.get(err.getString("error_type"))
+							.getDeclaredConstructor(JSONObject.class)
+							.newInstance(err);
+				} catch ( InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException | IOException inst_exc ) {}
+
+				throw new Exceptions.PayloadError(null);
 			}
 
-		} catch (IOException exc) {
-			System.out.println(exc);
-			throw exc;
+		} catch ( IOException exc ) {
+			throw new Exceptions.PayloadError(null);
 		}
 	}
 
@@ -145,23 +171,23 @@ public class ARMRequest<T> {
 		return this;
 	}
 
-	public List<T> all() throws IOException {
+	public List<T> all() throws Exceptions.PayloadError {
 		return (List<T>)this._request("GET", null, null);
 	}
 
-	public T get(String id) throws IOException {
+	public T get(String id) throws Exceptions.PayloadError {
 		if ( id == null )
 			throw new NullPointerException();
 		return (T)this._request("GET", id, null);
 	}
 
-	public T create(T obj) throws IOException {
+	public T create(T obj) throws Exceptions.PayloadError {
 		ARMObject new_obj = (ARMObject)this._request("POST", null, ((ARMObject)obj).obj.toString());
 		((ARMObject)obj).obj = new_obj.obj;
 		return obj;
 	}
 
-	public List<T> create(List<T> objs) throws IOException {
+	public List<T> create(List<T> objs) throws Exceptions.PayloadError {
 		JSONObject req = new JSONObject();
 		JSONArray arr = new JSONArray();
 
@@ -179,7 +205,7 @@ public class ARMRequest<T> {
 		return objs;
 	}
 
-	public T update(ARMObject obj, Map.Entry<String,Object>[] upds) throws IOException {
+	public T update(ARMObject obj, Map.Entry<String,Object>[] upds) throws Exceptions.PayloadError {
 		if ( obj.getStr("id") == null )
 			throw new NullPointerException();
 
@@ -192,7 +218,7 @@ public class ARMRequest<T> {
 		return (T)obj;
 	}
 
-	public void delete(ARMObject obj) throws IOException {
+	public void delete(ARMObject obj) throws Exceptions.PayloadError {
 		if ( obj.getStr("id") == null )
 			throw new NullPointerException();
 		ARMObject new_obj = (ARMObject)this._request("DELETE", obj.getStr("id"), null);

@@ -1,12 +1,14 @@
 package com.payload.arm;
 import java.lang.reflect.ParameterizedType;
 import java.util.Map;
-import java.io.IOException;
+import java.util.HashMap;
 import org.json.*;
+import com.payload.Exceptions;
 
 public class ARMObject<T> {
 	public String getObject(){ return ""; }
 	public String getType(){ return null; }
+	public Map<String,String> fieldmap(){ return null; }
 	public String getEndpoint() { return "/"+getObject()+"s"; }
 	public JSONObject obj;
 
@@ -23,23 +25,41 @@ public class ARMObject<T> {
 	}
 
 	public String getStr(String key) {
+		return this.getStr(key, null);
+	}
+
+	public String getStr(String key, String default_val) {
 		try {
-			return obj.getString(key);
+			return mappedObj(key).getString(key);
 		} catch( JSONException exc ) {
-			return null;
+			return default_val;
 		}
 	}
 
+	private JSONObject mappedObj(String key) {
+		if ( fieldmap() != null && fieldmap().containsKey(key) ) {
+			String val = fieldmap().get(key);
+			if ( !obj.has(val) )
+				obj.put(val, new JSONObject());
+			return obj.getJSONObject(val);
+		} else
+			return obj;
+	}
+
 	public int getInt(String key) {
-		return obj.getInt(key);
+		return mappedObj(key).getInt(key);
 	}
 
 	public float getFloat(String key) {
-		return obj.getFloat(key);
+		return mappedObj(key).getFloat(key);
+	}
+
+	public JSONObject getJObj(String key) {
+		return mappedObj(key).getJSONObject(key);
 	}
 
 	public T set(String key, Object value) {
-		obj.put(key, value);
+		mappedObj(key).put(key, value);
 		return (T)this;
 	}
 
@@ -56,18 +76,18 @@ public class ARMObject<T> {
 			.getActualTypeArguments()[0];
 	}
 
-	public T create() throws IOException {
+	public T create() throws Exceptions.PayloadError {
 		Class<T> cls = getCls();
 		return new ARMRequest<T>(cls).create((T)this);
 	}
 
-	public T update(Map.Entry<String,Object>... args) throws IOException {
+	public T update(Map.Entry<String,Object>... args) throws Exceptions.PayloadError {
 		Class<T> cls = getCls();
 		new ARMRequest<T>(cls).update((ARMObject)this, args);
 		return (T)this;
 	}
 
-	public void delete() throws IOException {
+	public void delete() throws Exceptions.PayloadError {
 		Class<T> cls = getCls();
 		new ARMRequest<T>(cls).delete((ARMObject)this);
 	}
