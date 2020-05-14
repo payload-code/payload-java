@@ -1,4 +1,4 @@
-package com.payload.arm;
+package co.payload.arm;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -24,9 +24,9 @@ import java.nio.charset.StandardCharsets;
 import java.lang.reflect.InvocationTargetException;
 import org.json.*;
 
-import com.payload.arm.ARMObject;
-import com.payload.Exceptions;
-import com.payload.pl;
+import co.payload.arm.ARMObject;
+import co.payload.Exceptions;
+import co.payload.pl;
 
 public class ARMRequest<T> {
 	public Class<T> cls;
