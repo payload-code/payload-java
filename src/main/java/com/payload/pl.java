@@ -81,6 +81,27 @@ public class pl {
 		}
 	}
 
+	public static class Org extends ARMObject<ProcessingAccount> {
+		public String getObject(){ return "org"; }
+		public String getEndpoint(){ return "/accounts/orgs"; }
+
+		public static ARMRequest select(String... args) {
+			return new ARMRequest<Org>(Org.class).select(args);
+		}
+
+		public static List<Org> create(Org... args) throws Exceptions.PayloadError {
+			return new ARMRequest<Org>(Org.class).create(Arrays.asList(args));
+		}
+
+		public static ARMRequest filter_by(String attr, Object val) {
+			return new ARMRequest<Org>(Org.class).filter_by(attr, val);
+		}
+
+		public static Org get(String id) throws Exceptions.PayloadError {
+			return new ARMRequest<Org>(Org.class).get(id);
+		}
+	}
+
 	public static class Transaction extends ARMObject<Transaction> {
 		public String getObject(){ return "transaction"; }
 
@@ -131,7 +152,7 @@ public class pl {
 		}
 
 		public PaymentMethod paymentMethod() {
-			JSONObject outerObj = obj;
+			final JSONObject outerObj = obj;
 			return new pl.PaymentMethod(){{
 				setJson(outerObj.getJSONObject("payment_method"));
 			}};
@@ -392,6 +413,46 @@ public class pl {
 
 		public static Reader get(String id) throws Exceptions.PayloadError {
 			return new ARMRequest<Reader>(Reader.class).get(id);
+		}
+	}
+
+	public static class Webhook extends ARMObject<Webhook> {
+		public String getObject(){ return "webhook"; }
+
+		public static ARMRequest select(String... args) {
+			return new ARMRequest<Webhook>(Webhook.class).select(args);
+		}
+
+		public static List<Webhook> create(Webhook... args) throws Exceptions.PayloadError {
+			return new ARMRequest<Webhook>(Webhook.class).create(Arrays.asList(args));
+		}
+
+		public static ARMRequest filter_by(String attr, Object val) {
+			return new ARMRequest<Webhook>(Webhook.class).filter_by(attr, val);
+		}
+
+		public static Webhook get(String id) throws Exceptions.PayloadError {
+			return new ARMRequest<Webhook>(Webhook.class).get(id);
+		}
+	}
+
+	public static class PaymentLink extends ARMObject<Webhook> {
+		public String getObject(){ return "payment_link"; }
+
+		public static ARMRequest select(String... args) {
+			return new ARMRequest<PaymentLink>(PaymentLink.class).select(args);
+		}
+
+		public static List<PaymentLink> create(PaymentLink... args) throws Exceptions.PayloadError {
+			return new ARMRequest<PaymentLink>(PaymentLink.class).create(Arrays.asList(args));
+		}
+
+		public static ARMRequest filter_by(String attr, Object val) {
+			return new ARMRequest<PaymentLink>(PaymentLink.class).filter_by(attr, val);
+		}
+
+		public static PaymentLink get(String id) throws Exceptions.PayloadError {
+			return new ARMRequest<PaymentLink>(PaymentLink.class).get(id);
 		}
 	}
 }
