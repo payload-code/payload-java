@@ -1,9 +1,9 @@
-package com.payload.arm;
+package co.payload.arm;
 import java.lang.reflect.ParameterizedType;
 import java.util.Map;
 import java.util.HashMap;
 import org.json.*;
-import com.payload.Exceptions;
+import co.payload.Exceptions;
 
 public class ARMObject<T> {
 	public String getObject(){ return ""; }
