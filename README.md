@@ -1,4 +1,4 @@
-# Payload Java Library [BETA]
+# Payload Java Library
 
 A Java library for integrating [Payload](https://payload.co).
 
