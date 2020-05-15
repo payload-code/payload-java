@@ -71,9 +71,14 @@ public class ARMObject<T> {
 	@SuppressWarnings("unchecked")
 	private Class<T> getCls() {
 		Class supercls = (Class)getClass().getGenericSuperclass();
-
-		return (Class<T>)((ParameterizedType)supercls.getGenericSuperclass())
-			.getActualTypeArguments()[0];
+		try {
+			return (Class<T>)((ParameterizedType)supercls.getGenericSuperclass())
+				.getActualTypeArguments()[0];
+		} catch(java.lang.ClassCastException exc) {
+			supercls = (Class)getClass().getSuperclass().getGenericSuperclass();
+			return (Class<T>)((ParameterizedType)supercls.getGenericSuperclass())
+				.getActualTypeArguments()[0];
+		}
 	}
 
 	public T create() throws Exceptions.PayloadError {
