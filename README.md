@@ -4,6 +4,18 @@ A Java library for integrating [Payload](https://payload.co).
 
 ## Installation
 
+### Maven Dependency
+
+```xml
+<dependency>
+  <groupId>co.payload</groupId>
+  <artifactId>payload</artifactId>
+  <version>0.1.2</version>
+</dependency>
+```
+
+## Manual Installation
+
 ### 1) Download
 
 Download the [latest](https://github.com/payload-code/payload-java/archive/master.zip)
@@ -12,10 +24,6 @@ version from GitHub.
 ### 2) Include in Project
 
 Include the **Payload** folder in your Android Studio or Eclipse project.
-
-### Maven
-
-*Coming Soon*
 
 ## Get Started
 
