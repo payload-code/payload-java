@@ -8,11 +8,11 @@ import org.json.*;
 public class Exceptions {
 	public static class PayloadError extends Exception {
 		public static int http_code = 0;
-		public JSONObject details = null;
+		public JSONObject data = null;
 
-		public PayloadError(JSONObject details) {
+		public PayloadError(JSONObject data) {
 			super();
-			this.details = details;
+			this.data = data;
 		}
 	}
 
@@ -29,8 +29,8 @@ public class Exceptions {
 		}
 	}
 
-	public static class InvalidArguments extends BadRequest {
-		public InvalidArguments(JSONObject details) {
+	public static class InvalidAttributes extends BadRequest {
+		public InvalidAttributes(JSONObject details) {
 			super(details);
 		}
 	}
@@ -79,7 +79,7 @@ public class Exceptions {
 
 	public static Map<String, Class> excmap = new HashMap<String, Class>() {{
 		put("BadRequest", BadRequest.class);
-		put("InvalidArguments", InvalidArguments.class);
+		put("InvalidAttributes", InvalidAttributes.class);
 		put("Unauthorized", Unauthorized.class);
 		put("Forbidden", Forbidden.class);
 		put("NotFound", NotFound.class);
