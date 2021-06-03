@@ -51,7 +51,7 @@ public class ARMObject<T> {
 	}
 
 	public float getFloat(String key) {
-		return mappedObj(key).getFloat(key);
+		return (float)mappedObj(key).getDouble(key);
 	}
 
 	public JSONObject getJObj(String key) {

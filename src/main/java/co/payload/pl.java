@@ -455,4 +455,24 @@ public class pl {
 			return new ARMRequest<PaymentLink>(PaymentLink.class).get(id);
 		}
 	}
+
+	public static class PaymentActivation extends ARMObject<Webhook> {
+		public String getObject(){ return "payment_activation"; }
+
+		public static ARMRequest select(String... args) {
+			return new ARMRequest<PaymentActivation>(PaymentActivation.class).select(args);
+		}
+
+		public static List<PaymentActivation> create(PaymentActivation... args) throws Exceptions.PayloadError {
+			return new ARMRequest<PaymentActivation>(PaymentActivation.class).create(Arrays.asList(args));
+		}
+
+		public static ARMRequest filter_by(String attr, Object val) {
+			return new ARMRequest<PaymentActivation>(PaymentActivation.class).filter_by(attr, val);
+		}
+
+		public static PaymentActivation get(String id) throws Exceptions.PayloadError {
+			return new ARMRequest<PaymentActivation>(PaymentActivation.class).get(id);
+		}
+	}
 }
