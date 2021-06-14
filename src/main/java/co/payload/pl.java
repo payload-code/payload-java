@@ -19,29 +19,8 @@ public class pl {
 		return new AbstractMap.SimpleEntry<String,Object>(key, val);
 	}
 
-	public static class Account extends ARMObject<Account> {
-		public String getObject(){ return "account"; }
-
-		public static ARMRequest select(String... args) {
-			return new ARMRequest<Account>(Account.class).select(args);
-		}
-
-		public static List<Account> create(Account... args) throws Exceptions.PayloadError {
-			return new ARMRequest<Account>(Account.class).create(Arrays.asList(args));
-		}
-
-		public static ARMRequest filter_by(String attr, Object val) {
-			return new ARMRequest<Account>(Account.class).filter_by(attr, val);
-		}
-
-		public static Account get(String id) throws Exceptions.PayloadError {
-			return new ARMRequest<Account>(Account.class).get(id);
-		}
-	}
-
 	public static class Customer extends ARMObject<Customer> {
-		public String getObject(){ return "account"; }
-		public String getType(){ return "customer"; }
+		public String getObject(){ return "customer"; }
 
 		public static ARMRequest select(String... args) {
 			return new ARMRequest<Customer>(Customer.class).select(args);
@@ -61,8 +40,7 @@ public class pl {
 	}
 
 	public static class ProcessingAccount extends ARMObject<ProcessingAccount> {
-		public String getObject(){ return "account"; }
-		public String getType(){ return "processing"; }
+		public String getObject(){ return "processing_account"; }
 
 		public static ARMRequest select(String... args) {
 			return new ARMRequest<ProcessingAccount>(ProcessingAccount.class).select(args);
@@ -124,7 +102,7 @@ public class pl {
 
 	public static class Payment extends ARMObject<Payment> {
 		public String getObject(){ return "transaction"; }
-		public String getType(){ return "payment"; }
+		public String[] getPoly(){ return new String[]{"type", "payment"}; }
 
 		public Payment() {
 			super();
@@ -161,7 +139,7 @@ public class pl {
 
 	public static class Refund extends ARMObject<Refund> {
 		public String getObject(){ return "transaction"; }
-		public String getType(){ return "refund"; }
+		public String[] getPoly(){ return new String[]{"type", "refund"}; }
 
 		public static ARMRequest select(String... args) {
 			return new ARMRequest<Refund>(Refund.class).select(args);
@@ -237,7 +215,7 @@ public class pl {
 	}
 
 	public static class Card extends PaymentMethod {
-		public String getType(){ return "card"; }
+		public String[] getPoly(){ return new String[]{"type", "card"}; }
 
 		public static ARMRequest select(String... args) {
 			return new ARMRequest<Card>(Card.class).select(args);
@@ -257,7 +235,7 @@ public class pl {
 	}
 
 	public static class BankAccount extends PaymentMethod {
-		public String getType(){ return "bank_account"; }
+		public String[] getPoly(){ return new String[]{"type", "bank_account"}; }
 
 		public static ARMRequest select(String... args) {
 			return new ARMRequest<BankAccount>(BankAccount.class).select(args);
@@ -357,7 +335,7 @@ public class pl {
 	}
 
 	public static class ChargeItem extends LineItem {
-		public String getType(){ return "charge"; }
+		public String[] getPoly(){ return new String[]{"entry_type", "charge"}; }
 
 		public static ARMRequest select(String... args) {
 			return new ARMRequest<ChargeItem>(ChargeItem.class).select(args);
@@ -377,7 +355,7 @@ public class pl {
 	}
 
 	public static class PaymentItem extends LineItem {
-		public String getType(){ return "payment"; }
+		public String[] getPoly(){ return new String[]{"entry_type", "payment"}; }
 
 		public static ARMRequest select(String... args) {
 			return new ARMRequest<PaymentItem>(PaymentItem.class).select(args);
@@ -436,7 +414,7 @@ public class pl {
 		}
 	}
 
-	public static class PaymentLink extends ARMObject<Webhook> {
+	public static class PaymentLink extends ARMObject<PaymentLink> {
 		public String getObject(){ return "payment_link"; }
 
 		public static ARMRequest select(String... args) {
@@ -456,7 +434,7 @@ public class pl {
 		}
 	}
 
-	public static class PaymentActivation extends ARMObject<Webhook> {
+	public static class PaymentActivation extends ARMObject<PaymentActivation> {
 		public String getObject(){ return "payment_activation"; }
 
 		public static ARMRequest select(String... args) {

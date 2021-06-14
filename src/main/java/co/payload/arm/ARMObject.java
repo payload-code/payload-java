@@ -7,7 +7,7 @@ import co.payload.Exceptions;
 
 public class ARMObject<T> {
 	public String getObject(){ return ""; }
-	public String getType(){ return null; }
+	public String[] getPoly(){ return null; }
 	public Map<String,String> fieldmap(){ return null; }
 	public String getEndpoint() { return "/"+getObject()+"s"; }
 	public JSONObject obj;
@@ -15,8 +15,8 @@ public class ARMObject<T> {
 	public ARMObject() {
 		this.obj = new JSONObject();
 
-		if ( getType() != null )
-			this.set("type", getType());
+		if ( getPoly() != null )
+			this.set(getPoly()[0], getPoly()[1]);
 	}
 
 	public T setJson(JSONObject obj) {
@@ -65,6 +65,15 @@ public class ARMObject<T> {
 
 	public T set(String key, ARMObject value) {
 		obj.put(key, value.obj);
+		return (T)this;
+	}
+
+	public T set(String key, ARMObject[] values) {
+		obj.put(key, new JSONArray());
+		int i;
+		for (i = 0; i < values.length; i++) {
+			obj.getJSONArray(key).put(values[i].obj);
+		}
 		return (T)this;
 	}
 
