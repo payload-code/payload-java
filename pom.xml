@@ -5,7 +5,7 @@
 
   <groupId>co.payload</groupId>
   <artifactId>payload</artifactId>
-  <version>0.1.6</version>
+  <version>0.1.7</version>
   <name>payload</name>
   <description>Payload Java Library</description>
   <url>https://github.com/payload-code/payload-java</url>

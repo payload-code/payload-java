@@ -12,14 +12,14 @@ public class Utils {
     }
 
     static Map<String, Object> flattenJSON(JSONObject obj, Map<String, Object> map, String prefix) {
-        obj.keySet().forEach(keyStr -> {
+        for (String keyStr: obj.keySet()) {
             Object keyvalue = obj.get(keyStr);
 
             if ( prefix != null )
                 keyStr = prefix + "[" + keyStr + "]";
 
             mergeJSON(keyvalue, map, keyStr);
-        });
+        }
 
         return map;
     }

@@ -17,11 +17,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.Optional;
-import java.util.Base64;
 import java.util.ArrayList;
 import java.nio.charset.StandardCharsets;
 import java.lang.reflect.InvocationTargetException;
+import javax.xml.bind.DatatypeConverter;
 import org.json.*;
 
 import co.payload.arm.ARMObject;
@@ -85,9 +84,7 @@ public class ARMRequest<T> {
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod(method);
 
-			String encoded = Base64.getEncoder()
-				.encodeToString((pl.api_key+":")
-				.getBytes(StandardCharsets.UTF_8));
+			String encoded = DatatypeConverter.printBase64Binary((pl.api_key+":").getBytes("UTF-8"));
 
 			con.setRequestProperty("Authorization", "Basic "+encoded);
 
