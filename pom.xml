@@ -5,7 +5,7 @@
 
   <groupId>co.payload</groupId>
   <artifactId>payload</artifactId>
-  <version>0.1.7</version>
+  <version>0.1.8</version>
   <name>payload</name>
   <description>Payload Java Library</description>
   <url>https://github.com/payload-code/payload-java</url>
@@ -43,8 +43,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>1.7</maven.compiler.source>
+    <maven.compiler.target>1.7</maven.compiler.target>
   </properties>
 
   <dependencies>
@@ -59,8 +59,13 @@
       <artifactId>json</artifactId>
       <version>20180813</version>
     </dependency>
-  </dependencies>
+    <dependency>
+        <groupId>commons-codec</groupId>
+        <artifactId>commons-codec</artifactId>
+        <version>1.15</version>
+    </dependency>
 
+  </dependencies>
   <build>
       <plugins>
         <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
@@ -71,11 +76,47 @@
         <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
-          <version>3.0.2</version>
+          <version>3.2.0</version>
         </plugin>
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.8.0</version>
+          <executions>
+                <execution>
+                    <id>compile-java-7</id>
+                    <goals>
+                        <goal>compile</goal>
+                    </goals>
+                    <configuration>
+                        <source>1.7</source>
+                        <target>1.7</target>
+                    </configuration>
+                </execution>
+                <execution>
+                    <id>compile-java-8</id>
+                    <goals>
+                        <goal>compile</goal>
+                    </goals>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                    </configuration>
+                </execution>
+                <execution>
+                    <id>compile-java-9</id>
+                    <phase>compile</phase>
+                    <goals>
+                        <goal>compile</goal>
+                    </goals>
+                    <configuration>
+                        <release>9</release>
+                        <compileSourceRoots>
+                            <compileSourceRoot>${project.basedir}/src/main/java9</compileSourceRoot>
+                        </compileSourceRoots>
+                        <multiReleaseOutput>true</multiReleaseOutput>
+                    </configuration>
+                </execution>
+           </executions>
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
@@ -83,7 +124,14 @@
         </plugin>
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>3.0.2</version>
+          <version>3.2.0</version>
+          <configuration>
+            <archive>
+                <manifestEntries>
+                    <Multi-Release>true</Multi-Release>
+                </manifestEntries>
+            </archive>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-install-plugin</artifactId>

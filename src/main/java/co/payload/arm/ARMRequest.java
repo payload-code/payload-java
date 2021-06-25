@@ -20,12 +20,13 @@ import java.util.Set;
 import java.util.ArrayList;
 import java.nio.charset.StandardCharsets;
 import java.lang.reflect.InvocationTargetException;
-import javax.xml.bind.DatatypeConverter;
+import org.apache.commons.codec.binary.Base64;
 import org.json.*;
 
 import co.payload.arm.ARMObject;
 import co.payload.Exceptions;
 import co.payload.pl;
+import co.payload.Utils;
 
 public class ARMRequest<T> {
 	public Class<T> cls;
@@ -44,6 +45,12 @@ public class ARMRequest<T> {
 			endpoint = inst.getEndpoint();
 		} catch ( Exception exc ) {
 			return null;
+		}
+
+		if ( Utils.getVersion() < 8 ) {
+			String cur_https_protos = System.getProperty("https.protocols");
+			if ( !cur_https_protos.contains("TLSv1.2") )
+				System.setProperty("https.protocols", cur_https_protos+",TLSv1.2");
 		}
 
 		if (id != null && !id.isEmpty())
@@ -84,7 +91,7 @@ public class ARMRequest<T> {
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod(method);
 
-			String encoded = DatatypeConverter.printBase64Binary((pl.api_key+":").getBytes("UTF-8"));
+			String encoded = Base64.encodeBase64String((pl.api_key+":").getBytes("UTF-8"));
 
 			con.setRequestProperty("Authorization", "Basic "+encoded);
 
