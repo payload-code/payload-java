@@ -5,7 +5,7 @@
 
   <groupId>co.payload</groupId>
   <artifactId>payload</artifactId>
-  <version>0.1.8</version>
+  <version>0.1.9</version>
   <name>payload</name>
   <description>Payload Java Library</description>
   <url>https://github.com/payload-code/payload-java</url>
@@ -63,6 +63,11 @@
         <groupId>commons-codec</groupId>
         <artifactId>commons-codec</artifactId>
         <version>1.15</version>
+    </dependency>
+    <dependency>
+      <groupId>net.jodah</groupId>
+      <artifactId>typetools</artifactId>
+      <version>0.6.3</version>
     </dependency>
 
   </dependencies>
@@ -185,7 +190,10 @@
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
-            <version>2.9.1</version>
+            <version>3.1.1</version>
+            <configuration>
+                <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+            </configuration>
             <executions>
                 <execution>
                     <id>attach-javadocs</id>

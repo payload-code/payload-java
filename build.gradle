@@ -6,10 +6,11 @@ repositories {
 
 jar {
     baseName = 'payload'
-    version =  '0.1.8'
+    version =  '0.1.9'
 }
 
 dependencies {
     compile 'org.json:json:20180813'
     compile 'commons-codec:commons-codec:1.15'
+    compile 'net.jodah:typetools:0.6.3'
 }
