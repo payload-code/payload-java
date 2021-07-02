@@ -2,6 +2,7 @@ package co.payload.arm;
 import java.lang.reflect.ParameterizedType;
 import java.util.Map;
 import java.util.HashMap;
+import net.jodah.typetools.TypeResolver;
 import org.json.*;
 import co.payload.Exceptions;
 
@@ -79,15 +80,7 @@ public class ARMObject<T> {
 
 	@SuppressWarnings("unchecked")
 	private Class<T> getCls() {
-		Class supercls = (Class)getClass().getGenericSuperclass();
-		try {
-			return (Class<T>)((ParameterizedType)supercls.getGenericSuperclass())
-				.getActualTypeArguments()[0];
-		} catch(java.lang.ClassCastException exc) {
-			supercls = (Class)getClass().getSuperclass().getGenericSuperclass();
-			return (Class<T>)((ParameterizedType)supercls.getGenericSuperclass())
-				.getActualTypeArguments()[0];
-		}
+		return (Class<T>)TypeResolver.resolveRawArgument(ARMObject.class, getClass());
 	}
 
 	public T create() throws Exceptions.PayloadError {
