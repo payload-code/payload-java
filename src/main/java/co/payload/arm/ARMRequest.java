@@ -49,7 +49,7 @@ public class ARMRequest<T> {
 
 		if ( Utils.getVersion() < 8 ) {
 			String cur_https_protos = System.getProperty("https.protocols");
-			if ( !cur_https_protos.contains("TLSv1.2") )
+			if ( cur_https_protos != null && !cur_https_protos.contains("TLSv1.2") )
 				System.setProperty("https.protocols", cur_https_protos+",TLSv1.2");
 		}
 
