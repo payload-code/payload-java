@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.io.InputStream;
 import java.net.CookieManager;
 import java.net.HttpCookie;
 import java.net.HttpURLConnection;
@@ -51,6 +52,9 @@ public class ARMRequest<T> {
 			String cur_https_protos = System.getProperty("https.protocols");
 			if ( cur_https_protos != null && !cur_https_protos.contains("TLSv1.2") )
 				System.setProperty("https.protocols", cur_https_protos+",TLSv1.2");
+			else if ( cur_https_protos == null ) {
+				System.setProperty("https.protocols","TLSv1.2");
+			}
 		}
 
 		if (id != null && !id.isEmpty())
@@ -136,30 +140,34 @@ public class ARMRequest<T> {
 
 			} catch (IOException exc) {
 				try {
-					System.out.println(exc);
 					int status = con.getResponseCode();
-					BufferedReader in = new BufferedReader(new InputStreamReader(con.getErrorStream()));
-					String inputLine;
-					StringBuilder content = new StringBuilder();
-					while ((inputLine = in.readLine()) != null) {
-						content.append(inputLine);
+					InputStream errorStream = con.getErrorStream();
+					if ( errorStream != null ) {
+						BufferedReader in = new BufferedReader(new InputStreamReader(errorStream));
+						String inputLine;
+						StringBuilder content = new StringBuilder();
+						while ((inputLine = in.readLine()) != null) {
+							content.append(inputLine);
+						}
+						in.close();
+						System.out.println(content.toString());
+
+						JSONObject err = new JSONObject(content.toString());
+
+						if ( Exceptions.excmap.containsKey(err.getString("error_type")) )
+							throw (Exceptions.PayloadError)Exceptions.excmap.get(err.getString("error_type"))
+								.getDeclaredConstructor(JSONObject.class)
+								.newInstance(err);
 					}
-					in.close();
-					System.out.println(content.toString());
+				} catch ( InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException | IOException inst_exc ) {
+					throw new Exceptions.PayloadError(inst_exc.toString(), inst_exc);
+				}
 
-					JSONObject err = new JSONObject(content.toString());
-
-					if ( Exceptions.excmap.containsKey(err.getString("error_type")) )
-						throw (Exceptions.PayloadError)Exceptions.excmap.get(err.getString("error_type"))
-							.getDeclaredConstructor(JSONObject.class)
-							.newInstance(err);
-				} catch ( InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException | IOException inst_exc ) {}
-
-				throw new Exceptions.PayloadError(null);
+				throw new Exceptions.PayloadError(exc.toString(), exc);
 			}
 
 		} catch ( IOException exc ) {
-			throw new Exceptions.PayloadError(null);
+			throw new Exceptions.PayloadError(exc.toString(), exc);
 		}
 	}
 

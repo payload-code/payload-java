@@ -10,7 +10,7 @@ A Java library for integrating [Payload](https://payload.co).
 <dependency>
   <groupId>co.payload</groupId>
   <artifactId>payload</artifactId>
-  <version>0.1.10</version>
+  <version>0.1.12</version>
 </dependency>
 ```
 
