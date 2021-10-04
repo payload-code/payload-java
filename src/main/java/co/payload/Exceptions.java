@@ -14,6 +14,14 @@ public class Exceptions {
 			super();
 			this.data = data;
 		}
+
+		public PayloadError(String msg) {
+			super(msg);
+		}
+
+		public PayloadError(String msg, Exception e) {
+			super(msg, e);
+		}
 	}
 
 	public static class UnknownResponse extends PayloadError {
