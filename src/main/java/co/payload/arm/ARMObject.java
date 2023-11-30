@@ -5,6 +5,7 @@ import java.util.HashMap;
 import net.jodah.typetools.TypeResolver;
 import org.json.*;
 import co.payload.Exceptions;
+import co.payload.Session;
 
 public class ARMObject<T> {
 	public String getObject(){ return ""; }
@@ -12,6 +13,7 @@ public class ARMObject<T> {
 	public Map<String,String> fieldmap(){ return null; }
 	public String getEndpoint() { return "/"+getObject()+"s"; }
 	public JSONObject obj;
+	public Session session;
 
 	public ARMObject() {
 		this.obj = new JSONObject();
@@ -85,18 +87,23 @@ public class ARMObject<T> {
 
 	public T create() throws Exceptions.PayloadError {
 		Class<T> cls = getCls();
-		return new ARMRequest<T>(cls).create((T)this);
+		return new ARMRequest<T>(cls, this.session).create((T)this);
+	}
+
+	public T create(Session session) throws Exceptions.PayloadError {
+		Class<T> cls = getCls();
+		return new ARMRequest<T>(cls, session).create((T)this);
 	}
 
 	public T update(Map.Entry<String,Object>... args) throws Exceptions.PayloadError {
 		Class<T> cls = getCls();
-		new ARMRequest<T>(cls).update((ARMObject)this, args);
+		new ARMRequest<T>(cls, this.session).update((ARMObject)this, args);
 		return (T)this;
 	}
 
 	public void delete() throws Exceptions.PayloadError {
 		Class<T> cls = getCls();
-		new ARMRequest<T>(cls).delete((ARMObject)this);
+		new ARMRequest<T>(cls, this.session).delete((ARMObject)this);
 	}
 }
 
