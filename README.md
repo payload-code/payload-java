@@ -10,7 +10,7 @@ A Java library for integrating [Payload](https://payload.co).
 <dependency>
   <groupId>co.payload</groupId>
   <artifactId>payload</artifactId>
-  <version>0.1.12</version>
+  <version>0.2.0</version>
 </dependency>
 ```
 
@@ -38,9 +38,9 @@ To authenticate with the Payload API, you'll need a live or test API key. API
 keys are accessible from within the Payload dashboard.
 
 ```java
-import co.payload.pl;
+import co.payload.Session;
 
-pl.api_key = "secret_key_3bW9JMZtPVDOfFNzwRdfE";
+Session sess = Session("secret_key_3bW9JMZtPVDOfFNzwRdfE");
 ```
 
 ### Creating an Object
@@ -50,22 +50,20 @@ creating a customer using the `pl.Customer` object.
 
 ```java
 // Create a Customer
-pl.Customer customer = new pl.Customer(){{
+pl.Customer customer = sess.create(new pl.Customer(){{
     set("email", "matt.perez@example.com");
     set("full_name", "Matt Perez");
-    create();
-}};
+}});
 ```
 
 ```java
 // Create a Payment
-pl.Payment payment = new pl.Payment(){{
+pl.Payment payment = sess.create(new pl.Payment(){{
     set("amount", 100.0);
     set("payment_method, new pl.Card(){{
         set("card_number", "4242 4242 4242 4242");
     }});
-    create();
-}};
+}});
 ```
 
 ### Accessing Object Attributes
@@ -74,6 +72,7 @@ Object attributes are accessible through `getStr`, `getInt`, and `getFloat`.
 
 ```java
 System.out.print(customer.getStr("email"));
+
 ```
 
 ### Updating an Object
@@ -85,13 +84,23 @@ Updating an object is a simple call to the `update` object method.
 customer.update(pl.attr("email", "matt.perez@newwork.com"));
 ```
 
+
+### Get an Object by ID
+
+Grab an existing object by its ID using the `get` method.
+
+```java
+// Get a customer by id
+pl.Customer customer = sess.select(pl.Customer.class).get("cust_id");
+```
+
 ### Selecting Objects
 
 Objects can be selected using any of their attributes.
 
 ```java
 // Select a customer by email
-pl.Customer customers = pl.Customer.filter_by(
+List<pl.Customer> customers = sess.select(pl.Customer.class).filter_by(
     "email", "matt.perez@example.com"
 );
 ```
@@ -100,12 +109,20 @@ Use the `pl.attr` attribute helper
 interface to write powerful queries with a little extra syntax sugar.
 
 ```java
-pl.Payment payments = pl.Payments.filter_by(
+List<pl.Payment> payments = sess.select(pl.Payment.class).filter_by(
     pl.attr("amount").gt(100),
     pl.attr("amount").lt(200),
     pl.attr("description").contains("Test"),
     pl.attr("created_at").gt(LocalDate.of(2019, 02, 20))
 ).all();
+```
+
+### Testing the Payload Java Library
+
+Tests are contained within the `src/tests` directory. To run tests use the following command in terminal:
+
+```bash
+API_KEY=your_test_secret_key mvn test
 ```
 
 ## Documentation

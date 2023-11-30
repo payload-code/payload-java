@@ -28,14 +28,22 @@ import co.payload.arm.ARMObject;
 import co.payload.Exceptions;
 import co.payload.pl;
 import co.payload.Utils;
+import co.payload.Session;
 
 public class ARMRequest<T> {
 	public Class<T> cls;
+	public Session session;
 	private ArrayList<String> _attrs = new ArrayList<String>();
 	private HashMap<String, Object> _filters = new HashMap<String, Object>();
 
 	public ARMRequest(Class<T> cls) {
 		this.cls = cls;
+		this.session = pl.default_session;
+	}
+
+	public ARMRequest(Class<T> cls, Session session) {
+		this.cls = cls;
+		this.session = session != null ? session : pl.default_session;
 	}
 
 	public Object _request( String method, String id, String json) throws Exceptions.PayloadError {
@@ -91,11 +99,11 @@ public class ARMRequest<T> {
 			endpoint += "?" + query;
 
 		try {
-			URL url = new URL(pl.api_url + endpoint);
+			URL url = new URL(this.session.getApiUrl() + endpoint);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod(method);
 
-			String encoded = Base64.encodeBase64String((pl.api_key+":").getBytes("UTF-8"));
+			String encoded = Base64.encodeBase64String((this.session.getApiKey()+":").getBytes("UTF-8"));
 
 			con.setRequestProperty("Authorization", "Basic "+encoded);
 
@@ -126,13 +134,19 @@ public class ARMRequest<T> {
 						JSONArray lst = obj.getJSONArray("values");
 
 						for (int i = 0 ; i < lst.length(); i++) {
-							obj = lst.getJSONObject(i);
-							result.add((T)((ARMObject)this.cls.newInstance()).setJson(obj));
+							ARMObject armObj = (ARMObject)this.cls.newInstance();
+							armObj.setJson(lst.getJSONObject(i));
+							armObj.session = this.session;
+							result.add((T)armObj);
 						}
 
 						return result;
-					} else
-						return (T)((ARMObject)this.cls.newInstance()).setJson(obj);
+					} else {
+						ARMObject armObj = (ARMObject)this.cls.newInstance();
+						armObj.setJson(obj);
+						armObj.session = this.session;
+						return (T)armObj;
+					}
 				} catch ( InstantiationException | IllegalAccessException exc ) {
 					System.out.println(exc);
 					return null;
@@ -150,7 +164,6 @@ public class ARMRequest<T> {
 							content.append(inputLine);
 						}
 						in.close();
-						System.out.println(content.toString());
 
 						JSONObject err = new JSONObject(content.toString());
 
@@ -195,6 +208,7 @@ public class ARMRequest<T> {
 	public T create(T obj) throws Exceptions.PayloadError {
 		ARMObject new_obj = (ARMObject)this._request("POST", null, ((ARMObject)obj).obj.toString());
 		((ARMObject)obj).obj = new_obj.obj;
+		((ARMObject)obj).session = new_obj.session;
 		return obj;
 	}
 
@@ -210,8 +224,10 @@ public class ARMRequest<T> {
 
 		List<ARMObject> resp = (List<ARMObject>)this._request("POST", null, req.toString());
 
-		for ( int i = 0; i < resp.size(); i++ )
+		for ( int i = 0; i < resp.size(); i++ ) {
 			((ARMObject)objs.get(i)).obj = resp.get(i).obj;
+			((ARMObject)objs.get(i)).session = resp.get(i).session;
+    }
 
 		return objs;
 	}
@@ -226,6 +242,7 @@ public class ARMRequest<T> {
 
 		ARMObject new_obj = (ARMObject)this._request("PUT", obj.getStr("id"), req.toString());
 		((ARMObject)obj).obj = new_obj.obj;
+		((ARMObject)obj).session = new_obj.session;
 		return (T)obj;
 	}
 

@@ -14,6 +14,7 @@ public class pl {
 	public static final String URL = "https://api.payload.co";
 	public static volatile String api_key;
 	public static volatile String api_url = URL;
+	public static Session default_session = new Session(null);
 
 	public static Map.Entry<String,Object> attr(String key, Object val) {
 		return new AbstractMap.SimpleEntry<String,Object>(key, val);
@@ -32,6 +33,10 @@ public class pl {
 
 		public static ARMRequest filter_by(String attr, Object val) {
 			return new ARMRequest<Customer>(Customer.class).filter_by(attr, val);
+		}
+
+		public static List<Customer> all() throws Exceptions.PayloadError {
+			return new ARMRequest<Customer>(Customer.class).all();
 		}
 
 		public static Customer get(String id) throws Exceptions.PayloadError {
@@ -54,12 +59,16 @@ public class pl {
 			return new ARMRequest<ProcessingAccount>(ProcessingAccount.class).filter_by(attr, val);
 		}
 
+		public static List<ProcessingAccount> all() throws Exceptions.PayloadError {
+			return new ARMRequest<ProcessingAccount>(ProcessingAccount.class).all();
+		}
+
 		public static ProcessingAccount get(String id) throws Exceptions.PayloadError {
 			return new ARMRequest<ProcessingAccount>(ProcessingAccount.class).get(id);
 		}
 	}
 
-	public static class Org extends ARMObject<ProcessingAccount> {
+	public static class Org extends ARMObject<Org> {
 		public String getObject(){ return "org"; }
 		public String getEndpoint(){ return "/accounts/orgs"; }
 
@@ -73,6 +82,10 @@ public class pl {
 
 		public static ARMRequest filter_by(String attr, Object val) {
 			return new ARMRequest<Org>(Org.class).filter_by(attr, val);
+		}
+
+		public static List<Org> all() throws Exceptions.PayloadError {
+			return new ARMRequest<Org>(Org.class).all();
 		}
 
 		public static Org get(String id) throws Exceptions.PayloadError {
@@ -93,6 +106,10 @@ public class pl {
 
 		public static ARMRequest filter_by(String attr, Object val) {
 			return new ARMRequest<Transaction>(Transaction.class).filter_by(attr, val);
+		}
+
+		public static List<Transaction> all() throws Exceptions.PayloadError {
+			return new ARMRequest<Transaction>(Transaction.class).all();
 		}
 
 		public static Transaction get(String id) throws Exceptions.PayloadError {
@@ -129,6 +146,10 @@ public class pl {
 			return new ARMRequest<Payment>(Payment.class).get(id);
 		}
 
+		public static List<Payment> all() throws Exceptions.PayloadError {
+			return new ARMRequest<Payment>(Payment.class).all();
+		}
+
 		public PaymentMethod paymentMethod() {
 			final JSONObject outerObj = obj;
 			return new pl.PaymentMethod(){{
@@ -153,8 +174,62 @@ public class pl {
 			return new ARMRequest<Refund>(Refund.class).filter_by(attr, val);
 		}
 
+		public static List<Refund> all() throws Exceptions.PayloadError {
+			return new ARMRequest<Refund>(Refund.class).all();
+		}
+
 		public static Refund get(String id) throws Exceptions.PayloadError {
 			return new ARMRequest<Refund>(Refund.class).get(id);
+		}
+	}
+
+	public static class Deposit extends ARMObject<Deposit> {
+		public String getObject(){ return "transaction"; }
+		public String[] getPoly(){ return new String[]{"type", "deposit"}; }
+
+		public static ARMRequest select(String... args) {
+			return new ARMRequest<Deposit>(Deposit.class).select(args);
+		}
+
+		public static List<Deposit> create(Deposit... args) throws Exceptions.PayloadError {
+			return new ARMRequest<Deposit>(Deposit.class).create(Arrays.asList(args));
+		}
+
+		public static ARMRequest filter_by(String attr, Object val) {
+			return new ARMRequest<Deposit>(Deposit.class).filter_by(attr, val);
+		}
+
+		public static List<Deposit> all() throws Exceptions.PayloadError {
+			return new ARMRequest<Deposit>(Deposit.class).all();
+		}
+
+		public static Deposit get(String id) throws Exceptions.PayloadError {
+			return new ARMRequest<Deposit>(Deposit.class).get(id);
+		}
+	}
+
+	public static class Credit extends ARMObject<Credit> {
+		public String getObject(){ return "transaction"; }
+		public String[] getPoly(){ return new String[]{"type", "credit"}; }
+
+		public static ARMRequest select(String... args) {
+			return new ARMRequest<Credit>(Credit.class).select(args);
+		}
+
+		public static List<Credit> create(Credit... args) throws Exceptions.PayloadError {
+			return new ARMRequest<Credit>(Credit.class).create(Arrays.asList(args));
+		}
+
+		public static ARMRequest filter_by(String attr, Object val) {
+			return new ARMRequest<Credit>(Credit.class).filter_by(attr, val);
+		}
+
+		public static List<Credit> all() throws Exceptions.PayloadError {
+			return new ARMRequest<Credit>(Credit.class).all();
+		}
+
+		public static Credit get(String id) throws Exceptions.PayloadError {
+			return new ARMRequest<Credit>(Credit.class).get(id);
 		}
 	}
 
@@ -171,6 +246,10 @@ public class pl {
 
 		public static ARMRequest filter_by(String attr, Object val) {
 			return new ARMRequest<Ledger>(Ledger.class).filter_by(attr, val);
+		}
+
+		public static List<Ledger> all() throws Exceptions.PayloadError {
+			return new ARMRequest<Ledger>(Ledger.class).all();
 		}
 
 		public static Ledger get(String id) throws Exceptions.PayloadError {
@@ -207,6 +286,10 @@ public class pl {
 
 		public static ARMRequest filter_by(String attr, Object val) {
 			return new ARMRequest<PaymentMethod>(PaymentMethod.class).filter_by(attr, val);
+		}
+
+		public static List<PaymentMethod> all() throws Exceptions.PayloadError {
+			return new ARMRequest<PaymentMethod>(PaymentMethod.class).all();
 		}
 
 		public static PaymentMethod get(String id) throws Exceptions.PayloadError {
@@ -269,6 +352,10 @@ public class pl {
 			return new ARMRequest<BillingSchedule>(BillingSchedule.class).filter_by(attr, val);
 		}
 
+		public static List<BillingSchedule> all() throws Exceptions.PayloadError {
+			return new ARMRequest<BillingSchedule>(BillingSchedule.class).all();
+		}
+
 		public static BillingSchedule get(String id) throws Exceptions.PayloadError {
 			return new ARMRequest<BillingSchedule>(BillingSchedule.class).get(id);
 		}
@@ -287,6 +374,10 @@ public class pl {
 
 		public static ARMRequest filter_by(String attr, Object val) {
 			return new ARMRequest<BillingCharge>(BillingCharge.class).filter_by(attr, val);
+		}
+
+		public static List<BillingCharge> all() throws Exceptions.PayloadError {
+			return new ARMRequest<BillingCharge>(BillingCharge.class).all();
 		}
 
 		public static BillingCharge get(String id) throws Exceptions.PayloadError {
@@ -309,6 +400,10 @@ public class pl {
 			return new ARMRequest<Invoice>(Invoice.class).filter_by(attr, val);
 		}
 
+		public static List<Invoice> all() throws Exceptions.PayloadError {
+			return new ARMRequest<Invoice>(Invoice.class).all();
+		}
+
 		public static Invoice get(String id) throws Exceptions.PayloadError {
 			return new ARMRequest<Invoice>(Invoice.class).get(id);
 		}
@@ -327,6 +422,10 @@ public class pl {
 
 		public static ARMRequest filter_by(String attr, Object val) {
 			return new ARMRequest<LineItem>(LineItem.class).filter_by(attr, val);
+		}
+
+		public static List<LineItem> all() throws Exceptions.PayloadError {
+			return new ARMRequest<LineItem>(LineItem.class).all();
 		}
 
 		public static LineItem get(String id) throws Exceptions.PayloadError {
@@ -409,6 +508,10 @@ public class pl {
 			return new ARMRequest<Webhook>(Webhook.class).filter_by(attr, val);
 		}
 
+		public static List<Webhook> all() throws Exceptions.PayloadError {
+			return new ARMRequest<Webhook>(Webhook.class).all();
+		}
+
 		public static Webhook get(String id) throws Exceptions.PayloadError {
 			return new ARMRequest<Webhook>(Webhook.class).get(id);
 		}
@@ -427,6 +530,10 @@ public class pl {
 
 		public static ARMRequest filter_by(String attr, Object val) {
 			return new ARMRequest<PaymentLink>(PaymentLink.class).filter_by(attr, val);
+		}
+
+		public static List<PaymentLink> all() throws Exceptions.PayloadError {
+			return new ARMRequest<PaymentLink>(PaymentLink.class).all();
 		}
 
 		public static PaymentLink get(String id) throws Exceptions.PayloadError {
@@ -449,8 +556,62 @@ public class pl {
 			return new ARMRequest<PaymentActivation>(PaymentActivation.class).filter_by(attr, val);
 		}
 
+		public static List<PaymentActivation> all() throws Exceptions.PayloadError {
+			return new ARMRequest<PaymentActivation>(PaymentActivation.class).all();
+		}
+
 		public static PaymentActivation get(String id) throws Exceptions.PayloadError {
 			return new ARMRequest<PaymentActivation>(PaymentActivation.class).get(id);
 		}
 	}
+
+	public static class AccessToken extends ARMObject<AccessToken> {
+		public String getObject(){ return "access_token"; }
+
+		public static ARMRequest select(String... args) {
+			return new ARMRequest<AccessToken>(AccessToken.class).select(args);
+		}
+
+		public static List<AccessToken> create(AccessToken... args) throws Exceptions.PayloadError {
+			return new ARMRequest<AccessToken>(AccessToken.class).create(Arrays.asList(args));
+		}
+
+		public static ARMRequest filter_by(String attr, Object val) {
+			return new ARMRequest<AccessToken>(AccessToken.class).filter_by(attr, val);
+		}
+
+		public static List<AccessToken> all() throws Exceptions.PayloadError {
+			return new ARMRequest<AccessToken>(AccessToken.class).all();
+		}
+
+		public static AccessToken get(String id) throws Exceptions.PayloadError {
+			return new ARMRequest<AccessToken>(AccessToken.class).get(id);
+		}
+	}
+
+	public static class ClientToken extends ARMObject<ClientToken> {
+		public String getObject(){ return "access_token"; }
+		public String[] getPoly(){ return new String[]{"type", "client"}; }
+
+		public static ARMRequest select(String... args) {
+			return new ARMRequest<ClientToken>(ClientToken.class).select(args);
+		}
+
+		public static List<ClientToken> create(ClientToken... args) throws Exceptions.PayloadError {
+			return new ARMRequest<ClientToken>(ClientToken.class).create(Arrays.asList(args));
+		}
+
+		public static ARMRequest filter_by(String attr, Object val) {
+			return new ARMRequest<ClientToken>(ClientToken.class).filter_by(attr, val);
+		}
+
+		public static List<ClientToken> all() throws Exceptions.PayloadError {
+			return new ARMRequest<ClientToken>(ClientToken.class).all();
+		}
+
+		public static ClientToken get(String id) throws Exceptions.PayloadError {
+			return new ARMRequest<ClientToken>(ClientToken.class).get(id);
+		}
+	}
+
 }

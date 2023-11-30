@@ -50,9 +50,9 @@ public class Exceptions {
 		}
 	}
 
-	public static class Forbidden extends PayloadError {
+	public static class NotPermitted extends PayloadError {
 		public static int http_code = 403;
-		public Forbidden(JSONObject details) {
+		public NotPermitted(JSONObject details) {
 			super(details);
 		}
 	}
@@ -89,7 +89,7 @@ public class Exceptions {
 		put("BadRequest", BadRequest.class);
 		put("InvalidAttributes", InvalidAttributes.class);
 		put("Unauthorized", Unauthorized.class);
-		put("Forbidden", Forbidden.class);
+		put("NotPermitted", NotPermitted.class);
 		put("NotFound", NotFound.class);
 		put("TooManyRequests", TooManyRequests.class);
 		put("InternalServerError", InternalServerError.class);
