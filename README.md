@@ -60,7 +60,7 @@ pl.Customer customer = sess.create(new pl.Customer(){{
 // Create a Payment
 pl.Payment payment = sess.create(new pl.Payment(){{
     set("amount", 100.0);
-    set("payment_method, new pl.Card(){{
+    set("payment_method", new pl.Card(){{
         set("card_number", "4242 4242 4242 4242");
     }});
 }});
