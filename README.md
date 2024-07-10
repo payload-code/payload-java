@@ -1,3 +1,17 @@
+<p align="center">
+  <a href="https://payload.com">
+    <img src="https://payload.com/images/horizontal-logo.svg" alt="Payload Logo"/>
+  </a>
+</p>
+
+<p align="center">
+  <strong>Powerfully simple payments</strong>
+</p>
+
+![Payload Documentation](https://img.shields.io/badge/Payload-Documentation-blue?style=plastic&logo=https%3A%2F%2Fpayload.com%2Fimages%2Fhorizontal-logo.svg&logoColor=%230000FF&logoSize=auto&link=https%3A%2F%2Fdocs.payload.com%2F)
+![Payload Support](https://img.shields.io/badge/Payload-Support-blue?style=plastic&link=mailto:contact@payload.com)
+![Java CI](https://github.com/payload-code/payload-java/actions/workflows/test-workflow.yml/badge.svg)
+
 # Payload Java Library
 
 A Java library for integrating [Payload](https://payload.co).
@@ -83,7 +97,6 @@ Updating an object is a simple call to the `update` object method.
 // Updating a customer's email
 customer.update(pl.attr("email", "matt.perez@newwork.com"));
 ```
-
 
 ### Get an Object by ID
 
