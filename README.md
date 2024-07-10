@@ -5,16 +5,22 @@
 </p>
 
 <p align="center">
-  <strong>Powerfully simple payments</strong>
+  <strong>Powerfully Simple Payments</strong>
 </p>
 
-[![Payload Documentation](https://img.shields.io/badge/Payload-Documentation-blue?style=plastic&logo=https%3A%2F%2Fpayload.com%2Fimages%2Fhorizontal-logo.svg&logoColor=%230000FF&logoSize=auto)](https://docs.payload.com/)
-[![Payload Support](https://img.shields.io/badge/Payload-Support-blue?style=plastic)](mailto:contact@payload.com)
-![Java CI](https://github.com/payload-code/payload-java/actions/workflows/test-workflow.yml/badge.svg)
+<p align="center">
+  <a href="https://docs.payload.com/">
+    <img src="https://img.shields.io/badge/Payload-Documentation-blue?style=plastic&logo=https%3A%2F%2Fpayload.com%2Fimages%2Fhorizontal-logo.svg&logoColor=%230000FF&logoSize=auto" alt="Payload Documentation"/>
+  </a>
+  <a href="mailto:contact@payload.com">
+    <img src="https://img.shields.io/badge/Payload-Support-blue?style=plastic" alt="Payload Support"/>
+  </a>
+  <img src="https://github.com/payload-code/payload-java/actions/workflows/test-workflow.yml/badge.svg" alt="Java CI"/>
+</p>
 
 # Payload Java Library
 
-A Java library for integrating [Payload](https://payload.co).
+A Java library for integrating [Payload](https://payload.com).
 
 ## Installation
 
@@ -28,28 +34,18 @@ A Java library for integrating [Payload](https://payload.co).
 </dependency>
 ```
 
-## Manual Installation
+### Manual Installation
 
-### 1) Download
-
-Download the [latest](https://github.com/payload-code/payload-java/archive/master.zip)
-version from GitHub.
-
-### 2) Include in Project
-
-Include the **Payload** folder in your Android Studio or Eclipse project.
+1. **Download** the [latest version](https://github.com/payload-code/payload-java/archive/master.zip) from GitHub.
+2. **Include in Project**: Include the **Payload** folder in your Android Studio or Eclipse project.
 
 ## Get Started
 
-Once you've included the Payload Java library in your project,
-include the `co.payload.pl` namespace to get started.
-
-All Payload objects and methods are accessible using the `pl` static class.
+Once you've included the Payload Java library in your project, include the `co.payload.pl` namespace to get started. All Payload objects and methods are accessible using the `pl` static class.
 
 ### API Authentication
 
-To authenticate with the Payload API, you'll need a live or test API key. API
-keys are accessible from within the Payload dashboard.
+To authenticate with the Payload API, you'll need a live or test API key, accessible from the Payload dashboard.
 
 ```java
 import co.payload.Session;
@@ -59,8 +55,7 @@ Session sess = Session("secret_key_3bW9JMZtPVDOfFNzwRdfE");
 
 ### Creating an Object
 
-Interfacing with the Payload API is done primarily through Payload Objects. Below is an example of
-creating a customer using the `pl.Customer` object.
+Interfacing with the Payload API is done primarily through Payload Objects. Below is an example of creating a customer using the `pl.Customer` object.
 
 ```java
 // Create a Customer
@@ -86,7 +81,6 @@ Object attributes are accessible through `getStr`, `getInt`, and `getFloat`.
 
 ```java
 System.out.print(customer.getStr("email"));
-
 ```
 
 ### Updating an Object
@@ -118,8 +112,7 @@ List<pl.Customer> customers = sess.select(pl.Customer.class).filter_by(
 );
 ```
 
-Use the `pl.attr` attribute helper
-interface to write powerful queries with a little extra syntax sugar.
+Use the `pl.attr` attribute helper interface to write powerful queries with a little extra syntax sugar.
 
 ```java
 List<pl.Payment> payments = sess.select(pl.Payment.class).filter_by(
@@ -130,9 +123,9 @@ List<pl.Payment> payments = sess.select(pl.Payment.class).filter_by(
 ).all();
 ```
 
-### Testing the Payload Java Library
+## Testing the Payload Java Library
 
-Tests are contained within the `src/tests` directory. To run tests use the following command in terminal:
+Tests are contained within the `src/tests` directory. To run tests, use the following command in terminal:
 
 ```bash
 API_KEY=your_test_secret_key mvn test
@@ -140,5 +133,4 @@ API_KEY=your_test_secret_key mvn test
 
 ## Documentation
 
-To get further information on Payload's Java library and API capabilities,
-visit the unabridged [Payload Documentation](https://docs.payload.co/?java).
+For further information on Payload's Java library and API capabilities, visit the [Payload Documentation](https://docs.payload.co/?java).
