@@ -28,7 +28,7 @@ A Java library for integrating [Payload](https://payload.com).
 
 ```xml
 <dependency>
-  <groupId>co.payload</groupId>
+  <groupId>com.payload</groupId>
   <artifactId>payload</artifactId>
   <version>0.2.0</version>
 </dependency>
@@ -41,14 +41,14 @@ A Java library for integrating [Payload](https://payload.com).
 
 ## Get Started
 
-Once you've included the Payload Java library in your project, include the `co.payload.pl` namespace to get started. All Payload objects and methods are accessible using the `pl` static class.
+Once you've included the Payload Java library in your project, include the `com.payload.pl` namespace to get started. All Payload objects and methods are accessible using the `pl` static class.
 
 ### API Authentication
 
 To authenticate with the Payload API, you'll need a live or test API key, accessible from the Payload dashboard.
 
 ```java
-import co.payload.Session;
+import com.payload.Session;
 
 Session sess = Session("secret_key_3bW9JMZtPVDOfFNzwRdfE");
 ```

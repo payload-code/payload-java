@@ -1,11 +1,11 @@
-package co.payload.arm;
+package com.payload.arm;
 import java.lang.reflect.ParameterizedType;
 import java.util.Map;
 import java.util.HashMap;
 import net.jodah.typetools.TypeResolver;
 import org.json.*;
-import co.payload.Exceptions;
-import co.payload.Session;
+import com.payload.Exceptions;
+import com.payload.Session;
 
 public class ARMObject<T> {
 	public String getObject(){ return ""; }

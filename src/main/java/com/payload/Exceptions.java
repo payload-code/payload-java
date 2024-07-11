@@ -1,4 +1,4 @@
-package co.payload;
+package com.payload;
 import java.lang.reflect.ParameterizedType;
 import java.util.Map;
 import java.io.IOException;

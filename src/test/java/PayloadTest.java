@@ -1,9 +1,9 @@
-package co.payload.test;
+package com.payload.test;
 
-import co.payload.pl;
-import co.payload.Session;
-import co.payload.arm.ARMRequest;
-import co.payload.Exceptions;
+import com.payload.pl;
+import com.payload.Session;
+import com.payload.arm.ARMRequest;
+import com.payload.Exceptions;
 import java.util.List;
 import java.lang.reflect.Field;
 import java.io.FileNotFoundException;
@@ -18,8 +18,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import com.github.javafaker.Faker;
-import co.payload.test.Factory;
-import co.payload.test.Fixtures;
+import com.payload.test.Factory;
+import com.payload.test.Fixtures;
 
 public class PayloadTest {
 
