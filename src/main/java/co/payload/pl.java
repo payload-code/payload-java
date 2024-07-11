@@ -11,7 +11,7 @@ import java.util.HashMap;
 import org.json.*;
 
 public class pl {
-	public static final String URL = "https://api.payload.co";
+	public static final String URL = "https://api.payload.com";
 	public static volatile String api_key;
 	public static volatile String api_url = URL;
 	public static Session default_session = new Session(null);
