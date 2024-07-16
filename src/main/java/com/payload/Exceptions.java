@@ -1,8 +1,8 @@
 package com.payload;
 
 import java.util.Map;
+import java.util.HashMap;
 import org.json.*;
-import java.util.Map;
 
 public class Exceptions {
     public static class PayloadError extends Exception {
