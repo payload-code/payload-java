@@ -1,9 +1,7 @@
 package com.payload;
-import java.lang.reflect.ParameterizedType;
 import java.util.Map;
-import java.io.IOException;
-import java.util.HashMap;
 import org.json.*;
+import java.util.Map;
 
 public class Exceptions {
 	public static class PayloadError extends Exception {
@@ -84,6 +82,25 @@ public class Exceptions {
 			super(details);
 		}
 	}
+
+  public class TransactionDeclined extends PayloadError {
+      private String transactionId;
+      private String declineReason;
+
+      public TransactionDeclined(String message, String transactionId, String declineReason) {
+          super(message);
+          this.transactionId = transactionId;
+          this.declineReason = declineReason;
+      }
+
+      public String getTransactionId() {
+          return transactionId;
+      }
+
+      public String getDeclineReason() {
+          return declineReason;
+      }
+  }
 
 	public static Map<String, Class> excmap = new HashMap<String, Class>() {{
 		put("BadRequest", BadRequest.class);
