@@ -112,6 +112,6 @@ public class Exceptions {
         put("TooManyRequests", TooManyRequests.class);
         put("InternalServerError", InternalServerError.class);
         put("ServiceUnavailable", ServiceUnavailable.class);
-        put("TransactionDeclined", TransactionDeclined.class); // Add this line
+        put("TransactionDeclined", TransactionDeclined.class);
     }};
 }
