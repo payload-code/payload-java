@@ -1,115 +1,117 @@
 package com.payload;
+
 import java.util.Map;
 import org.json.*;
 import java.util.Map;
 
 public class Exceptions {
-	public static class PayloadError extends Exception {
-		public static int http_code = 0;
-		public JSONObject data = null;
+    public static class PayloadError extends Exception {
+        public static int http_code = 0;
+        public JSONObject data = null;
 
-		public PayloadError(JSONObject data) {
-			super();
-			this.data = data;
-		}
+        public PayloadError(JSONObject data) {
+            super();
+            this.data = data;
+        }
 
-		public PayloadError(String msg) {
-			super(msg);
-		}
+        public PayloadError(String msg) {
+            super(msg);
+        }
 
-		public PayloadError(String msg, Exception e) {
-			super(msg, e);
-		}
-	}
+        public PayloadError(String msg, Exception e) {
+            super(msg, e);
+        }
+    }
 
-	public static class UnknownResponse extends PayloadError {
-		public UnknownResponse(JSONObject details) {
-			super(details);
-		}
-	}
+    public static class UnknownResponse extends PayloadError {
+        public UnknownResponse(JSONObject details) {
+            super(details);
+        }
+    }
 
-	public static class BadRequest extends PayloadError {
-		public static int http_code = 400;
-		public BadRequest(JSONObject details) {
-			super(details);
-		}
-	}
+    public static class BadRequest extends PayloadError {
+        public static int http_code = 400;
+        public BadRequest(JSONObject details) {
+            super(details);
+        }
+    }
 
-	public static class InvalidAttributes extends BadRequest {
-		public InvalidAttributes(JSONObject details) {
-			super(details);
-		}
-	}
+    public static class InvalidAttributes extends BadRequest {
+        public InvalidAttributes(JSONObject details) {
+            super(details);
+        }
+    }
 
-	public static class Unauthorized extends PayloadError {
-		public static int http_code = 401;
-		public Unauthorized(JSONObject details) {
-			super(details);
-		}
-	}
+    public static class Unauthorized extends PayloadError {
+        public static int http_code = 401;
+        public Unauthorized(JSONObject details) {
+            super(details);
+        }
+    }
 
-	public static class NotPermitted extends PayloadError {
-		public static int http_code = 403;
-		public NotPermitted(JSONObject details) {
-			super(details);
-		}
-	}
+    public static class NotPermitted extends PayloadError {
+        public static int http_code = 403;
+        public NotPermitted(JSONObject details) {
+            super(details);
+        }
+    }
 
-	public static class NotFound extends PayloadError {
-		public static int http_code = 404;
-		public NotFound(JSONObject details) {
-			super(details);
-		}
-	}
+    public static class NotFound extends PayloadError {
+        public static int http_code = 404;
+        public NotFound(JSONObject details) {
+            super(details);
+        }
+    }
 
-	public static class TooManyRequests extends PayloadError {
-		public static int http_code = 429;
-		public TooManyRequests(JSONObject details) {
-			super(details);
-		}
-	}
+    public static class TooManyRequests extends PayloadError {
+        public static int http_code = 429;
+        public TooManyRequests(JSONObject details) {
+            super(details);
+        }
+    }
 
-	public static class InternalServerError extends PayloadError {
-		public static int http_code = 500;
-		public InternalServerError(JSONObject details) {
-			super(details);
-		}
-	}
+    public static class InternalServerError extends PayloadError {
+        public static int http_code = 500;
+        public InternalServerError(JSONObject details) {
+            super(details);
+        }
+    }
 
-	public static class ServiceUnavailable extends PayloadError {
-		public static int http_code = 503;
-		public ServiceUnavailable(JSONObject details) {
-			super(details);
-		}
-	}
+    public static class ServiceUnavailable extends PayloadError {
+        public static int http_code = 503;
+        public ServiceUnavailable(JSONObject details) {
+            super(details);
+        }
+    }
 
-  public class TransactionDeclined extends PayloadError {
-      private String transactionId;
-      private String declineReason;
+    public static class TransactionDeclined extends PayloadError {
+        private String transactionId;
+        private String declineReason;
 
-      public TransactionDeclined(String message, String transactionId, String declineReason) {
-          super(message);
-          this.transactionId = transactionId;
-          this.declineReason = declineReason;
-      }
+        public TransactionDeclined(String message, String transactionId, String declineReason) {
+            super(message);
+            this.transactionId = transactionId;
+            this.declineReason = declineReason;
+        }
 
-      public String getTransactionId() {
-          return transactionId;
-      }
+        public String getTransactionId() {
+            return transactionId;
+        }
 
-      public String getDeclineReason() {
-          return declineReason;
-      }
-  }
+        public String getDeclineReason() {
+            return declineReason;
+        }
+    }
 
-	public static Map<String, Class> excmap = new HashMap<String, Class>() {{
-		put("BadRequest", BadRequest.class);
-		put("InvalidAttributes", InvalidAttributes.class);
-		put("Unauthorized", Unauthorized.class);
-		put("NotPermitted", NotPermitted.class);
-		put("NotFound", NotFound.class);
-		put("TooManyRequests", TooManyRequests.class);
-		put("InternalServerError", InternalServerError.class);
-		put("ServiceUnavailable", ServiceUnavailable.class);
-	}};
+    public static Map<String, Class> excmap = new HashMap<String, Class>() {{
+        put("BadRequest", BadRequest.class);
+        put("InvalidAttributes", InvalidAttributes.class);
+        put("Unauthorized", Unauthorized.class);
+        put("NotPermitted", NotPermitted.class);
+        put("NotFound", NotFound.class);
+        put("TooManyRequests", TooManyRequests.class);
+        put("InternalServerError", InternalServerError.class);
+        put("ServiceUnavailable", ServiceUnavailable.class);
+        put("TransactionDeclined", TransactionDeclined.class); // Add this line
+    }};
 }
