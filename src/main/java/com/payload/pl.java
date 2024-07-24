@@ -1,8 +1,8 @@
-package co.payload;
+package com.payload;
 
-import co.payload.arm.ARMObject;
-import co.payload.arm.ARMRequest;
-import co.payload.Exceptions;
+import com.payload.arm.ARMObject;
+import com.payload.arm.ARMRequest;
+import com.payload.Exceptions;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +11,7 @@ import java.util.HashMap;
 import org.json.*;
 
 public class pl {
-	public static final String URL = "https://api.payload.co";
+	public static final String URL = "https://api.payload.com";
 	public static volatile String api_key;
 	public static volatile String api_url = URL;
 	public static Session default_session = new Session(null);

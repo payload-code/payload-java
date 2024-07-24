@@ -1,4 +1,4 @@
-package co.payload.arm;
+package com.payload.arm;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -24,11 +24,11 @@ import java.lang.reflect.InvocationTargetException;
 import org.apache.commons.codec.binary.Base64;
 import org.json.*;
 
-import co.payload.arm.ARMObject;
-import co.payload.Exceptions;
-import co.payload.pl;
-import co.payload.Utils;
-import co.payload.Session;
+import com.payload.arm.ARMObject;
+import com.payload.Exceptions;
+import com.payload.pl;
+import com.payload.Utils;
+import com.payload.Session;
 
 public class ARMRequest<T> {
 	public Class<T> cls;

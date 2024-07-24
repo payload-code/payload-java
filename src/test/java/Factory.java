@@ -1,9 +1,9 @@
-package co.payload.test;
+package com.payload.test;
 
-import co.payload.pl;
-import co.payload.Session;
-import co.payload.arm.ARMRequest;
-import co.payload.Exceptions;
+import com.payload.pl;
+import com.payload.Session;
+import com.payload.arm.ARMRequest;
+import com.payload.Exceptions;
 import java.util.List;
 import java.lang.reflect.Field;
 import java.io.FileNotFoundException;
@@ -56,7 +56,7 @@ public class Factory {
                         put("state_incorporated", "NY");
                         put("postal_code", "11238");
                         put("phone_number", "(111) 222-3333");
-                        put("website", "https://payload.co");
+                        put("website", "https://payload.com");
                         put("start_date", "05/01/2015");
                         put("contact_name", "Test Person");
                         put("contact_email", "test.person@example.com");
