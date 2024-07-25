@@ -10,23 +10,6 @@
   <description>Payload Java Library</description>
   <url>https://github.com/payload-code/payload-java</url>
 
-  <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>9</version>
-  </parent>
-
-  <distributionManagement>
-    <snapshotRepository>
-        <id>ossrh</id>
-        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-    <repository>
-        <id>ossrh</id>
-        <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-  </distributionManagement>
-
   <licenses>
     <license>
         <name>MIT License</name>
@@ -169,17 +152,6 @@
               <autoVersionSubmodules>true</autoVersionSubmodules>
               <releaseProfiles>releases</releaseProfiles>
            </configuration>
-        </plugin>
-        <plugin>
-            <groupId>org.sonatype.plugins</groupId>
-            <artifactId>nexus-staging-maven-plugin</artifactId>
-            <version>1.6.13</version>
-            <extensions>true</extensions>
-            <configuration>
-                <serverId>ossrh</serverId>
-                <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                <autoReleaseAfterClose>true</autoReleaseAfterClose>
-            </configuration>
         </plugin>
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
