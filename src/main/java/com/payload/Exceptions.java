@@ -10,7 +10,7 @@ public class Exceptions {
         public JSONObject data = null;
 
         public PayloadError(JSONObject data) {
-            super();
+            super(data != null ? data.toString() : null);
             this.data = data;
         }
 
