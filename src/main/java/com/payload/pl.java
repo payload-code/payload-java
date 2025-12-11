@@ -615,4 +615,292 @@ public class pl {
 		}
 	}
 
+	public static class Profile extends ARMObject<Profile> {
+		public String getObject(){ return "profile"; }
+
+		public static ARMRequest select(String... args) {
+			return new ARMRequest<Profile>(Profile.class).select(args);
+		}
+
+		public static List<Profile> create(Profile... args) throws Exceptions.PayloadError {
+			return new ARMRequest<Profile>(Profile.class).create(Arrays.asList(args));
+		}
+
+		public static ARMRequest filter_by(String attr, Object val) {
+			return new ARMRequest<Profile>(Profile.class).filter_by(attr, val);
+		}
+
+		public static List<Profile> all() throws Exceptions.PayloadError {
+			return new ARMRequest<Profile>(Profile.class).all();
+		}
+
+		public static Profile get(String id) throws Exceptions.PayloadError {
+			return new ARMRequest<Profile>(Profile.class).get(id);
+		}
+	}
+
+	public static class BillingItem extends ARMObject<BillingItem> {
+		public String getObject(){ return "billing_item"; }
+
+		public static ARMRequest select(String... args) {
+			return new ARMRequest<BillingItem>(BillingItem.class).select(args);
+		}
+
+		public static List<BillingItem> create(BillingItem... args) throws Exceptions.PayloadError {
+			return new ARMRequest<BillingItem>(BillingItem.class).create(Arrays.asList(args));
+		}
+
+		public static ARMRequest filter_by(String attr, Object val) {
+			return new ARMRequest<BillingItem>(BillingItem.class).filter_by(attr, val);
+		}
+
+		public static List<BillingItem> all() throws Exceptions.PayloadError {
+			return new ARMRequest<BillingItem>(BillingItem.class).all();
+		}
+
+		public static BillingItem get(String id) throws Exceptions.PayloadError {
+			return new ARMRequest<BillingItem>(BillingItem.class).get(id);
+		}
+	}
+
+	public static class Intent extends ARMObject<Intent> {
+		public String getObject(){ return "intent"; }
+
+		public static ARMRequest select(String... args) {
+			return new ARMRequest<Intent>(Intent.class).select(args);
+		}
+
+		public static List<Intent> create(Intent... args) throws Exceptions.PayloadError {
+			return new ARMRequest<Intent>(Intent.class).create(Arrays.asList(args));
+		}
+
+		public static ARMRequest filter_by(String attr, Object val) {
+			return new ARMRequest<Intent>(Intent.class).filter_by(attr, val);
+		}
+
+		public static List<Intent> all() throws Exceptions.PayloadError {
+			return new ARMRequest<Intent>(Intent.class).all();
+		}
+
+		public static Intent get(String id) throws Exceptions.PayloadError {
+			return new ARMRequest<Intent>(Intent.class).get(id);
+		}
+	}
+
+	public static class InvoiceItem extends ARMObject<InvoiceItem> {
+		public String getObject(){ return "invoice_item"; }
+
+		public static ARMRequest select(String... args) {
+			return new ARMRequest<InvoiceItem>(InvoiceItem.class).select(args);
+		}
+
+		public static List<InvoiceItem> create(InvoiceItem... args) throws Exceptions.PayloadError {
+			return new ARMRequest<InvoiceItem>(InvoiceItem.class).create(Arrays.asList(args));
+		}
+
+		public static ARMRequest filter_by(String attr, Object val) {
+			return new ARMRequest<InvoiceItem>(InvoiceItem.class).filter_by(attr, val);
+		}
+
+		public static List<InvoiceItem> all() throws Exceptions.PayloadError {
+			return new ARMRequest<InvoiceItem>(InvoiceItem.class).all();
+		}
+
+		public static InvoiceItem get(String id) throws Exceptions.PayloadError {
+			return new ARMRequest<InvoiceItem>(InvoiceItem.class).get(id);
+		}
+	}
+
+	public static class PaymentAllocation extends ARMObject<PaymentAllocation> {
+		public String getObject(){ return "payment_allocation"; }
+
+		public static ARMRequest select(String... args) {
+			return new ARMRequest<PaymentAllocation>(PaymentAllocation.class).select(args);
+		}
+
+		public static List<PaymentAllocation> create(PaymentAllocation... args) throws Exceptions.PayloadError {
+			return new ARMRequest<PaymentAllocation>(PaymentAllocation.class).create(Arrays.asList(args));
+		}
+
+		public static ARMRequest filter_by(String attr, Object val) {
+			return new ARMRequest<PaymentAllocation>(PaymentAllocation.class).filter_by(attr, val);
+		}
+
+		public static List<PaymentAllocation> all() throws Exceptions.PayloadError {
+			return new ARMRequest<PaymentAllocation>(PaymentAllocation.class).all();
+		}
+
+		public static PaymentAllocation get(String id) throws Exceptions.PayloadError {
+			return new ARMRequest<PaymentAllocation>(PaymentAllocation.class).get(id);
+		}
+	}
+
+	public static class Entity extends ARMObject<Entity> {
+		public String getObject(){ return "entity"; }
+
+		public static ARMRequest select(String... args) {
+			return new ARMRequest<Entity>(Entity.class).select(args);
+		}
+
+		public static List<Entity> create(Entity... args) throws Exceptions.PayloadError {
+			return new ARMRequest<Entity>(Entity.class).create(Arrays.asList(args));
+		}
+
+		public static ARMRequest filter_by(String attr, Object val) {
+			return new ARMRequest<Entity>(Entity.class).filter_by(attr, val);
+		}
+
+		public static List<Entity> all() throws Exceptions.PayloadError {
+			return new ARMRequest<Entity>(Entity.class).all();
+		}
+
+		public static Entity get(String id) throws Exceptions.PayloadError {
+			return new ARMRequest<Entity>(Entity.class).get(id);
+		}
+	}
+
+	public static class Stakeholder extends ARMObject<Stakeholder> {
+		public String getObject(){ return "stakeholder"; }
+
+		public static ARMRequest select(String... args) {
+			return new ARMRequest<Stakeholder>(Stakeholder.class).select(args);
+		}
+
+		public static List<Stakeholder> create(Stakeholder... args) throws Exceptions.PayloadError {
+			return new ARMRequest<Stakeholder>(Stakeholder.class).create(Arrays.asList(args));
+		}
+
+		public static ARMRequest filter_by(String attr, Object val) {
+			return new ARMRequest<Stakeholder>(Stakeholder.class).filter_by(attr, val);
+		}
+
+		public static List<Stakeholder> all() throws Exceptions.PayloadError {
+			return new ARMRequest<Stakeholder>(Stakeholder.class).all();
+		}
+
+		public static Stakeholder get(String id) throws Exceptions.PayloadError {
+			return new ARMRequest<Stakeholder>(Stakeholder.class).get(id);
+		}
+	}
+
+	public static class ProcessingAgreement extends ARMObject<ProcessingAgreement> {
+		public String getObject(){ return "processing_agreement"; }
+
+		public static ARMRequest select(String... args) {
+			return new ARMRequest<ProcessingAgreement>(ProcessingAgreement.class).select(args);
+		}
+
+		public static List<ProcessingAgreement> create(ProcessingAgreement... args) throws Exceptions.PayloadError {
+			return new ARMRequest<ProcessingAgreement>(ProcessingAgreement.class).create(Arrays.asList(args));
+		}
+
+		public static ARMRequest filter_by(String attr, Object val) {
+			return new ARMRequest<ProcessingAgreement>(ProcessingAgreement.class).filter_by(attr, val);
+		}
+
+		public static List<ProcessingAgreement> all() throws Exceptions.PayloadError {
+			return new ARMRequest<ProcessingAgreement>(ProcessingAgreement.class).all();
+		}
+
+		public static ProcessingAgreement get(String id) throws Exceptions.PayloadError {
+			return new ARMRequest<ProcessingAgreement>(ProcessingAgreement.class).get(id);
+		}
+	}
+
+	public static class Transfer extends ARMObject<Transfer> {
+		public String getObject(){ return "transfer"; }
+
+		public static ARMRequest select(String... args) {
+			return new ARMRequest<Transfer>(Transfer.class).select(args);
+		}
+
+		public static List<Transfer> create(Transfer... args) throws Exceptions.PayloadError {
+			return new ARMRequest<Transfer>(Transfer.class).create(Arrays.asList(args));
+		}
+
+		public static ARMRequest filter_by(String attr, Object val) {
+			return new ARMRequest<Transfer>(Transfer.class).filter_by(attr, val);
+		}
+
+		public static List<Transfer> all() throws Exceptions.PayloadError {
+			return new ARMRequest<Transfer>(Transfer.class).all();
+		}
+
+		public static Transfer get(String id) throws Exceptions.PayloadError {
+			return new ARMRequest<Transfer>(Transfer.class).get(id);
+		}
+	}
+
+	public static class TransactionOperation extends ARMObject<TransactionOperation> {
+		public String getObject(){ return "transaction_operation"; }
+
+		public static ARMRequest select(String... args) {
+			return new ARMRequest<TransactionOperation>(TransactionOperation.class).select(args);
+		}
+
+		public static List<TransactionOperation> create(TransactionOperation... args) throws Exceptions.PayloadError {
+			return new ARMRequest<TransactionOperation>(TransactionOperation.class).create(Arrays.asList(args));
+		}
+
+		public static ARMRequest filter_by(String attr, Object val) {
+			return new ARMRequest<TransactionOperation>(TransactionOperation.class).filter_by(attr, val);
+		}
+
+		public static List<TransactionOperation> all() throws Exceptions.PayloadError {
+			return new ARMRequest<TransactionOperation>(TransactionOperation.class).all();
+		}
+
+		public static TransactionOperation get(String id) throws Exceptions.PayloadError {
+			return new ARMRequest<TransactionOperation>(TransactionOperation.class).get(id);
+		}
+	}
+
+	public static class CheckFront extends ARMObject<CheckFront> {
+		public String getObject(){ return "check_front"; }
+
+		public static ARMRequest select(String... args) {
+			return new ARMRequest<CheckFront>(CheckFront.class).select(args);
+		}
+
+		public static List<CheckFront> create(CheckFront... args) throws Exceptions.PayloadError {
+			return new ARMRequest<CheckFront>(CheckFront.class).create(Arrays.asList(args));
+		}
+
+		public static ARMRequest filter_by(String attr, Object val) {
+			return new ARMRequest<CheckFront>(CheckFront.class).filter_by(attr, val);
+		}
+
+		public static List<CheckFront> all() throws Exceptions.PayloadError {
+			return new ARMRequest<CheckFront>(CheckFront.class).all();
+		}
+
+		public static CheckFront get(String id) throws Exceptions.PayloadError {
+			return new ARMRequest<CheckFront>(CheckFront.class).get(id);
+		}
+	}
+
+	public static class CheckBack extends ARMObject<CheckBack> {
+		public String getObject(){ return "check_back"; }
+
+		public static ARMRequest select(String... args) {
+			return new ARMRequest<CheckBack>(CheckBack.class).select(args);
+		}
+
+		public static List<CheckBack> create(CheckBack... args) throws Exceptions.PayloadError {
+			return new ARMRequest<CheckBack>(CheckBack.class).create(Arrays.asList(args));
+		}
+
+		public static ARMRequest filter_by(String attr, Object val) {
+			return new ARMRequest<CheckBack>(CheckBack.class).filter_by(attr, val);
+		}
+
+		public static List<CheckBack> all() throws Exceptions.PayloadError {
+			return new ARMRequest<CheckBack>(CheckBack.class).all();
+		}
+
+		public static CheckBack get(String id) throws Exceptions.PayloadError {
+			return new ARMRequest<CheckBack>(CheckBack.class).get(id);
+		}
+	}
+
 }
