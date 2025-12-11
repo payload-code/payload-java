@@ -30,7 +30,7 @@ A Java library for integrating [Payload](https://payload.com).
 <dependency>
   <groupId>com.payload</groupId>
   <artifactId>payload</artifactId>
-  <version>1.0.0</version>
+  <version>2.0.0</version>
 </dependency>
 ```
 
@@ -50,7 +50,17 @@ To authenticate with the Payload API, you'll need a live or test API key, access
 ```java
 import com.payload.Session;
 
-Session sess = Session("secret_key_3bW9JMZtPVDOfFNzwRdfE");
+Session sess = new Session("secret_key_3bW9JMZtPVDOfFNzwRdfE");
+```
+
+### API Version
+
+To specify which version of the Payload API to use, set the `api_version` property. When set, all requests will include the `X-API-Version` header.
+
+```java
+import com.payload.pl;
+
+pl.api_version = "2";
 ```
 
 ### Creating an Object
@@ -133,4 +143,4 @@ API_KEY=your_test_secret_key mvn test
 
 ## Documentation
 
-For further information on Payload's Java library and API capabilities, visit the [Payload Documentation](https://docs.payload.co/?java).
+For further information on Payload's Java library and API capabilities, visit the [Payload Documentation](https://docs.payload.com/?java).
