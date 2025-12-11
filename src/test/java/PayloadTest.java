@@ -289,4 +289,283 @@ public class PayloadTest {
         assertNotNull(clientToken.getJObj("intent").getJSONObject("checkout_page").getString("url"));
     }
 
+    @Test
+    public void testPaymentFilters() throws Exception {
+        final String randDescription = faker.lorem().sentence();
+
+        pl.Payment pmt = new pl.Payment() {
+            {
+                set("amount", 100);
+                set("description", randDescription);
+                set("processing_id", fixtures.processing_account.getStr("id"));
+                set("payment_method", new pl.Card() {
+                    {
+                        set("card", new JSONObject() {
+                            {
+                                put("card_number", "4242 4242 4242 4242");
+                                put("expiry", "12/29");
+                            }
+                        });
+                        set("billing_address", new JSONObject() {
+                            {
+                                put("postal_code", "12345");
+                            }
+                        });
+                    }
+                });
+                create();
+            }
+        };
+
+        List<pl.Payment> payments = (List<pl.Payment>) pl.Payment
+            .filter_by("amount[gte]", 99)
+            .filter_by("amount[lte]", 200)
+            .filter_by("description", randDescription)
+            .filter_by("created_at[gte]", "2019-12-31")
+            .all();
+
+        assertEquals(1, payments.size());
+        assertEquals(pmt.getStr("id"), payments.get(0).getStr("id"));
+    }
+
+    @Test
+    public void testVoidPayment() throws Exception {
+        pl.Payment pmt = new pl.Payment() {
+            {
+                set("amount", 100);
+                set("processing_id", fixtures.processing_account.getStr("id"));
+                set("payment_method", new pl.Card() {
+                    {
+                        set("card", new JSONObject() {
+                            {
+                                put("card_number", "4242 4242 4242 4242");
+                                put("expiry", "12/29");
+                            }
+                        });
+                        set("billing_address", new JSONObject() {
+                            {
+                                put("postal_code", "12345");
+                            }
+                        });
+                    }
+                });
+                create();
+            }
+        };
+
+        pmt.update(pl.attr("status", "voided"));
+
+        assertEquals("voided", pmt.getStr("status"));
+    }
+
+    @Test
+    public void testRefundCardPayment() throws Exception {
+        pl.Payment pmt = new pl.Payment() {
+            {
+                set("amount", 100);
+                set("processing_id", fixtures.processing_account.getStr("id"));
+                set("payment_method", new pl.Card() {
+                    {
+                        set("card", new JSONObject() {
+                            {
+                                put("card_number", "4242 4242 4242 4242");
+                                put("expiry", "12/29");
+                            }
+                        });
+                        set("billing_address", new JSONObject() {
+                            {
+                                put("postal_code", "12345");
+                            }
+                        });
+                    }
+                });
+                create();
+            }
+        };
+
+        final String pmtId = pmt.getStr("id");
+
+        pl.Refund refund = new pl.Refund() {
+            {
+                set("amount", 100);
+                set("ledger", new JSONObject[] { new JSONObject() {
+                    {
+                        put("assoc_transaction_id", pmtId);
+                    }
+                }});
+                create();
+            }
+        };
+
+        assertEquals("refund", refund.getStr("type"));
+        assertEquals(100., refund.getFloat("amount"), 0.0001);
+        assertEquals("approved", refund.getStr("status_code"));
+    }
+
+    @Test
+    public void testPartialRefundCardPayment() throws Exception {
+        pl.Payment pmt = new pl.Payment() {
+            {
+                set("amount", 100);
+                set("processing_id", fixtures.processing_account.getStr("id"));
+                set("payment_method", new pl.Card() {
+                    {
+                        set("card", new JSONObject() {
+                            {
+                                put("card_number", "4242 4242 4242 4242");
+                                put("expiry", "12/29");
+                            }
+                        });
+                        set("billing_address", new JSONObject() {
+                            {
+                                put("postal_code", "12345");
+                            }
+                        });
+                    }
+                });
+                create();
+            }
+        };
+
+        final String pmtId = pmt.getStr("id");
+
+        pl.Refund refund = new pl.Refund() {
+            {
+                set("amount", 10);
+                set("ledger", new JSONObject[] { new JSONObject() {
+                    {
+                        put("assoc_transaction_id", pmtId);
+                    }
+                }});
+                create();
+            }
+        };
+
+        assertEquals("refund", refund.getStr("type"));
+        assertEquals(10., refund.getFloat("amount"), 0.0001);
+        assertEquals("approved", refund.getStr("status_code"));
+    }
+
+    @Test
+    public void testRefundBankPayment() throws Exception {
+        pl.Payment pmt = new pl.Payment() {
+            {
+                set("amount", 100);
+                set("processing_id", fixtures.processing_account.getStr("id"));
+                set("payment_method", new pl.BankAccount() {
+                    {
+                        set("account_number", "1234567890");
+                        set("routing_number", "036001808");
+                        set("account_type", "checking");
+                    }
+                });
+                create();
+            }
+        };
+
+        final String pmtId = pmt.getStr("id");
+
+        pl.Refund refund = new pl.Refund() {
+            {
+                set("amount", 100);
+                set("ledger", new JSONObject[] { new JSONObject() {
+                    {
+                        put("assoc_transaction_id", pmtId);
+                    }
+                }});
+                create();
+            }
+        };
+
+        assertEquals("refund", refund.getStr("type"));
+        assertEquals(100., refund.getFloat("amount"), 0.0001);
+        assertEquals("approved", refund.getStr("status_code"));
+    }
+
+    @Test
+    public void testPartialRefundBankPayment() throws Exception {
+        pl.Payment pmt = new pl.Payment() {
+            {
+                set("amount", 100);
+                set("processing_id", fixtures.processing_account.getStr("id"));
+                set("payment_method", new pl.BankAccount() {
+                    {
+                        set("account_number", "1234567890");
+                        set("routing_number", "036001808");
+                        set("account_type", "checking");
+                    }
+                });
+                create();
+            }
+        };
+
+        final String pmtId = pmt.getStr("id");
+
+        pl.Refund refund = new pl.Refund() {
+            {
+                set("amount", 10);
+                set("ledger", new JSONObject[] { new JSONObject() {
+                    {
+                        put("assoc_transaction_id", pmtId);
+                    }
+                }});
+                create();
+            }
+        };
+
+        assertEquals("refund", refund.getStr("type"));
+        assertEquals(10., refund.getFloat("amount"), 0.0001);
+        assertEquals("approved", refund.getStr("status_code"));
+    }
+
+    @Test
+    public void testConvenienceFee() throws Exception {
+        pl.Payment pmt = (pl.Payment) pl.Payment.select("*", "fee", "conv_fee").create(new pl.Payment() {
+            {
+                set("amount", 100);
+                set("processing_id", fixtures.processing_account.getStr("id"));
+                set("payment_method", new pl.Card() {
+                    {
+                        set("card", new JSONObject() {
+                            {
+                                put("card_number", "4242 4242 4242 4242");
+                                put("expiry", "12/29");
+                            }
+                        });
+                        set("billing_address", new JSONObject() {
+                            {
+                                put("postal_code", "12345");
+                            }
+                        });
+                    }
+                });
+            }
+        }).get(0);
+
+        assertNotNull(pmt.get("fee"));
+        assertNotNull(pmt.get("conv_fee"));
+    }
+
+    @Test(expected = Exceptions.InvalidAttributes.class)
+    public void testInvalidPaymentMethodTypeInvalidAttributes() throws Exception {
+        new pl.Payment() {
+            {
+                set("amount", 100);
+                set("processing_id", fixtures.processing_account.getStr("id"));
+                set("payment_method", new pl.PaymentMethod() {
+                    {
+                        set("type", "bank_account");
+                        set("card", new JSONObject() {
+                            {
+                                put("card_number", "4242 4242 4242 4242");
+                                put("expiry", "12/29");
+                            }
+                        });
+                    }
+                });
+                create();
+            }
+        };
+    }
+
 }
