@@ -33,15 +33,23 @@ public class pl {
     }
 
     public Map.Entry<String, Object> gt(Object val) {
-      return new AbstractMap.SimpleEntry<String, Object>(key, new JSONObject().put("gt", val));
+      return new AbstractMap.SimpleEntry<String, Object>(key, ">" + val);
     }
 
     public Map.Entry<String, Object> lt(Object val) {
-      return new AbstractMap.SimpleEntry<String, Object>(key, new JSONObject().put("lt", val));
+      return new AbstractMap.SimpleEntry<String, Object>(key, "<" + val);
+    }
+
+    public Map.Entry<String, Object> gte(Object val) {
+      return new AbstractMap.SimpleEntry<String, Object>(key, ">=" + val);
+    }
+
+    public Map.Entry<String, Object> lte(Object val) {
+      return new AbstractMap.SimpleEntry<String, Object>(key, "<=" + val);
     }
 
     public Map.Entry<String, Object> contains(Object val) {
-      return new AbstractMap.SimpleEntry<String, Object>(key, new JSONObject().put("contains", val));
+      return new AbstractMap.SimpleEntry<String, Object>(key, "?*" + val);
     }
 
     public Map.Entry<String, Object> eq(Object val) {

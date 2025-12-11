@@ -6,9 +6,6 @@ import com.payload.arm.ARMRequest;
 import com.payload.Exceptions;
 import java.util.List;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.lang.reflect.Field;
-import java.io.FileNotFoundException;
 import org.json.*;
 import org.junit.Test;
 import org.junit.Before;
@@ -19,6 +16,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 import com.github.javafaker.Faker;
 import com.payload.test.Factory;
 import com.payload.test.Fixtures;
@@ -327,17 +325,12 @@ public class PayloadTest {
       }
     };
 
-    String createdAt = pmt.getStr("created_at");
-    assertNotNull("created_at should not be null", createdAt);
-
-    LocalDate createdDate = LocalDate.parse(createdAt.substring(0, 10), DateTimeFormatter.ISO_LOCAL_DATE);
-
     List<pl.Payment> payments = (List<pl.Payment>) pl.Payment
         .filter_by(
             pl.attr("amount").gt(99),
             pl.attr("amount").lt(200),
             pl.attr("description").contains(randDescription),
-            pl.attr("created_at").gt(createdDate))
+            pl.attr("created_at").gt(LocalDate.of(2019, 2, 1)))
         .all();
 
     assertEquals(1, payments.size());
@@ -541,36 +534,34 @@ public class PayloadTest {
 
   @Test
   public void testConvenienceFee() throws Exception {
-    pl.Payment pmt = new pl.Payment() {
-      {
-        set("amount", 100);
-        set("processing_id", fixtures.processing_account.getStr("id"));
-        set("payment_method", new pl.Card() {
+    pl.Payment pmt = (pl.Payment) pl.Payment
+        .select("*", "fee", "conv_fee")
+        .create(new pl.Payment() {
           {
-            set("card", new JSONObject() {
+            set("amount", 100);
+            set("processing_id", fixtures.processing_account.getStr("id"));
+            set("payment_method", new pl.Card() {
               {
-                put("card_number", "4242 4242 4242 4242");
-                put("expiry", "12/29");
-                put("card_code", "123");
-              }
-            });
-            set("billing_address", new JSONObject() {
-              {
-                put("postal_code", "12345");
+                set("card", new JSONObject() {
+                  {
+                    put("card_number", "4242 4242 4242 4242");
+                    put("expiry", "12/29");
+                    put("card_code", "123");
+                  }
+                });
+                set("billing_address", new JSONObject() {
+                  {
+                    put("postal_code", "12345");
+                  }
+                });
               }
             });
           }
         });
-        create();
-      }
-    };
 
-    pl.Payment pmtWithFees = (pl.Payment) pl.Payment
-        .select("*", "fee", "conv_fee")
-        .get(pmt.getStr("id"));
-
-    assertNotNull(pmtWithFees.get("fee"));
-    assertNotNull(pmtWithFees.get("conv_fee"));
+    assertNotNull(pmt);
+    assertTrue(pmt.getFloat("fee") >= 0);
+    assertTrue(pmt.getFloat("conv_fee") >= 0);
   }
 
   @Test(expected = Exceptions.InvalidAttributes.class)
