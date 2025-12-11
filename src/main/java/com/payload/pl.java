@@ -14,7 +14,7 @@ public class pl {
 	public static final String URL = "https://api.payload.com";
 	public static volatile String api_key;
 	public static volatile String api_url = URL;
-	public static volatile String api_version;
+	public static volatile String api_version = "1";
 	public static Session default_session = new Session(null);
 
 	public static Map.Entry<String,Object> attr(String key, Object val) {
