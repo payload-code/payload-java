@@ -107,6 +107,10 @@ public class ARMRequest<T> {
 
 			con.setRequestProperty("Authorization", "Basic "+encoded);
 
+			if (this.session.getApiVersion() != null) {
+				con.setRequestProperty("X-API-Version", this.session.getApiVersion());
+			}
+
 			if (json != null && !json.isEmpty()) {
 				con.setRequestProperty("Content-Type", "application/json");
 				con.setDoOutput(true);
