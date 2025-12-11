@@ -543,8 +543,7 @@ public class PayloadTest {
             }
         };
 
-        pl.Payment pmtWithFees = pl.Payment.select("*", "fee", "conv_fee")
-            .filter_by("id", pmt.getStr("id"))
+        pl.Payment pmtWithFees = (pl.Payment) pl.Payment.select("*", "fee", "conv_fee")
             .get(pmt.getStr("id"));
 
         assertNotNull(pmtWithFees.get("fee"));
