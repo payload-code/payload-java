@@ -23,10 +23,10 @@ public class ApiVersionTest {
     }
 
     @Test
-    public void testApiVersionDefaultsToV1() {
-        assertEquals("1", pl.api_version);
+    public void testApiVersionDefaultsToNull() {
+        assertNull(pl.api_version);
         Session session = new Session("test_key");
-        assertEquals("1", session.getApiVersion());
+        assertNull(session.getApiVersion());
     }
 
     @Test
