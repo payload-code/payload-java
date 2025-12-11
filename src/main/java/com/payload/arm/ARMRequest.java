@@ -114,21 +114,21 @@ public class ARMRequest<T> {
 			if (json != null && !json.isEmpty()) {
 				con.setRequestProperty("Content-Type", "application/json");
 				con.setDoOutput(true);
-				DataOutputStream out = new DataOutputStream(con.getOutputStream());
-				out.writeBytes(json);
-				out.flush();
-				out.close();
+				try (DataOutputStream out = new DataOutputStream(con.getOutputStream())) {
+					out.writeBytes(json);
+					out.flush();
+				}
 			}
 
 			try {
 				int status = con.getResponseCode();
-				BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-				String inputLine;
 				StringBuilder content = new StringBuilder();
-				while ((inputLine = in.readLine()) != null) {
-					content.append(inputLine);
+				try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+					String inputLine;
+					while ((inputLine = in.readLine()) != null) {
+						content.append(inputLine);
+					}
 				}
-				in.close();
 
 				JSONObject obj = new JSONObject(content.toString());
 
@@ -161,13 +161,13 @@ public class ARMRequest<T> {
 					int status = con.getResponseCode();
 					InputStream errorStream = con.getErrorStream();
 					if ( errorStream != null ) {
-						BufferedReader in = new BufferedReader(new InputStreamReader(errorStream));
-						String inputLine;
 						StringBuilder content = new StringBuilder();
-						while ((inputLine = in.readLine()) != null) {
-							content.append(inputLine);
+						try (BufferedReader in = new BufferedReader(new InputStreamReader(errorStream))) {
+							String inputLine;
+							while ((inputLine = in.readLine()) != null) {
+								content.append(inputLine);
+							}
 						}
-						in.close();
 
 						JSONObject err = new JSONObject(content.toString());
 
