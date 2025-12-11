@@ -21,14 +21,6 @@ public class Exceptions {
         public PayloadError(String msg, Exception e) {
             super(msg, e);
         }
-
-        @Override
-        public String getMessage() {
-            if (this.data != null) {
-                return this.data.toString();
-            }
-            return super.getMessage();
-        }
     }
 
     public static class UnknownResponse extends PayloadError {
