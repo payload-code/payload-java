@@ -199,6 +199,14 @@ public class ARMRequest<T> {
 		return this;
 	}
 
+	@SafeVarargs
+	public final ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+		for (Map.Entry<String, Object> entry : attrs) {
+			_filters.put(entry.getKey(), entry.getValue());
+		}
+		return this;
+	}
+
 	public List<T> all() throws Exceptions.PayloadError {
 		return (List<T>)this._request("GET", null, null);
 	}

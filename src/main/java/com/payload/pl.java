@@ -21,6 +21,34 @@ public class pl {
 		return new AbstractMap.SimpleEntry<String,Object>(key, val);
 	}
 
+	public static Attr attr(String key) {
+		return new Attr(key);
+	}
+
+	public static class Attr {
+		private final String key;
+
+		public Attr(String key) {
+			this.key = key;
+		}
+
+		public Map.Entry<String, Object> gt(Object val) {
+			return new AbstractMap.SimpleEntry<String, Object>(key, new JSONObject().put("gt", val));
+		}
+
+		public Map.Entry<String, Object> lt(Object val) {
+			return new AbstractMap.SimpleEntry<String, Object>(key, new JSONObject().put("lt", val));
+		}
+
+		public Map.Entry<String, Object> contains(Object val) {
+			return new AbstractMap.SimpleEntry<String, Object>(key, new JSONObject().put("contains", val));
+		}
+
+		public Map.Entry<String, Object> eq(Object val) {
+			return new AbstractMap.SimpleEntry<String, Object>(key, val);
+		}
+	}
+
 	public static class Customer extends ARMObject<Customer> {
 		public String getObject(){ return "customer"; }
 
@@ -141,6 +169,11 @@ public class pl {
 
 		public static ARMRequest filter_by(String attr, Object val) {
 			return new ARMRequest<Payment>(Payment.class).filter_by(attr, val);
+		}
+
+		@SafeVarargs
+		public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+			return new ARMRequest<Payment>(Payment.class).filter_by(attrs);
 		}
 
 		public static Payment get(String id) throws Exceptions.PayloadError {
