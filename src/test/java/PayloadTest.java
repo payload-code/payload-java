@@ -520,7 +520,7 @@ public class PayloadTest {
 
     @Test
     public void testConvenienceFee() throws Exception {
-        pl.Payment pmt = (pl.Payment) pl.Payment.select("*", "fee", "conv_fee").create(new pl.Payment() {
+        pl.Payment pmt = new pl.Payment() {
             {
                 set("amount", 100);
                 set("processing_id", fixtures.processing_account.getStr("id"));
@@ -539,11 +539,16 @@ public class PayloadTest {
                         });
                     }
                 });
+                create();
             }
-        }).get(0);
+        };
 
-        assertNotNull(pmt.get("fee"));
-        assertNotNull(pmt.get("conv_fee"));
+        pl.Payment pmtWithFees = pl.Payment.select("*", "fee", "conv_fee")
+            .filter_by("id", pmt.getStr("id"))
+            .get(pmt.getStr("id"));
+
+        assertNotNull(pmtWithFees.get("fee"));
+        assertNotNull(pmtWithFees.get("conv_fee"));
     }
 
     @Test(expected = Exceptions.InvalidAttributes.class)
