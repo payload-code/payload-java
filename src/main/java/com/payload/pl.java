@@ -935,6 +935,37 @@ public class pl {
     }
   }
 
+  public static class ProcessingRule extends ARMObject<ProcessingRule> {
+    public String getObject() {
+      return "processing_rule";
+    }
+
+    public static ARMRequest select(String... args) {
+      return new ARMRequest<ProcessingRule>(ProcessingRule.class).select(args);
+    }
+
+    public static List<ProcessingRule> create(ProcessingRule... args) throws Exceptions.PayloadError {
+      return new ARMRequest<ProcessingRule>(ProcessingRule.class).create(Arrays.asList(args));
+    }
+
+    public static ARMRequest filter_by(String attr, Object val) {
+      return new ARMRequest<ProcessingRule>(ProcessingRule.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<ProcessingRule>(ProcessingRule.class).filter_by(attrs);
+    }
+
+    public static List<ProcessingRule> all() throws Exceptions.PayloadError {
+      return new ARMRequest<ProcessingRule>(ProcessingRule.class).all();
+    }
+
+    public static ProcessingRule get(String id) throws Exceptions.PayloadError {
+      return new ARMRequest<ProcessingRule>(ProcessingRule.class).get(id);
+    }
+  }
+
   public static class Transfer extends ARMObject<Transfer> {
     public String getObject() {
       return "transfer";
