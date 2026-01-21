@@ -12,10 +12,17 @@ import org.json.*;
 
 public class pl {
   public static final String URL = "https://api.payload.com";
+  public static final String VERSION;
   public static volatile String api_key;
   public static volatile String api_url = URL;
   public static volatile String api_version = null;
   public static Session default_session = new Session(null);
+
+  static {
+    Package pkg = pl.class.getPackage();
+    String implVersion = pkg != null ? pkg.getImplementationVersion() : null;
+    VERSION = implVersion != null ? implVersion : "dev";
+  }
 
   public static Map.Entry<String, Object> attr(String key, Object val) {
     return new AbstractMap.SimpleEntry<String, Object>(key, val);

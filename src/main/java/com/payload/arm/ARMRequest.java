@@ -46,6 +46,10 @@ public class ARMRequest<T> {
 		this.session = session != null ? session : pl.default_session;
 	}
 
+	protected HttpURLConnection openConnection(URL url) throws IOException {
+		return (HttpURLConnection) url.openConnection();
+	}
+
 	public Object _request( String method, String id, String json) throws Exceptions.PayloadError {
 		String endpoint = "";
 
@@ -100,12 +104,13 @@ public class ARMRequest<T> {
 
 		try {
 			URL url = new URL(this.session.getApiUrl() + endpoint);
-			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			HttpURLConnection con = openConnection(url);
 			con.setRequestMethod(method);
 
 			String encoded = Base64.encodeBase64String((this.session.getApiKey()+":").getBytes("UTF-8"));
 
 			con.setRequestProperty("Authorization", "Basic "+encoded);
+			con.setRequestProperty("User-Agent", "payload-java/" + pl.VERSION);
 
 			if (this.session.getApiVersion() != null) {
 				con.setRequestProperty("X-API-Version", this.session.getApiVersion());
