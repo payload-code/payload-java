@@ -5,7 +5,7 @@
 
   <groupId>com.payload</groupId>
   <artifactId>payload</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
   <name>payload</name>
   <description>Payload Java Library</description>
   <url>https://github.com/payload-code/payload-java</url>
@@ -50,6 +50,12 @@
       <groupId>com.github.javafaker</groupId>
       <artifactId>javafaker</artifactId>
       <version>1.0.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>4.11.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -108,6 +114,17 @@
                     </configuration>
                 </execution>
            </executions>
+        </plugin>
+        <plugin>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.3.0</version>
+          <configuration>
+            <archive>
+              <manifest>
+                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              </manifest>
+            </archive>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>

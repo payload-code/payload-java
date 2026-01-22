@@ -46,6 +46,10 @@ public class ARMRequest<T> {
 		this.session = session != null ? session : pl.default_session;
 	}
 
+	protected HttpURLConnection openConnection(URL url) throws IOException {
+		return (HttpURLConnection) url.openConnection();
+	}
+
 	public Object _request( String method, String id, String json) throws Exceptions.PayloadError {
 		String endpoint = "";
 
@@ -100,31 +104,36 @@ public class ARMRequest<T> {
 
 		try {
 			URL url = new URL(this.session.getApiUrl() + endpoint);
-			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			HttpURLConnection con = openConnection(url);
 			con.setRequestMethod(method);
 
 			String encoded = Base64.encodeBase64String((this.session.getApiKey()+":").getBytes("UTF-8"));
 
 			con.setRequestProperty("Authorization", "Basic "+encoded);
+			con.setRequestProperty("User-Agent", "payload-java/" + pl.VERSION);
+
+			if (this.session.getApiVersion() != null) {
+				con.setRequestProperty("X-API-Version", this.session.getApiVersion());
+			}
 
 			if (json != null && !json.isEmpty()) {
 				con.setRequestProperty("Content-Type", "application/json");
 				con.setDoOutput(true);
-				DataOutputStream out = new DataOutputStream(con.getOutputStream());
-				out.writeBytes(json);
-				out.flush();
-				out.close();
+				try (DataOutputStream out = new DataOutputStream(con.getOutputStream())) {
+					out.writeBytes(json);
+					out.flush();
+				}
 			}
 
 			try {
 				int status = con.getResponseCode();
-				BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-				String inputLine;
 				StringBuilder content = new StringBuilder();
-				while ((inputLine = in.readLine()) != null) {
-					content.append(inputLine);
+				try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+					String inputLine;
+					while ((inputLine = in.readLine()) != null) {
+						content.append(inputLine);
+					}
 				}
-				in.close();
 
 				JSONObject obj = new JSONObject(content.toString());
 
@@ -157,13 +166,13 @@ public class ARMRequest<T> {
 					int status = con.getResponseCode();
 					InputStream errorStream = con.getErrorStream();
 					if ( errorStream != null ) {
-						BufferedReader in = new BufferedReader(new InputStreamReader(errorStream));
-						String inputLine;
 						StringBuilder content = new StringBuilder();
-						while ((inputLine = in.readLine()) != null) {
-							content.append(inputLine);
+						try (BufferedReader in = new BufferedReader(new InputStreamReader(errorStream))) {
+							String inputLine;
+							while ((inputLine = in.readLine()) != null) {
+								content.append(inputLine);
+							}
 						}
-						in.close();
 
 						JSONObject err = new JSONObject(content.toString());
 
@@ -192,6 +201,14 @@ public class ARMRequest<T> {
 
 	public ARMRequest filter_by(String attr, Object val) {
 		_filters.put(attr, val);
+		return this;
+	}
+
+	@SafeVarargs
+	public final ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+		for (Map.Entry<String, Object> entry : attrs) {
+			_filters.put(entry.getKey(), entry.getValue());
+		}
 		return this;
 	}
 

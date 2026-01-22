@@ -6,11 +6,11 @@ import org.json.*;
 
 public class Exceptions {
     public static class PayloadError extends Exception {
-        public static int http_code = 0;
+        public static final int http_code = 0;
         public JSONObject data = null;
 
         public PayloadError(JSONObject data) {
-            super();
+            super(data != null ? data.toString() : null);
             this.data = data;
         }
 
@@ -30,7 +30,7 @@ public class Exceptions {
     }
 
     public static class BadRequest extends PayloadError {
-        public static int http_code = 400;
+        public static final int http_code = 400;
         public BadRequest(JSONObject details) {
             super(details);
         }
@@ -43,42 +43,42 @@ public class Exceptions {
     }
 
     public static class Unauthorized extends PayloadError {
-        public static int http_code = 401;
+        public static final int http_code = 401;
         public Unauthorized(JSONObject details) {
             super(details);
         }
     }
 
     public static class NotPermitted extends PayloadError {
-        public static int http_code = 403;
+        public static final int http_code = 403;
         public NotPermitted(JSONObject details) {
             super(details);
         }
     }
 
     public static class NotFound extends PayloadError {
-        public static int http_code = 404;
+        public static final int http_code = 404;
         public NotFound(JSONObject details) {
             super(details);
         }
     }
 
     public static class TooManyRequests extends PayloadError {
-        public static int http_code = 429;
+        public static final int http_code = 429;
         public TooManyRequests(JSONObject details) {
             super(details);
         }
     }
 
     public static class InternalServerError extends PayloadError {
-        public static int http_code = 500;
+        public static final int http_code = 500;
         public InternalServerError(JSONObject details) {
             super(details);
         }
     }
 
     public static class ServiceUnavailable extends PayloadError {
-        public static int http_code = 503;
+        public static final int http_code = 503;
         public ServiceUnavailable(JSONObject details) {
             super(details);
         }
@@ -103,7 +103,7 @@ public class Exceptions {
         }
     }
 
-    public static Map<String, Class> excmap = new HashMap<String, Class>() {{
+    public static final Map<String, Class<? extends PayloadError>> excmap = new HashMap<String, Class<? extends PayloadError>>() {{
         put("BadRequest", BadRequest.class);
         put("InvalidAttributes", InvalidAttributes.class);
         put("Unauthorized", Unauthorized.class);
