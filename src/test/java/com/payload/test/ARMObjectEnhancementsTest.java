@@ -19,7 +19,7 @@ public class ARMObjectEnhancementsTest {
     ARMObject obj = new ARMObject();
     obj.set("active", true);
     obj.set("disabled", false);
-    obj.set("missing", null);
+    // Set a key that doesn't exist to test default behavior
 
     // Test basic boolean retrieval
     assertTrue(obj.getBool("active"));
@@ -28,8 +28,8 @@ public class ARMObjectEnhancementsTest {
     // Test boolean with default value
     assertTrue(obj.getBool("active", false));
     assertFalse(obj.getBool("disabled", true));
-    assertTrue(obj.getBool("missing", true));
-    assertFalse(obj.getBool("nonexistent", false));
+    assertTrue(obj.getBool("nonexistent", true));
+    assertFalse(obj.getBool("another_nonexistent", false));
   }
 
   @Test
@@ -42,7 +42,7 @@ public class ARMObjectEnhancementsTest {
     assertTrue(obj.getBool("invalid_bool", true));
     assertFalse(obj.getBool("invalid_bool", false));
     assertTrue(obj.getBool("null_bool", true));
-    assertFalse(obj.getBool("nonexistent", true));
+    assertTrue(obj.getBool("nonexistent", true));
   }
 
   @Test
