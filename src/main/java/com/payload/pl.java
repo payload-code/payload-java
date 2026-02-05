@@ -173,6 +173,9 @@ public class pl {
   }
 
   public static class Payment extends ARMObject<Payment> {
+    public Boolean finalized;
+    public String status;
+
     public String getObject() {
       return "transaction";
     }
@@ -188,6 +191,14 @@ public class pl {
     public Payment(float amount) {
       super();
       set("amount", amount);
+    }
+
+    @Override
+    public Payment setJson(JSONObject obj) {
+      super.setJson(obj);
+      this.finalized = obj.has("finalized") ? obj.getBoolean("finalized") : null;
+      this.status = obj.optString("status", null);
+      return this;
     }
 
     public static ARMRequest select(String... args) {
@@ -341,9 +352,42 @@ public class pl {
     }
   }
 
+  public static class SyntheticBalance {
+    public double available;
+    public double pending;
+
+    public SyntheticBalance(JSONObject obj) {
+      this.available = obj.optDouble("available", 0);
+      this.pending = obj.optDouble("pending", 0);
+    }
+  }
+
+  public static class SyntheticAccount {
+    public SyntheticBalance balance;
+
+    public SyntheticAccount(JSONObject obj) {
+      if (obj.has("balance")) {
+        this.balance = new SyntheticBalance(obj.getJSONObject("balance"));
+      }
+    }
+  }
+
   public static class PaymentMethod extends ARMObject<PaymentMethod> {
+    public String transfer_type;
+    public SyntheticAccount synthetic;
+
     public String getObject() {
       return "payment_method";
+    }
+
+    @Override
+    public PaymentMethod setJson(JSONObject obj) {
+      super.setJson(obj);
+      this.transfer_type = obj.optString("transfer_type", null);
+      if (obj.has("synthetic")) {
+        this.synthetic = new SyntheticAccount(obj.getJSONObject("synthetic"));
+      }
+      return this;
     }
 
     public Map<String, String> fieldmap() {
@@ -601,8 +645,19 @@ public class pl {
   }
 
   public static class Webhook extends ARMObject<Webhook> {
+    public String url;
+    public String trigger;
+
     public String getObject() {
       return "webhook";
+    }
+
+    @Override
+    public Webhook setJson(JSONObject obj) {
+      super.setJson(obj);
+      this.url = obj.optString("url", null);
+      this.trigger = obj.optString("trigger", null);
+      return this;
     }
 
     public static ARMRequest select(String... args) {
@@ -623,6 +678,46 @@ public class pl {
 
     public static Webhook get(String id) throws Exceptions.PayloadError {
       return new ARMRequest<Webhook>(Webhook.class).get(id);
+    }
+  }
+
+  public static class WebhookLog extends ARMObject<WebhookLog> {
+    public String url;
+    public ARMObject triggered_on;
+
+    public String getObject() {
+      return "webhook_log";
+    }
+
+    @Override
+    public WebhookLog setJson(JSONObject obj) {
+      super.setJson(obj);
+      this.url = obj.optString("url", null);
+      if (obj.has("triggered_on")) {
+        this.triggered_on = new ARMObject();
+        this.triggered_on.setJson(obj.getJSONObject("triggered_on"));
+      }
+      return this;
+    }
+
+    public static ARMRequest select(String... args) {
+      return new ARMRequest<WebhookLog>(WebhookLog.class).select(args);
+    }
+
+    public static List<WebhookLog> create(WebhookLog... args) throws Exceptions.PayloadError {
+      return new ARMRequest<WebhookLog>(WebhookLog.class).create(Arrays.asList(args));
+    }
+
+    public static ARMRequest filter_by(String attr, Object val) {
+      return new ARMRequest<WebhookLog>(WebhookLog.class).filter_by(attr, val);
+    }
+
+    public static List<WebhookLog> all() throws Exceptions.PayloadError {
+      return new ARMRequest<WebhookLog>(WebhookLog.class).all();
+    }
+
+    public static WebhookLog get(String id) throws Exceptions.PayloadError {
+      return new ARMRequest<WebhookLog>(WebhookLog.class).get(id);
     }
   }
 
