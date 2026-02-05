@@ -764,5 +764,3 @@ public class PayloadTest {
     assertNull(partialAccount.balance);
   }
 }
-
-}
