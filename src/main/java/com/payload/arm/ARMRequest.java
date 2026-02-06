@@ -193,27 +193,43 @@ public class ARMRequest<T> {
 		}
 	}
 
-	public ARMRequest select(String... args) {
+	public ARMRequest<T> select(String... args) {
 		for ( int i=0; i<args.length; i++)
 			this._attrs.add(args[i]);
 		return this;
 	}
 
-	public ARMRequest filter_by(String attr, Object val) {
+	public ARMRequest<T> filter_by(String attr, Object val) {
 		_filters.put(attr, val);
 		return this;
 	}
 
 	@SafeVarargs
-	public final ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+	public final ARMRequest<T> filter_by(Map.Entry<String, Object>... attrs) {
 		for (Map.Entry<String, Object> entry : attrs) {
 			_filters.put(entry.getKey(), entry.getValue());
 		}
 		return this;
 	}
 
+	@SafeVarargs
+	public final ARMRequest<T> where(Map.Entry<String, Object>... attrs) {
+		return filter_by(attrs);
+	}
+
+	public ARMRequest<T> sort(String field, String direction) {
+		_filters.put("sort", field + ":" + direction);
+		return this;
+	}
+
 	public List<T> all() throws Exceptions.PayloadError {
 		return (List<T>)this._request("GET", null, null);
+	}
+
+	public T first() throws Exceptions.PayloadError {
+		_filters.put("limit", 1);
+		List<T> results = all();
+		return results != null && !results.isEmpty() ? results.get(0) : null;
 	}
 
 	public T get(String id) throws Exceptions.PayloadError {

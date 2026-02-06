@@ -32,6 +32,23 @@ public class pl {
     return new Attr(key);
   }
 
+  @SafeVarargs
+  public static JSONObject map(Map.Entry<String, Object>... attrs) {
+    JSONObject obj = new JSONObject();
+    for (Map.Entry<String, Object> entry : attrs) {
+      obj.put(entry.getKey(), entry.getValue());
+    }
+    return obj;
+  }
+
+  public static JSONArray list(Object... items) {
+    JSONArray arr = new JSONArray();
+    for (Object item : items) {
+      arr.put(item);
+    }
+    return arr;
+  }
+
   public static class Attr {
     private final String key;
 
@@ -173,8 +190,6 @@ public class pl {
   }
 
   public static class Payment extends ARMObject<Payment> {
-    public Boolean finalized;
-    public String status;
 
     public String getObject() {
       return "transaction";
@@ -191,14 +206,6 @@ public class pl {
     public Payment(float amount) {
       super();
       set("amount", amount);
-    }
-
-    @Override
-    public Payment setJson(JSONObject obj) {
-      super.setJson(obj);
-      this.finalized = obj.has("finalized") ? obj.getBoolean("finalized") : null;
-      this.status = obj.optString("status", null);
-      return this;
     }
 
     public static ARMRequest select(String... args) {
@@ -224,6 +231,10 @@ public class pl {
 
     public static List<Payment> all() throws Exceptions.PayloadError {
       return new ARMRequest<Payment>(Payment.class).all();
+    }
+
+    public Payment capture() throws Exceptions.PayloadError {
+      return this.update(pl.attr("status", "processed"));
     }
 
     public PaymentMethod paymentMethod() {
@@ -317,6 +328,11 @@ public class pl {
       return new ARMRequest<Credit>(Credit.class).filter_by(attr, val);
     }
 
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Credit>(Credit.class).filter_by(attrs);
+    }
+
     public static List<Credit> all() throws Exceptions.PayloadError {
       return new ARMRequest<Credit>(Credit.class).all();
     }
@@ -352,42 +368,10 @@ public class pl {
     }
   }
 
-  public static class SyntheticBalance {
-    public double available;
-    public double pending;
-
-    public SyntheticBalance(JSONObject obj) {
-      this.available = obj.optDouble("available", 0);
-      this.pending = obj.optDouble("pending", 0);
-    }
-  }
-
-  public static class SyntheticAccount {
-    public SyntheticBalance balance;
-
-    public SyntheticAccount(JSONObject obj) {
-      if (obj.has("balance")) {
-        this.balance = new SyntheticBalance(obj.getJSONObject("balance"));
-      }
-    }
-  }
-
   public static class PaymentMethod extends ARMObject<PaymentMethod> {
-    public String transfer_type;
-    public SyntheticAccount synthetic;
 
     public String getObject() {
       return "payment_method";
-    }
-
-    @Override
-    public PaymentMethod setJson(JSONObject obj) {
-      super.setJson(obj);
-      this.transfer_type = obj.optString("transfer_type", null);
-      if (obj.has("synthetic")) {
-        this.synthetic = new SyntheticAccount(obj.getJSONObject("synthetic"));
-      }
-      return this;
     }
 
     public Map<String, String> fieldmap() {
@@ -645,19 +629,9 @@ public class pl {
   }
 
   public static class Webhook extends ARMObject<Webhook> {
-    public String url;
-    public String trigger;
 
     public String getObject() {
       return "webhook";
-    }
-
-    @Override
-    public Webhook setJson(JSONObject obj) {
-      super.setJson(obj);
-      this.url = obj.optString("url", null);
-      this.trigger = obj.optString("trigger", null);
-      return this;
     }
 
     public static ARMRequest select(String... args) {
@@ -682,22 +656,9 @@ public class pl {
   }
 
   public static class WebhookLog extends ARMObject<WebhookLog> {
-    public String url;
-    public ARMObject triggered_on;
 
     public String getObject() {
       return "webhook_log";
-    }
-
-    @Override
-    public WebhookLog setJson(JSONObject obj) {
-      super.setJson(obj);
-      this.url = obj.optString("url", null);
-      if (obj.has("triggered_on")) {
-        this.triggered_on = new ARMObject();
-        this.triggered_on.setJson(obj.getJSONObject("triggered_on"));
-      }
-      return this;
     }
 
     public static ARMRequest select(String... args) {
@@ -882,6 +843,7 @@ public class pl {
   }
 
   public static class Intent extends ARMObject<Intent> {
+
     public String getObject() {
       return "intent";
     }
@@ -1143,6 +1105,147 @@ public class pl {
 
     public static CheckFront get(String id) throws Exceptions.PayloadError {
       return new ARMRequest<CheckFront>(CheckFront.class).get(id);
+    }
+  }
+
+  public static class Account extends ARMObject<Account> {
+    public String getObject() {
+      return "account";
+    }
+
+    public static ARMRequest select(String... args) {
+      return new ARMRequest<Account>(Account.class).select(args);
+    }
+
+    public static List<Account> create(Account... args) throws Exceptions.PayloadError {
+      return new ARMRequest<Account>(Account.class).create(Arrays.asList(args));
+    }
+
+    public static ARMRequest filter_by(String attr, Object val) {
+      return new ARMRequest<Account>(Account.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Account>(Account.class).filter_by(attrs);
+    }
+
+    public static List<Account> all() throws Exceptions.PayloadError {
+      return new ARMRequest<Account>(Account.class).all();
+    }
+
+    public static Account get(String id) throws Exceptions.PayloadError {
+      return new ARMRequest<Account>(Account.class).get(id);
+    }
+  }
+
+  public static class Address extends ARMObject<Address> {
+    public String getObject() {
+      return "address";
+    }
+  }
+
+  public static class AutopaySettings extends ARMObject<AutopaySettings> {
+    public String getObject() {
+      return "autopay_settings";
+    }
+  }
+
+  public static class AccountDefaults extends ARMObject<AccountDefaults> {
+    public String getObject() {
+      return "account_defaults";
+    }
+  }
+
+  public static class AccountHolder extends ARMObject<AccountHolder> {
+    public String getObject() {
+      return "account_holder";
+    }
+  }
+
+  public static class Attribute extends ARMObject<Attribute> {
+    public String getObject() {
+      return "attribute";
+    }
+  }
+
+  public static class RecurringSchedule extends ARMObject<RecurringSchedule> {
+    public String getObject() {
+      return "recurring_schedule";
+    }
+  }
+
+  public static class ProcessingSetting extends ARMObject<ProcessingSetting> {
+    public String getObject() {
+      return "processing_setting";
+    }
+
+    public static ARMRequest select(String... args) {
+      return new ARMRequest<ProcessingSetting>(ProcessingSetting.class).select(args);
+    }
+
+    public static List<ProcessingSetting> create(ProcessingSetting... args) throws Exceptions.PayloadError {
+      return new ARMRequest<ProcessingSetting>(ProcessingSetting.class).create(Arrays.asList(args));
+    }
+
+    public static ARMRequest filter_by(String attr, Object val) {
+      return new ARMRequest<ProcessingSetting>(ProcessingSetting.class).filter_by(attr, val);
+    }
+
+    public static List<ProcessingSetting> all() throws Exceptions.PayloadError {
+      return new ARMRequest<ProcessingSetting>(ProcessingSetting.class).all();
+    }
+
+    public static ProcessingSetting get(String id) throws Exceptions.PayloadError {
+      return new ARMRequest<ProcessingSetting>(ProcessingSetting.class).get(id);
+    }
+  }
+
+  public static class InvoiceAllocation extends ARMObject<InvoiceAllocation> {
+    public String getObject() {
+      return "invoice_allocation";
+    }
+
+    public static ARMRequest select(String... args) {
+      return new ARMRequest<InvoiceAllocation>(InvoiceAllocation.class).select(args);
+    }
+
+    public static List<InvoiceAllocation> create(InvoiceAllocation... args) throws Exceptions.PayloadError {
+      return new ARMRequest<InvoiceAllocation>(InvoiceAllocation.class).create(Arrays.asList(args));
+    }
+
+    public static ARMRequest filter_by(String attr, Object val) {
+      return new ARMRequest<InvoiceAllocation>(InvoiceAllocation.class).filter_by(attr, val);
+    }
+
+    public static List<InvoiceAllocation> all() throws Exceptions.PayloadError {
+      return new ARMRequest<InvoiceAllocation>(InvoiceAllocation.class).all();
+    }
+
+    public static InvoiceAllocation get(String id) throws Exceptions.PayloadError {
+      return new ARMRequest<InvoiceAllocation>(InvoiceAllocation.class).get(id);
+    }
+  }
+
+  public static class DiscountItem extends LineItem {
+    public String[] getPoly() {
+      return new String[] { "entry_type", "discount" };
+    }
+
+    public static ARMRequest select(String... args) {
+      return new ARMRequest<DiscountItem>(DiscountItem.class).select(args);
+    }
+
+    public static List<DiscountItem> create(DiscountItem... args) throws Exceptions.PayloadError {
+      return new ARMRequest<DiscountItem>(DiscountItem.class).create(Arrays.asList(args));
+    }
+
+    public static ARMRequest filter_by(String attr, Object val) {
+      return new ARMRequest<DiscountItem>(DiscountItem.class).filter_by(attr, val);
+    }
+
+    public static DiscountItem get(String id) throws Exceptions.PayloadError {
+      return new ARMRequest<DiscountItem>(DiscountItem.class).get(id);
     }
   }
 

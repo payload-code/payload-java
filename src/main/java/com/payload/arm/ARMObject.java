@@ -73,6 +73,10 @@ public class ARMObject<T> {
 		return mappedObj(key).getJSONObject(key);
 	}
 
+	public JSONArray getJArr(String key) {
+		return mappedObj(key).getJSONArray(key);
+	}
+
 	public ARMObject getObj(String key) {
 		try {
 			JSONObject nested = mappedObj(key).getJSONObject(key);
@@ -82,6 +86,21 @@ public class ARMObject<T> {
 		} catch (JSONException exc) {
 			return null;
 		}
+	}
+
+	public java.util.List<ARMObject> getList(String key) {
+		java.util.List<ARMObject> result = new java.util.ArrayList<>();
+		try {
+			JSONArray arr = mappedObj(key).getJSONArray(key);
+			for (int i = 0; i < arr.length(); i++) {
+				ARMObject item = new ARMObject();
+				item.setJson(arr.getJSONObject(i));
+				result.add(item);
+			}
+		} catch (Exception exc) {
+			// Return empty list on error
+		}
+		return result;
 	}
 
 	public <E extends ARMObject> java.util.List<E> getList(String key, Class<E> clazz) {
