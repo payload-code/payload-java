@@ -18,13 +18,10 @@ public class ArmrestTest {
     ARMObject obj = new ARMObject();
     obj.set("active", true);
     obj.set("disabled", false);
-    // Set a key that doesn't exist to test default behavior
 
-    // Test basic boolean retrieval
     assertTrue(obj.getBool("active"));
     assertFalse(obj.getBool("disabled"));
 
-    // Test boolean with default value
     assertTrue(obj.getBool("active", false));
     assertFalse(obj.getBool("disabled", true));
     assertTrue(obj.getBool("nonexistent", true));
@@ -37,7 +34,6 @@ public class ArmrestTest {
     obj.set("invalid_bool", "not_a_boolean");
     obj.set("null_bool", JSONObject.NULL);
 
-    // Should return default when JSON is invalid
     assertTrue(obj.getBool("invalid_bool", true));
     assertFalse(obj.getBool("invalid_bool", false));
     assertTrue(obj.getBool("null_bool", true));
@@ -48,23 +44,18 @@ public class ArmrestTest {
   public void testGetObjMethod() throws Exception {
     ARMObject obj = new ARMObject();
 
-    // Create nested JSON object
     JSONObject nestedJson = new JSONObject();
     nestedJson.put("name", "Test Account");
     nestedJson.put("balance", 1000.50);
-
     obj.set("account", nestedJson);
 
-    // Test retrieving nested object
     ARMObject account = obj.getObj("account");
     assertNotNull(account);
     assertEquals("Test Account", account.getStr("name"));
     assertEquals(1000.50, account.getFloat("balance"), 0.001);
 
-    // Test with nonexistent key
     assertNull(obj.getObj("nonexistent"));
 
-    // Test with invalid JSON
     obj.set("invalid", "not_an_object");
     assertNull(obj.getObj("invalid"));
   }
@@ -73,7 +64,6 @@ public class ArmrestTest {
   public void testGetListMethod() throws Exception {
     ARMObject obj = new ARMObject();
 
-    // Create JSON array of payment objects
     JSONArray paymentsArray = new JSONArray();
 
     JSONObject payment1 = new JSONObject();
@@ -88,10 +78,8 @@ public class ArmrestTest {
 
     paymentsArray.put(payment1);
     paymentsArray.put(payment2);
-
     obj.set("payments", paymentsArray);
 
-    // Test retrieving typed list
     List<pl.Payment> payments = obj.getList("payments", pl.Payment.class);
     assertNotNull(payments);
     assertEquals(2, payments.size());
@@ -121,12 +109,10 @@ public class ArmrestTest {
   public void testGetListWithInvalidData() throws Exception {
     ARMObject obj = new ARMObject();
 
-    // Test with non-existent key
     List<pl.Payment> payments1 = obj.getList("nonexistent", pl.Payment.class);
     assertNotNull(payments1);
     assertEquals(0, payments1.size());
 
-    // Test with invalid data type
     obj.set("invalid_list", "not_an_array");
     List<pl.Payment> payments2 = obj.getList("invalid_list", pl.Payment.class);
     assertNotNull(payments2);
@@ -134,7 +120,7 @@ public class ArmrestTest {
   }
 
   @Test
-  public void testPaymentSetJson() throws Exception {
+  public void testPaymentDynamicAccess() throws Exception {
     JSONObject paymentJson = new JSONObject();
     paymentJson.put("id", "pay_123");
     paymentJson.put("amount", 100.00);
@@ -146,10 +132,9 @@ public class ArmrestTest {
 
     assertEquals("pay_123", payment.getStr("id"));
     assertEquals(100.00, payment.getFloat("amount"), 0.001);
-    assertTrue(payment.finalized);
-    assertEquals("completed", payment.status);
+    assertTrue(payment.getBool("finalized"));
+    assertEquals("completed", payment.getStr("status"));
 
-    // Test with missing optional fields
     JSONObject partialJson = new JSONObject();
     partialJson.put("id", "pay_456");
     partialJson.put("amount", 50.00);
@@ -159,12 +144,12 @@ public class ArmrestTest {
 
     assertEquals("pay_456", partialPayment.getStr("id"));
     assertEquals(50.00, partialPayment.getFloat("amount"), 0.001);
-    assertNull(partialPayment.finalized);
-    assertNull(partialPayment.status);
+    assertFalse(partialPayment.getBool("finalized", false));
+    assertNull(partialPayment.getStr("status"));
   }
 
   @Test
-  public void testPaymentMethodSetJson() throws Exception {
+  public void testPaymentMethodDynamicAccess() throws Exception {
     JSONObject paymentMethodJson = new JSONObject();
     paymentMethodJson.put("id", "pm_123");
     paymentMethodJson.put("type", "card");
@@ -182,15 +167,15 @@ public class ArmrestTest {
 
     assertEquals("pm_123", paymentMethod.getStr("id"));
     assertEquals("card", paymentMethod.getStr("type"));
-    assertEquals("ach", paymentMethod.transfer_type);
+    assertEquals("ach", paymentMethod.getStr("transfer_type"));
 
-    // Test synthetic account
-    assertNotNull(paymentMethod.synthetic);
-    assertNotNull(paymentMethod.synthetic.balance);
-    assertEquals(500.00, paymentMethod.synthetic.balance.available, 0.001);
-    assertEquals(100.00, paymentMethod.synthetic.balance.pending, 0.001);
+    ARMObject synthetic = paymentMethod.getObj("synthetic");
+    assertNotNull(synthetic);
+    ARMObject balance = synthetic.getObj("balance");
+    assertNotNull(balance);
+    assertEquals(500.00, balance.getFloat("available"), 0.001);
+    assertEquals(100.00, balance.getFloat("pending"), 0.001);
 
-    // Test with missing synthetic data
     JSONObject basicJson = new JSONObject();
     basicJson.put("id", "pm_456");
     basicJson.put("type", "bank");
@@ -200,12 +185,12 @@ public class ArmrestTest {
 
     assertEquals("pm_456", basicPaymentMethod.getStr("id"));
     assertEquals("bank", basicPaymentMethod.getStr("type"));
-    assertNull(basicPaymentMethod.transfer_type);
-    assertNull(basicPaymentMethod.synthetic);
+    assertNull(basicPaymentMethod.getStr("transfer_type"));
+    assertNull(basicPaymentMethod.getObj("synthetic"));
   }
 
   @Test
-  public void testWebhookSetJson() throws Exception {
+  public void testWebhookDynamicAccess() throws Exception {
     JSONObject webhookJson = new JSONObject();
     webhookJson.put("id", "wh_123");
     webhookJson.put("url", "https://example.com/webhook");
@@ -215,10 +200,9 @@ public class ArmrestTest {
     webhook.setJson(webhookJson);
 
     assertEquals("wh_123", webhook.getStr("id"));
-    assertEquals("https://example.com/webhook", webhook.url);
-    assertEquals("payment.created", webhook.trigger);
+    assertEquals("https://example.com/webhook", webhook.getStr("url"));
+    assertEquals("payment.created", webhook.getStr("trigger"));
 
-    // Test with missing fields
     JSONObject partialJson = new JSONObject();
     partialJson.put("id", "wh_456");
 
@@ -226,12 +210,12 @@ public class ArmrestTest {
     partialWebhook.setJson(partialJson);
 
     assertEquals("wh_456", partialWebhook.getStr("id"));
-    assertNull(partialWebhook.url);
-    assertNull(partialWebhook.trigger);
+    assertNull(partialWebhook.getStr("url"));
+    assertNull(partialWebhook.getStr("trigger"));
   }
 
   @Test
-  public void testWebhookLogSetJson() throws Exception {
+  public void testWebhookLogDynamicAccess() throws Exception {
     JSONObject webhookLogJson = new JSONObject();
     webhookLogJson.put("id", "whl_123");
     webhookLogJson.put("url", "https://example.com/webhook");
@@ -244,16 +228,14 @@ public class ArmrestTest {
     pl.WebhookLog webhookLog = new pl.WebhookLog();
     webhookLog.setJson(webhookLogJson);
 
-    // Test basic fields
     assertEquals("whl_123", webhookLog.getStr("id"));
-    assertEquals("https://example.com/webhook", webhookLog.url);
+    assertEquals("https://example.com/webhook", webhookLog.getStr("url"));
 
-    // Test nested triggered_on object
-    assertNotNull(webhookLog.triggered_on);
-    assertEquals("pay_123", webhookLog.triggered_on.getStr("id"));
-    assertEquals(100.00, webhookLog.triggered_on.getFloat("amount"), 0.001);
+    ARMObject triggeredOn = webhookLog.getObj("triggered_on");
+    assertNotNull(triggeredOn);
+    assertEquals("pay_123", triggeredOn.getStr("id"));
+    assertEquals(100.00, triggeredOn.getFloat("amount"), 0.001);
 
-    // Test with missing triggered_on
     JSONObject basicJson = new JSONObject();
     basicJson.put("id", "whl_456");
 
@@ -261,51 +243,30 @@ public class ArmrestTest {
     basicWebhookLog.setJson(basicJson);
 
     assertEquals("whl_456", basicWebhookLog.getStr("id"));
-    assertNull(basicWebhookLog.url);
-    assertNull(basicWebhookLog.triggered_on);
+    assertNull(basicWebhookLog.getStr("url"));
+    assertNull(basicWebhookLog.getObj("triggered_on"));
   }
 
   @Test
-  public void testSyntheticBalance() throws Exception {
+  public void testNestedBalanceAccess() throws Exception {
+    JSONObject pmJson = new JSONObject();
+    pmJson.put("id", "pm_789");
+
+    JSONObject syntheticJson = new JSONObject();
     JSONObject balanceJson = new JSONObject();
     balanceJson.put("available", 750.25);
     balanceJson.put("pending", 150.75);
+    syntheticJson.put("balance", balanceJson);
+    pmJson.put("synthetic", syntheticJson);
 
-    pl.SyntheticBalance balance = new pl.SyntheticBalance(balanceJson);
+    pl.PaymentMethod pm = new pl.PaymentMethod();
+    pm.setJson(pmJson);
 
-    assertEquals(750.25, balance.available, 0.001);
-    assertEquals(150.75, balance.pending, 0.001);
+    double available = pm.getObj("synthetic").getObj("balance").getFloat("available");
+    double pending = pm.getObj("synthetic").getObj("balance").getFloat("pending");
 
-    // Test with missing fields (should default to 0)
-    JSONObject partialJson = new JSONObject();
-    partialJson.put("available", 500.00);
-
-    pl.SyntheticBalance partialBalance = new pl.SyntheticBalance(partialJson);
-
-    assertEquals(500.00, partialBalance.available, 0.001);
-    assertEquals(0.00, partialBalance.pending, 0.001);
-  }
-
-  @Test
-  public void testSyntheticAccount() throws Exception {
-    JSONObject accountJson = new JSONObject();
-    JSONObject balanceJson = new JSONObject();
-    balanceJson.put("available", 1000.00);
-    balanceJson.put("pending", 200.00);
-    accountJson.put("balance", balanceJson);
-
-    pl.SyntheticAccount account = new pl.SyntheticAccount(accountJson);
-
-    assertNotNull(account.balance);
-    assertEquals(1000.00, account.balance.available, 0.001);
-    assertEquals(200.00, account.balance.pending, 0.001);
-
-    // Test with missing balance
-    JSONObject partialJson = new JSONObject();
-
-    pl.SyntheticAccount partialAccount = new pl.SyntheticAccount(partialJson);
-
-    assertNull(partialAccount.balance);
+    assertEquals(750.25, available, 0.001);
+    assertEquals(150.75, pending, 0.001);
   }
 
 }
