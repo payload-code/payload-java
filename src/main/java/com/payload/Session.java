@@ -179,7 +179,7 @@ public class Session {
      return obj.create(this);
   }
 
-  public pl.ProcessingSetting create(pl.ProcessingSetting obj) throws Exceptions.PayloadError {
+  public pl.ProcessingSettings create(pl.ProcessingSettings obj) throws Exceptions.PayloadError {
      return obj.create(this);
   }
 

@@ -32,23 +32,6 @@ public class pl {
     return new Attr(key);
   }
 
-  @SafeVarargs
-  public static JSONObject map(Map.Entry<String, Object>... attrs) {
-    JSONObject obj = new JSONObject();
-    for (Map.Entry<String, Object> entry : attrs) {
-      obj.put(entry.getKey(), entry.getValue());
-    }
-    return obj;
-  }
-
-  public static JSONArray list(Object... items) {
-    JSONArray arr = new JSONArray();
-    for (Object item : items) {
-      arr.put(item);
-    }
-    return arr;
-  }
-
   public static class Attr {
     private final String key;
 
@@ -231,10 +214,6 @@ public class pl {
 
     public static List<Payment> all() throws Exceptions.PayloadError {
       return new ARMRequest<Payment>(Payment.class).all();
-    }
-
-    public Payment capture() throws Exceptions.PayloadError {
-      return this.update(pl.attr("status", "processed"));
     }
 
     public PaymentMethod paymentMethod() {
@@ -926,6 +905,10 @@ public class pl {
       return "entity";
     }
 
+    public String getEndpoint() {
+      return "/entities";
+    }
+
     public static ARMRequest select(String... args) {
       return new ARMRequest<Entity>(Entity.class).select(args);
     }
@@ -1139,65 +1122,33 @@ public class pl {
     }
   }
 
-  public static class Address extends ARMObject<Address> {
+  public static class ProcessingSettings extends ARMObject<ProcessingSettings> {
     public String getObject() {
-      return "address";
+      return "processing_settings";
     }
-  }
 
-  public static class AutopaySettings extends ARMObject<AutopaySettings> {
-    public String getObject() {
-      return "autopay_settings";
-    }
-  }
-
-  public static class AccountDefaults extends ARMObject<AccountDefaults> {
-    public String getObject() {
-      return "account_defaults";
-    }
-  }
-
-  public static class AccountHolder extends ARMObject<AccountHolder> {
-    public String getObject() {
-      return "account_holder";
-    }
-  }
-
-  public static class Attribute extends ARMObject<Attribute> {
-    public String getObject() {
-      return "attribute";
-    }
-  }
-
-  public static class RecurringSchedule extends ARMObject<RecurringSchedule> {
-    public String getObject() {
-      return "recurring_schedule";
-    }
-  }
-
-  public static class ProcessingSetting extends ARMObject<ProcessingSetting> {
-    public String getObject() {
-      return "processing_setting";
+    public String getEndpoint() {
+      return "/processing_settings";
     }
 
     public static ARMRequest select(String... args) {
-      return new ARMRequest<ProcessingSetting>(ProcessingSetting.class).select(args);
+      return new ARMRequest<ProcessingSettings>(ProcessingSettings.class).select(args);
     }
 
-    public static List<ProcessingSetting> create(ProcessingSetting... args) throws Exceptions.PayloadError {
-      return new ARMRequest<ProcessingSetting>(ProcessingSetting.class).create(Arrays.asList(args));
+    public static List<ProcessingSettings> create(ProcessingSettings... args) throws Exceptions.PayloadError {
+      return new ARMRequest<ProcessingSettings>(ProcessingSettings.class).create(Arrays.asList(args));
     }
 
     public static ARMRequest filter_by(String attr, Object val) {
-      return new ARMRequest<ProcessingSetting>(ProcessingSetting.class).filter_by(attr, val);
+      return new ARMRequest<ProcessingSettings>(ProcessingSettings.class).filter_by(attr, val);
     }
 
-    public static List<ProcessingSetting> all() throws Exceptions.PayloadError {
-      return new ARMRequest<ProcessingSetting>(ProcessingSetting.class).all();
+    public static List<ProcessingSettings> all() throws Exceptions.PayloadError {
+      return new ARMRequest<ProcessingSettings>(ProcessingSettings.class).all();
     }
 
-    public static ProcessingSetting get(String id) throws Exceptions.PayloadError {
-      return new ARMRequest<ProcessingSetting>(ProcessingSetting.class).get(id);
+    public static ProcessingSettings get(String id) throws Exceptions.PayloadError {
+      return new ARMRequest<ProcessingSettings>(ProcessingSettings.class).get(id);
     }
   }
 
@@ -1224,28 +1175,6 @@ public class pl {
 
     public static InvoiceAllocation get(String id) throws Exceptions.PayloadError {
       return new ARMRequest<InvoiceAllocation>(InvoiceAllocation.class).get(id);
-    }
-  }
-
-  public static class DiscountItem extends LineItem {
-    public String[] getPoly() {
-      return new String[] { "entry_type", "discount" };
-    }
-
-    public static ARMRequest select(String... args) {
-      return new ARMRequest<DiscountItem>(DiscountItem.class).select(args);
-    }
-
-    public static List<DiscountItem> create(DiscountItem... args) throws Exceptions.PayloadError {
-      return new ARMRequest<DiscountItem>(DiscountItem.class).create(Arrays.asList(args));
-    }
-
-    public static ARMRequest filter_by(String attr, Object val) {
-      return new ARMRequest<DiscountItem>(DiscountItem.class).filter_by(attr, val);
-    }
-
-    public static DiscountItem get(String id) throws Exceptions.PayloadError {
-      return new ARMRequest<DiscountItem>(DiscountItem.class).get(id);
     }
   }
 
