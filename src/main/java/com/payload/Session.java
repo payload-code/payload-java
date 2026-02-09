@@ -2,6 +2,7 @@ package com.payload;
 
 import java.util.List;
 import com.payload.pl;
+import com.payload.arm.ARMObject;
 import com.payload.arm.ARMRequest;
 
 public class Session {
@@ -116,6 +117,79 @@ public class Session {
 
   public pl.PaymentActivation create(pl.PaymentActivation obj) throws Exceptions.PayloadError {
      return obj.create(this);
+  }
+
+  public pl.Intent create(pl.Intent obj) throws Exceptions.PayloadError {
+     return obj.create(this);
+  }
+
+  public pl.Entity create(pl.Entity obj) throws Exceptions.PayloadError {
+     return obj.create(this);
+  }
+
+  public pl.Stakeholder create(pl.Stakeholder obj) throws Exceptions.PayloadError {
+     return obj.create(this);
+  }
+
+  public pl.Profile create(pl.Profile obj) throws Exceptions.PayloadError {
+     return obj.create(this);
+  }
+
+  public pl.BillingItem create(pl.BillingItem obj) throws Exceptions.PayloadError {
+     return obj.create(this);
+  }
+
+  public pl.InvoiceItem create(pl.InvoiceItem obj) throws Exceptions.PayloadError {
+     return obj.create(this);
+  }
+
+  public pl.PaymentAllocation create(pl.PaymentAllocation obj) throws Exceptions.PayloadError {
+     return obj.create(this);
+  }
+
+  public pl.ProcessingAgreement create(pl.ProcessingAgreement obj) throws Exceptions.PayloadError {
+     return obj.create(this);
+  }
+
+  public pl.ProcessingRule create(pl.ProcessingRule obj) throws Exceptions.PayloadError {
+     return obj.create(this);
+  }
+
+  public pl.Transfer create(pl.Transfer obj) throws Exceptions.PayloadError {
+     return obj.create(this);
+  }
+
+  public pl.TransactionOperation create(pl.TransactionOperation obj) throws Exceptions.PayloadError {
+     return obj.create(this);
+  }
+
+  public pl.WebhookLog create(pl.WebhookLog obj) throws Exceptions.PayloadError {
+     return obj.create(this);
+  }
+
+  public pl.CheckFront create(pl.CheckFront obj) throws Exceptions.PayloadError {
+     return obj.create(this);
+  }
+
+  public pl.CheckBack create(pl.CheckBack obj) throws Exceptions.PayloadError {
+     return obj.create(this);
+  }
+
+  public pl.Account create(pl.Account obj) throws Exceptions.PayloadError {
+     return obj.create(this);
+  }
+
+  public pl.ProcessingSettings create(pl.ProcessingSettings obj) throws Exceptions.PayloadError {
+     return obj.create(this);
+  }
+
+  public pl.InvoiceAllocation create(pl.InvoiceAllocation obj) throws Exceptions.PayloadError {
+     return obj.create(this);
+  }
+
+  public void delete(ARMObject obj) throws Exceptions.PayloadError {
+     obj.session = this;
+     obj.delete();
   }
 
 }

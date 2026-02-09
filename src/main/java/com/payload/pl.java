@@ -173,6 +173,7 @@ public class pl {
   }
 
   public static class Payment extends ARMObject<Payment> {
+
     public String getObject() {
       return "transaction";
     }
@@ -306,6 +307,11 @@ public class pl {
       return new ARMRequest<Credit>(Credit.class).filter_by(attr, val);
     }
 
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Credit>(Credit.class).filter_by(attrs);
+    }
+
     public static List<Credit> all() throws Exceptions.PayloadError {
       return new ARMRequest<Credit>(Credit.class).all();
     }
@@ -342,6 +348,7 @@ public class pl {
   }
 
   public static class PaymentMethod extends ARMObject<PaymentMethod> {
+
     public String getObject() {
       return "payment_method";
     }
@@ -601,6 +608,7 @@ public class pl {
   }
 
   public static class Webhook extends ARMObject<Webhook> {
+
     public String getObject() {
       return "webhook";
     }
@@ -623,6 +631,33 @@ public class pl {
 
     public static Webhook get(String id) throws Exceptions.PayloadError {
       return new ARMRequest<Webhook>(Webhook.class).get(id);
+    }
+  }
+
+  public static class WebhookLog extends ARMObject<WebhookLog> {
+
+    public String getObject() {
+      return "webhook_log";
+    }
+
+    public static ARMRequest select(String... args) {
+      return new ARMRequest<WebhookLog>(WebhookLog.class).select(args);
+    }
+
+    public static List<WebhookLog> create(WebhookLog... args) throws Exceptions.PayloadError {
+      return new ARMRequest<WebhookLog>(WebhookLog.class).create(Arrays.asList(args));
+    }
+
+    public static ARMRequest filter_by(String attr, Object val) {
+      return new ARMRequest<WebhookLog>(WebhookLog.class).filter_by(attr, val);
+    }
+
+    public static List<WebhookLog> all() throws Exceptions.PayloadError {
+      return new ARMRequest<WebhookLog>(WebhookLog.class).all();
+    }
+
+    public static WebhookLog get(String id) throws Exceptions.PayloadError {
+      return new ARMRequest<WebhookLog>(WebhookLog.class).get(id);
     }
   }
 
@@ -787,6 +822,7 @@ public class pl {
   }
 
   public static class Intent extends ARMObject<Intent> {
+
     public String getObject() {
       return "intent";
     }
@@ -867,6 +903,10 @@ public class pl {
   public static class Entity extends ARMObject<Entity> {
     public String getObject() {
       return "entity";
+    }
+
+    public String getEndpoint() {
+      return "/entities";
     }
 
     public static ARMRequest select(String... args) {
@@ -1048,6 +1088,93 @@ public class pl {
 
     public static CheckFront get(String id) throws Exceptions.PayloadError {
       return new ARMRequest<CheckFront>(CheckFront.class).get(id);
+    }
+  }
+
+  public static class Account extends ARMObject<Account> {
+    public String getObject() {
+      return "account";
+    }
+
+    public static ARMRequest select(String... args) {
+      return new ARMRequest<Account>(Account.class).select(args);
+    }
+
+    public static List<Account> create(Account... args) throws Exceptions.PayloadError {
+      return new ARMRequest<Account>(Account.class).create(Arrays.asList(args));
+    }
+
+    public static ARMRequest filter_by(String attr, Object val) {
+      return new ARMRequest<Account>(Account.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Account>(Account.class).filter_by(attrs);
+    }
+
+    public static List<Account> all() throws Exceptions.PayloadError {
+      return new ARMRequest<Account>(Account.class).all();
+    }
+
+    public static Account get(String id) throws Exceptions.PayloadError {
+      return new ARMRequest<Account>(Account.class).get(id);
+    }
+  }
+
+  public static class ProcessingSettings extends ARMObject<ProcessingSettings> {
+    public String getObject() {
+      return "processing_settings";
+    }
+
+    public String getEndpoint() {
+      return "/processing_settings";
+    }
+
+    public static ARMRequest select(String... args) {
+      return new ARMRequest<ProcessingSettings>(ProcessingSettings.class).select(args);
+    }
+
+    public static List<ProcessingSettings> create(ProcessingSettings... args) throws Exceptions.PayloadError {
+      return new ARMRequest<ProcessingSettings>(ProcessingSettings.class).create(Arrays.asList(args));
+    }
+
+    public static ARMRequest filter_by(String attr, Object val) {
+      return new ARMRequest<ProcessingSettings>(ProcessingSettings.class).filter_by(attr, val);
+    }
+
+    public static List<ProcessingSettings> all() throws Exceptions.PayloadError {
+      return new ARMRequest<ProcessingSettings>(ProcessingSettings.class).all();
+    }
+
+    public static ProcessingSettings get(String id) throws Exceptions.PayloadError {
+      return new ARMRequest<ProcessingSettings>(ProcessingSettings.class).get(id);
+    }
+  }
+
+  public static class InvoiceAllocation extends ARMObject<InvoiceAllocation> {
+    public String getObject() {
+      return "invoice_allocation";
+    }
+
+    public static ARMRequest select(String... args) {
+      return new ARMRequest<InvoiceAllocation>(InvoiceAllocation.class).select(args);
+    }
+
+    public static List<InvoiceAllocation> create(InvoiceAllocation... args) throws Exceptions.PayloadError {
+      return new ARMRequest<InvoiceAllocation>(InvoiceAllocation.class).create(Arrays.asList(args));
+    }
+
+    public static ARMRequest filter_by(String attr, Object val) {
+      return new ARMRequest<InvoiceAllocation>(InvoiceAllocation.class).filter_by(attr, val);
+    }
+
+    public static List<InvoiceAllocation> all() throws Exceptions.PayloadError {
+      return new ARMRequest<InvoiceAllocation>(InvoiceAllocation.class).all();
+    }
+
+    public static InvoiceAllocation get(String id) throws Exceptions.PayloadError {
+      return new ARMRequest<InvoiceAllocation>(InvoiceAllocation.class).get(id);
     }
   }
 

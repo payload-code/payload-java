@@ -35,6 +35,7 @@ public class ARMRequest<T> {
 	public Session session;
 	private ArrayList<String> _attrs = new ArrayList<String>();
 	private HashMap<String, Object> _filters = new HashMap<String, Object>();
+	private ArrayList<String> _orderBys = new ArrayList<String>();
 
 	public ARMRequest(Class<T> cls) {
 		this.cls = cls;
@@ -96,6 +97,17 @@ public class ARMRequest<T> {
 					mentry.getKey(),
 					URLEncoder.encode( String.valueOf(mentry.getValue()), "UTF8")
 				);
+			} catch( UnsupportedEncodingException exc ) {}
+		}
+
+		for ( int i = 0; i < _orderBys.size(); i++ ) {
+			if ( query.length() > 0 )
+				query += "&";
+
+			try {
+				query += String.format(
+					"order_by["+Integer.toString(i)+"]=%s",
+					URLEncoder.encode(_orderBys.get(i), "UTF8") );
 			} catch( UnsupportedEncodingException exc ) {}
 		}
 
@@ -193,27 +205,39 @@ public class ARMRequest<T> {
 		}
 	}
 
-	public ARMRequest select(String... args) {
+	public ARMRequest<T> select(String... args) {
 		for ( int i=0; i<args.length; i++)
 			this._attrs.add(args[i]);
 		return this;
 	}
 
-	public ARMRequest filter_by(String attr, Object val) {
+	public ARMRequest<T> filter_by(String attr, Object val) {
 		_filters.put(attr, val);
 		return this;
 	}
 
 	@SafeVarargs
-	public final ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+	public final ARMRequest<T> filter_by(Map.Entry<String, Object>... attrs) {
 		for (Map.Entry<String, Object> entry : attrs) {
 			_filters.put(entry.getKey(), entry.getValue());
 		}
 		return this;
 	}
 
+	public ARMRequest<T> order_by(String... args) {
+		for ( String arg : args )
+			this._orderBys.add(arg);
+		return this;
+	}
+
 	public List<T> all() throws Exceptions.PayloadError {
 		return (List<T>)this._request("GET", null, null);
+	}
+
+	public T first() throws Exceptions.PayloadError {
+		_filters.put("limit", 1);
+		List<T> results = all();
+		return results != null && !results.isEmpty() ? results.get(0) : null;
 	}
 
 	public T get(String id) throws Exceptions.PayloadError {
