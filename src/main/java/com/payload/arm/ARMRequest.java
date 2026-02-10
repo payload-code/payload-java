@@ -279,7 +279,7 @@ public class ARMRequest<T> {
 
 		JSONObject req = new JSONObject();
 		for ( Map.Entry<String,Object> upd : upds )
-			req.put(upd.getKey(), String.valueOf(upd.getValue()));
+			req.put(upd.getKey(), upd.getValue());
 
 		ARMObject new_obj = (ARMObject)this._request("PUT", obj.getStr("id"), req.toString());
 		((ARMObject)obj).obj = new_obj.obj;
