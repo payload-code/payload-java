@@ -183,7 +183,15 @@ public class Session {
      return obj.create(this);
   }
 
-  public pl.InvoiceAllocation create(pl.InvoiceAllocation obj) throws Exceptions.PayloadError {
+  public pl.OAuthToken create(pl.OAuthToken obj) throws Exceptions.PayloadError {
+     return obj.create(this);
+  }
+
+  public pl.User create(pl.User obj) throws Exceptions.PayloadError {
+     return obj.create(this);
+  }
+
+  public pl.InvoiceAttachment create(pl.InvoiceAttachment obj) throws Exceptions.PayloadError {
      return obj.create(this);
   }
 

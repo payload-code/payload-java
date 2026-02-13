@@ -211,6 +211,12 @@ public class ARMRequest<T> {
 		return this;
 	}
 
+	public ARMRequest<T> select(Object... args) {
+		for ( Object arg : args )
+			this._attrs.add(arg.toString());
+		return this;
+	}
+
 	public ARMRequest<T> filter_by(String attr, Object val) {
 		_filters.put(attr, val);
 		return this;
@@ -227,6 +233,28 @@ public class ARMRequest<T> {
 	public ARMRequest<T> order_by(String... args) {
 		for ( String arg : args )
 			this._orderBys.add(arg);
+		return this;
+	}
+
+	public ARMRequest<T> order_by(Object... args) {
+		for ( Object arg : args )
+			this._orderBys.add(arg.toString());
+		return this;
+	}
+
+	public ARMRequest<T> limit(int n) {
+		_filters.put("limit", n);
+		return this;
+	}
+
+	public ARMRequest<T> offset(int n) {
+		_filters.put("offset", n);
+		return this;
+	}
+
+	public ARMRequest<T> group_by(Object... args) {
+		for ( int i = 0; i < args.length; i++ )
+			_filters.put("group_by[" + i + "]", args[i].toString());
 		return this;
 	}
 
