@@ -102,43 +102,6 @@ public class pl {
       return new Filter(key, "!" + val);
     }
 
-    public Attr func(String name) {
-      return new Attr(name + "(" + key + ")");
-    }
-
-    public Attr date() { return func("date"); }
-    public Attr year() { return func("year"); }
-    public Attr month() { return func("month"); }
-    public Attr monthname() { return func("monthname"); }
-    public Attr day() { return func("day"); }
-    public Attr dayname() { return func("dayname"); }
-    public Attr dayofweek() { return func("dayofweek"); }
-    public Attr dayofyear() { return func("dayofyear"); }
-    public Attr weekofyear() { return func("weekofyear"); }
-    public Attr last_day() { return func("last_day"); }
-    public Attr hour() { return func("hour"); }
-    public Attr minute() { return func("minute"); }
-    public Attr second() { return func("second"); }
-    public Attr unix_timestamp() { return func("unix_timestamp"); }
-
-    public Attr lower() { return func("lower"); }
-    public Attr upper() { return func("upper"); }
-    public Attr length() { return func("length"); }
-
-    public Attr abs() { return func("abs"); }
-    public Attr ceil() { return func("ceil"); }
-    public Attr floor() { return func("floor"); }
-    public Attr round() { return func("round"); }
-
-    public Attr sum() { return func("sum"); }
-    public Attr count() { return func("count"); }
-    public Attr count_distinct() { return func("count_distinct"); }
-    public Attr avg() { return func("avg"); }
-    public Attr min() { return func("min"); }
-    public Attr max() { return func("max"); }
-    public Attr variance() { return func("variance"); }
-    public Attr stddev() { return func("stddev"); }
-
     public Attr desc() { return new Attr("desc(" + key + ")"); }
     public Attr asc() { return new Attr("asc(" + key + ")"); }
   }
