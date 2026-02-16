@@ -1469,10 +1469,6 @@ public class pl {
       return "processing_settings";
     }
 
-    public String getEndpoint() {
-      return "/processing_settings";
-    }
-
     public static ARMRequest select(String... args) {
       return new ARMRequest<ProcessingSettings>(ProcessingSettings.class).select(args);
     }
