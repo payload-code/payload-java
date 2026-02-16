@@ -11,7 +11,10 @@ public class ARMObject<T> {
 	public String getObject(){ return ""; }
 	public String[] getPoly(){ return null; }
 	public Map<String,String> fieldmap(){ return null; }
-	public String getEndpoint() { return "/"+getObject()+"s"; }
+	public String getEndpoint() {
+		String obj = getObject();
+		return "/" + obj + (obj.endsWith("s") ? "" : "s");
+	}
 	public JSONObject obj;
 	public Session session;
 
