@@ -124,8 +124,8 @@ public class ARMRequest<T> {
 			con.setRequestProperty("Authorization", "Basic "+encoded);
 			con.setRequestProperty("User-Agent", "payload-java/" + pl.VERSION);
 
-			if (pl.api_version != null) {
-				con.setRequestProperty("X-API-Version", pl.api_version);
+			if (this.session.getApiVersion() != null) {
+				con.setRequestProperty("X-API-Version", this.session.getApiVersion());
 			}
 
 			if (json != null && !json.isEmpty()) {

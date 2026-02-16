@@ -9,6 +9,7 @@ public class Session {
 
   private volatile String api_key;
   private volatile String api_url;
+  private volatile String api_version;
 
   public Session(String api_key) {
     this.api_key = api_key;
@@ -19,8 +20,15 @@ public class Session {
     this.api_url = api_url;
   }
 
+  public Session(String api_key, String api_url, String api_version) {
+    this.api_key = api_key;
+    this.api_url = api_url;
+    this.api_version = api_version;
+  }
+
   public String getApiKey() { return this.api_key != null ? this.api_key : pl.api_key; }
   public String getApiUrl() { return this.api_url != null ? this.api_url : pl.api_url; }
+  public String getApiVersion() { return this.api_version != null ? this.api_version : pl.api_version; }
 
   public <T> ARMRequest<T> select(Class<T> cls) throws Exceptions.PayloadError {
       return new ARMRequest<T>(cls, this);
