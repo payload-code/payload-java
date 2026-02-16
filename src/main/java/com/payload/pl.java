@@ -441,7 +441,7 @@ public class pl {
           put("device_sn", "card");
           put("magne_print", "card");
           put("magne_print_status", "card");
-          put("card_number", "card");
+          put("card_code", "card");
           put("expiry", "card");
           put("account_number", "bank_account");
           put("routing_number", "bank_account");

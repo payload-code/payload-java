@@ -132,7 +132,7 @@ public class ARMRequest<T> {
 				con.setRequestProperty("Content-Type", "application/json");
 				con.setDoOutput(true);
 				try (DataOutputStream out = new DataOutputStream(con.getOutputStream())) {
-					out.writeBytes(json);
+					out.write(json.getBytes(StandardCharsets.UTF_8));
 					out.flush();
 				}
 			}
@@ -155,7 +155,7 @@ public class ARMRequest<T> {
 						JSONArray lst = obj.getJSONArray("values");
 
 						for (int i = 0 ; i < lst.length(); i++) {
-							ARMObject armObj = (ARMObject)this.cls.newInstance();
+							ARMObject armObj = (ARMObject)this.cls.getConstructor().newInstance();
 							armObj.setJson(lst.getJSONObject(i));
 							armObj.session = this.session;
 							result.add((T)armObj);
@@ -163,12 +163,12 @@ public class ARMRequest<T> {
 
 						return result;
 					} else {
-						ARMObject armObj = (ARMObject)this.cls.newInstance();
+						ARMObject armObj = (ARMObject)this.cls.getConstructor().newInstance();
 						armObj.setJson(obj);
 						armObj.session = this.session;
 						return (T)armObj;
 					}
-				} catch ( InstantiationException | IllegalAccessException exc ) {
+				} catch ( InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException exc ) {
 					System.out.println(exc);
 					return null;
 				}
