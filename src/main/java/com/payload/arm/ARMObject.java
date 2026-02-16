@@ -100,7 +100,7 @@ public class ARMObject<T> {
 				item.setJson(arr.getJSONObject(i));
 				result.add(item);
 			}
-		} catch (Exception exc) {
+		} catch (JSONException | ReflectiveOperationException exc) {
 			// Return empty list on error
 		}
 		return result;
@@ -115,7 +115,7 @@ public class ARMObject<T> {
 				item.setJson(arr.getJSONObject(i));
 				result.add(item);
 			}
-		} catch (Exception exc) {
+		} catch (JSONException | ReflectiveOperationException exc) {
 			// Return empty list on error
 		}
 		return result;
