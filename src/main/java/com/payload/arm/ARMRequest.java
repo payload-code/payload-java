@@ -264,9 +264,18 @@ public class ARMRequest<T> {
 	}
 
 	public T first() throws Exceptions.PayloadError {
+		Object oldLimit = _filters.get("limit");
 		_filters.put("limit", 1);
-		List<T> results = all();
-		return results != null && !results.isEmpty() ? results.get(0) : null;
+		try {
+			List<T> results = all();
+			return results != null && !results.isEmpty() ? results.get(0) : null;
+		} finally {
+			if (oldLimit == null) {
+				_filters.remove("limit");
+			} else {
+				_filters.put("limit", oldLimit);
+			}
+		}
 	}
 
 	public T get(String id) throws Exceptions.PayloadError {
