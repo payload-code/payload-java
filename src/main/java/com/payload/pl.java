@@ -136,6 +136,11 @@ public class pl {
       return new ARMRequest<Customer>(Customer.class).filter_by(attr, val);
     }
 
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Customer>(Customer.class).filter_by(attrs);
+    }
+
     public static List<Customer> all() throws Exceptions.PayloadError {
       return new ARMRequest<Customer>(Customer.class).all();
     }
@@ -164,6 +169,11 @@ public class pl {
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<ProcessingAccount>(ProcessingAccount.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<ProcessingAccount>(ProcessingAccount.class).filter_by(attrs);
     }
 
     public static List<ProcessingAccount> all() throws Exceptions.PayloadError {
@@ -200,6 +210,11 @@ public class pl {
       return new ARMRequest<Org>(Org.class).filter_by(attr, val);
     }
 
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Org>(Org.class).filter_by(attrs);
+    }
+
     public static List<Org> all() throws Exceptions.PayloadError {
       return new ARMRequest<Org>(Org.class).all();
     }
@@ -228,6 +243,11 @@ public class pl {
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<Transaction>(Transaction.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Transaction>(Transaction.class).filter_by(attrs);
     }
 
     public static List<Transaction> all() throws Exceptions.PayloadError {
@@ -274,6 +294,11 @@ public class pl {
       return new ARMRequest<Payment>(Payment.class).filter_by(attr, val);
     }
 
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Payment>(Payment.class).filter_by(attrs);
+    }
+
     public static Payment get(String id) throws Exceptions.PayloadError {
       return new ARMRequest<Payment>(Payment.class).get(id);
     }
@@ -317,6 +342,11 @@ public class pl {
       return new ARMRequest<Refund>(Refund.class).filter_by(attr, val);
     }
 
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Refund>(Refund.class).filter_by(attrs);
+    }
+
     public static List<Refund> all() throws Exceptions.PayloadError {
       return new ARMRequest<Refund>(Refund.class).all();
     }
@@ -349,6 +379,11 @@ public class pl {
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<Deposit>(Deposit.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Deposit>(Deposit.class).filter_by(attrs);
     }
 
     public static List<Deposit> all() throws Exceptions.PayloadError {
@@ -385,6 +420,11 @@ public class pl {
       return new ARMRequest<Credit>(Credit.class).filter_by(attr, val);
     }
 
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Credit>(Credit.class).filter_by(attrs);
+    }
+
     public static List<Credit> all() throws Exceptions.PayloadError {
       return new ARMRequest<Credit>(Credit.class).all();
     }
@@ -413,6 +453,11 @@ public class pl {
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<Ledger>(Ledger.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Ledger>(Ledger.class).filter_by(attrs);
     }
 
     public static List<Ledger> all() throws Exceptions.PayloadError {
@@ -465,6 +510,11 @@ public class pl {
       return new ARMRequest<PaymentMethod>(PaymentMethod.class).filter_by(attr, val);
     }
 
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<PaymentMethod>(PaymentMethod.class).filter_by(attrs);
+    }
+
     public static List<PaymentMethod> all() throws Exceptions.PayloadError {
       return new ARMRequest<PaymentMethod>(PaymentMethod.class).all();
     }
@@ -495,6 +545,11 @@ public class pl {
       return new ARMRequest<Card>(Card.class).filter_by(attr, val);
     }
 
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Card>(Card.class).filter_by(attrs);
+    }
+
     public static Card get(String id) throws Exceptions.PayloadError {
       return new ARMRequest<Card>(Card.class).get(id);
     }
@@ -521,6 +576,11 @@ public class pl {
       return new ARMRequest<BankAccount>(BankAccount.class).filter_by(attr, val);
     }
 
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<BankAccount>(BankAccount.class).filter_by(attrs);
+    }
+
     public static BankAccount get(String id) throws Exceptions.PayloadError {
       return new ARMRequest<BankAccount>(BankAccount.class).get(id);
     }
@@ -545,6 +605,11 @@ public class pl {
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<BillingSchedule>(BillingSchedule.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<BillingSchedule>(BillingSchedule.class).filter_by(attrs);
     }
 
     public static List<BillingSchedule> all() throws Exceptions.PayloadError {
@@ -577,6 +642,11 @@ public class pl {
       return new ARMRequest<BillingCharge>(BillingCharge.class).filter_by(attr, val);
     }
 
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<BillingCharge>(BillingCharge.class).filter_by(attrs);
+    }
+
     public static List<BillingCharge> all() throws Exceptions.PayloadError {
       return new ARMRequest<BillingCharge>(BillingCharge.class).all();
     }
@@ -605,6 +675,11 @@ public class pl {
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<Invoice>(Invoice.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Invoice>(Invoice.class).filter_by(attrs);
     }
 
     public static List<Invoice> all() throws Exceptions.PayloadError {
@@ -637,6 +712,11 @@ public class pl {
       return new ARMRequest<LineItem>(LineItem.class).filter_by(attr, val);
     }
 
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<LineItem>(LineItem.class).filter_by(attrs);
+    }
+
     public static List<LineItem> all() throws Exceptions.PayloadError {
       return new ARMRequest<LineItem>(LineItem.class).all();
     }
@@ -667,6 +747,11 @@ public class pl {
       return new ARMRequest<ChargeItem>(ChargeItem.class).filter_by(attr, val);
     }
 
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<ChargeItem>(ChargeItem.class).filter_by(attrs);
+    }
+
     public static ChargeItem get(String id) throws Exceptions.PayloadError {
       return new ARMRequest<ChargeItem>(ChargeItem.class).get(id);
     }
@@ -691,6 +776,11 @@ public class pl {
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<PaymentItem>(PaymentItem.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<PaymentItem>(PaymentItem.class).filter_by(attrs);
     }
 
     public static PaymentItem get(String id) throws Exceptions.PayloadError {
@@ -718,6 +808,11 @@ public class pl {
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<Webhook>(Webhook.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Webhook>(Webhook.class).filter_by(attrs);
     }
 
     public static List<Webhook> all() throws Exceptions.PayloadError {
@@ -751,6 +846,11 @@ public class pl {
       return new ARMRequest<WebhookLog>(WebhookLog.class).filter_by(attr, val);
     }
 
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<WebhookLog>(WebhookLog.class).filter_by(attrs);
+    }
+
     public static List<WebhookLog> all() throws Exceptions.PayloadError {
       return new ARMRequest<WebhookLog>(WebhookLog.class).all();
     }
@@ -779,6 +879,11 @@ public class pl {
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<PaymentLink>(PaymentLink.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<PaymentLink>(PaymentLink.class).filter_by(attrs);
     }
 
     public static List<PaymentLink> all() throws Exceptions.PayloadError {
@@ -811,6 +916,11 @@ public class pl {
       return new ARMRequest<PaymentActivation>(PaymentActivation.class).filter_by(attr, val);
     }
 
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<PaymentActivation>(PaymentActivation.class).filter_by(attrs);
+    }
+
     public static List<PaymentActivation> all() throws Exceptions.PayloadError {
       return new ARMRequest<PaymentActivation>(PaymentActivation.class).all();
     }
@@ -839,6 +949,11 @@ public class pl {
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<AccessToken>(AccessToken.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<AccessToken>(AccessToken.class).filter_by(attrs);
     }
 
     public static List<AccessToken> all() throws Exceptions.PayloadError {
@@ -875,6 +990,11 @@ public class pl {
       return new ARMRequest<ClientToken>(ClientToken.class).filter_by(attr, val);
     }
 
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<ClientToken>(ClientToken.class).filter_by(attrs);
+    }
+
     public static List<ClientToken> all() throws Exceptions.PayloadError {
       return new ARMRequest<ClientToken>(ClientToken.class).all();
     }
@@ -905,6 +1025,11 @@ public class pl {
       return new ARMRequest<Profile>(Profile.class).filter_by(attr, val);
     }
 
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Profile>(Profile.class).filter_by(attrs);
+    }
+
     public static List<Profile> all() throws Exceptions.PayloadError {
       return new ARMRequest<Profile>(Profile.class).all();
     }
@@ -933,6 +1058,11 @@ public class pl {
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<BillingItem>(BillingItem.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<BillingItem>(BillingItem.class).filter_by(attrs);
     }
 
     public static List<BillingItem> all() throws Exceptions.PayloadError {
@@ -966,6 +1096,11 @@ public class pl {
       return new ARMRequest<Intent>(Intent.class).filter_by(attr, val);
     }
 
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Intent>(Intent.class).filter_by(attrs);
+    }
+
     public static List<Intent> all() throws Exceptions.PayloadError {
       return new ARMRequest<Intent>(Intent.class).all();
     }
@@ -996,6 +1131,11 @@ public class pl {
       return new ARMRequest<InvoiceItem>(InvoiceItem.class).filter_by(attr, val);
     }
 
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<InvoiceItem>(InvoiceItem.class).filter_by(attrs);
+    }
+
     public static List<InvoiceItem> all() throws Exceptions.PayloadError {
       return new ARMRequest<InvoiceItem>(InvoiceItem.class).all();
     }
@@ -1024,6 +1164,11 @@ public class pl {
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<PaymentAllocation>(PaymentAllocation.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<PaymentAllocation>(PaymentAllocation.class).filter_by(attrs);
     }
 
     public static List<PaymentAllocation> all() throws Exceptions.PayloadError {
@@ -1060,6 +1205,11 @@ public class pl {
       return new ARMRequest<Entity>(Entity.class).filter_by(attr, val);
     }
 
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Entity>(Entity.class).filter_by(attrs);
+    }
+
     public static List<Entity> all() throws Exceptions.PayloadError {
       return new ARMRequest<Entity>(Entity.class).all();
     }
@@ -1088,6 +1238,11 @@ public class pl {
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<Stakeholder>(Stakeholder.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Stakeholder>(Stakeholder.class).filter_by(attrs);
     }
 
     public static List<Stakeholder> all() throws Exceptions.PayloadError {
@@ -1120,6 +1275,11 @@ public class pl {
       return new ARMRequest<ProcessingAgreement>(ProcessingAgreement.class).filter_by(attr, val);
     }
 
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<ProcessingAgreement>(ProcessingAgreement.class).filter_by(attrs);
+    }
+
     public static List<ProcessingAgreement> all() throws Exceptions.PayloadError {
       return new ARMRequest<ProcessingAgreement>(ProcessingAgreement.class).all();
     }
@@ -1148,6 +1308,11 @@ public class pl {
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<ProcessingRule>(ProcessingRule.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<ProcessingRule>(ProcessingRule.class).filter_by(attrs);
     }
 
     public static List<ProcessingRule> all() throws Exceptions.PayloadError {
@@ -1180,6 +1345,11 @@ public class pl {
       return new ARMRequest<Transfer>(Transfer.class).filter_by(attr, val);
     }
 
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Transfer>(Transfer.class).filter_by(attrs);
+    }
+
     public static List<Transfer> all() throws Exceptions.PayloadError {
       return new ARMRequest<Transfer>(Transfer.class).all();
     }
@@ -1208,6 +1378,11 @@ public class pl {
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<TransactionOperation>(TransactionOperation.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<TransactionOperation>(TransactionOperation.class).filter_by(attrs);
     }
 
     public static List<TransactionOperation> all() throws Exceptions.PayloadError {
@@ -1240,6 +1415,11 @@ public class pl {
       return new ARMRequest<CheckFront>(CheckFront.class).filter_by(attr, val);
     }
 
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<CheckFront>(CheckFront.class).filter_by(attrs);
+    }
+
     public static List<CheckFront> all() throws Exceptions.PayloadError {
       return new ARMRequest<CheckFront>(CheckFront.class).all();
     }
@@ -1268,6 +1448,11 @@ public class pl {
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<Account>(Account.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Account>(Account.class).filter_by(attrs);
     }
 
     public static List<Account> all() throws Exceptions.PayloadError {
@@ -1304,6 +1489,11 @@ public class pl {
       return new ARMRequest<ProcessingSettings>(ProcessingSettings.class).filter_by(attr, val);
     }
 
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<ProcessingSettings>(ProcessingSettings.class).filter_by(attrs);
+    }
+
     public static List<ProcessingSettings> all() throws Exceptions.PayloadError {
       return new ARMRequest<ProcessingSettings>(ProcessingSettings.class).all();
     }
@@ -1338,6 +1528,11 @@ public class pl {
       return new ARMRequest<OAuthToken>(OAuthToken.class).filter_by(attr, val);
     }
 
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<OAuthToken>(OAuthToken.class).filter_by(attrs);
+    }
+
     public static List<OAuthToken> all() throws Exceptions.PayloadError {
       return new ARMRequest<OAuthToken>(OAuthToken.class).all();
     }
@@ -1366,6 +1561,11 @@ public class pl {
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<User>(User.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<User>(User.class).filter_by(attrs);
     }
 
     public static List<User> all() throws Exceptions.PayloadError {
@@ -1398,6 +1598,11 @@ public class pl {
       return new ARMRequest<InvoiceAttachment>(InvoiceAttachment.class).filter_by(attr, val);
     }
 
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<InvoiceAttachment>(InvoiceAttachment.class).filter_by(attrs);
+    }
+
     public static List<InvoiceAttachment> all() throws Exceptions.PayloadError {
       return new ARMRequest<InvoiceAttachment>(InvoiceAttachment.class).all();
     }
@@ -1426,6 +1631,11 @@ public class pl {
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<CheckBack>(CheckBack.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<CheckBack>(CheckBack.class).filter_by(attrs);
     }
 
     public static List<CheckBack> all() throws Exceptions.PayloadError {
