@@ -1,7 +1,6 @@
 package com.payload.test;
 
 import com.payload.pl;
-import com.payload.Session;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
@@ -25,15 +24,12 @@ public class ApiVersionTest {
   @Test
   public void testApiVersionDefaultsToNull() {
     assertNull(pl.api_version);
-    Session session = new Session("test_key");
-    assertNull(session.getApiVersion());
   }
 
   @Test
   public void testApiVersionWhenSet() {
     pl.api_version = "2";
-    Session session = new Session("test_key");
-    assertEquals("2", session.getApiVersion());
+    assertEquals("2", pl.api_version);
   }
 
   @Test
@@ -42,26 +38,8 @@ public class ApiVersionTest {
 
     for (String version : versions) {
       pl.api_version = version;
-      Session session = new Session("test_key");
-      assertEquals(version, session.getApiVersion());
+      assertEquals(version, pl.api_version);
     }
-  }
-
-  @Test
-  public void testGlobalApiVersionAffectsAllSessions() {
-    pl.api_version = "2";
-
-    Session session1 = new Session("key1");
-    Session session2 = new Session("key2", "https://api.payload.com");
-
-    assertEquals("2", session1.getApiVersion());
-    assertEquals("2", session2.getApiVersion());
-  }
-
-  @Test
-  public void testDefaultSessionUsesGlobalApiVersion() {
-    pl.api_version = "2";
-    assertEquals("2", pl.default_session.getApiVersion());
   }
 
 }

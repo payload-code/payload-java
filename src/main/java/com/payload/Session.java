@@ -21,7 +21,6 @@ public class Session {
 
   public String getApiKey() { return this.api_key != null ? this.api_key : pl.api_key; }
   public String getApiUrl() { return this.api_url != null ? this.api_url : pl.api_url; }
-  public String getApiVersion() { return pl.api_version; }
 
   public <T> ARMRequest<T> select(Class<T> cls) throws Exceptions.PayloadError {
       return new ARMRequest<T>(cls, this);

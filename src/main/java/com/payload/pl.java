@@ -42,10 +42,14 @@ public class pl {
     }
 
     @Override
-    public String getKey() { return attr; }
+    public String getKey() {
+      return attr;
+    }
 
     @Override
-    public Object getValue() { return opval; }
+    public Object getValue() {
+      return opval;
+    }
 
     @Override
     public Object setValue(Object value) {
@@ -102,8 +106,13 @@ public class pl {
       return new Filter(key, "!" + val);
     }
 
-    public Attr desc() { return new Attr("desc(" + key + ")"); }
-    public Attr asc() { return new Attr("asc(" + key + ")"); }
+    public Attr desc() {
+      return new Attr("desc(" + key + ")");
+    }
+
+    public Attr asc() {
+      return new Attr("asc(" + key + ")");
+    }
   }
 
   public static class Customer extends ARMObject<Customer> {
@@ -265,11 +274,6 @@ public class pl {
       return new ARMRequest<Payment>(Payment.class).filter_by(attr, val);
     }
 
-    @SafeVarargs
-    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
-      return new ARMRequest<Payment>(Payment.class).filter_by(attrs);
-    }
-
     public static Payment get(String id) throws Exceptions.PayloadError {
       return new ARMRequest<Payment>(Payment.class).get(id);
     }
@@ -379,11 +383,6 @@ public class pl {
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<Credit>(Credit.class).filter_by(attr, val);
-    }
-
-    @SafeVarargs
-    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
-      return new ARMRequest<Credit>(Credit.class).filter_by(attrs);
     }
 
     public static List<Credit> all() throws Exceptions.PayloadError {
@@ -1151,11 +1150,6 @@ public class pl {
       return new ARMRequest<ProcessingRule>(ProcessingRule.class).filter_by(attr, val);
     }
 
-    @SafeVarargs
-    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
-      return new ARMRequest<ProcessingRule>(ProcessingRule.class).filter_by(attrs);
-    }
-
     public static List<ProcessingRule> all() throws Exceptions.PayloadError {
       return new ARMRequest<ProcessingRule>(ProcessingRule.class).all();
     }
@@ -1274,11 +1268,6 @@ public class pl {
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<Account>(Account.class).filter_by(attr, val);
-    }
-
-    @SafeVarargs
-    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
-      return new ARMRequest<Account>(Account.class).filter_by(attrs);
     }
 
     public static List<Account> all() throws Exceptions.PayloadError {
