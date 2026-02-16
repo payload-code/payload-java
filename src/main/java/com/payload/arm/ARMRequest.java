@@ -150,7 +150,8 @@ public class ARMRequest<T> {
 				JSONObject obj = new JSONObject(content.toString());
 
 				try {
-					if ( obj.getString("object").equals("list") ) {
+					String objectType = obj.optString("object");
+					if ( "list".equals(objectType) ) {
 						List<T> result = new ArrayList<T>();
 						JSONArray lst = obj.getJSONArray("values");
 
