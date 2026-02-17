@@ -88,14 +88,6 @@ public class Exceptions {
         public TransactionDeclined(JSONObject details) {
             super(details);
         }
-
-        public String getTransactionId() {
-            return this.data != null ? this.data.optString("transaction_id", null) : null;
-        }
-
-        public String getDeclineReason() {
-            return this.data != null ? this.data.optString("decline_reason", null) : null;
-        }
     }
 
     public static final Map<String, Class<? extends PayloadError>> excmap = new HashMap<String, Class<? extends PayloadError>>() {{
