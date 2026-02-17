@@ -30,7 +30,7 @@ A Java library for integrating [Payload](https://payload.com).
 <dependency>
   <groupId>com.payload</groupId>
   <artifactId>payload</artifactId>
-  <version>2.0.0</version>
+  <version>1.2.0</version>
 </dependency>
 ```
 
