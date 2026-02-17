@@ -1,6 +1,7 @@
 package com.payload;
 
 import java.util.List;
+import java.util.Arrays;
 import com.payload.pl;
 import com.payload.arm.ARMObject;
 import com.payload.arm.ARMRequest;
@@ -38,172 +39,20 @@ public class Session {
       return new ARMRequest<T>(cls, this);
   }
 
-  public pl.AccessToken create(pl.AccessToken obj) throws Exceptions.PayloadError {
-     return obj.create(this);
+  public <T> ARMRequest<T> select(Class<T> cls, String... args) {
+    return new ARMRequest<T>(cls).select(args);
   }
 
-  public pl.ClientToken create(pl.ClientToken obj) throws Exceptions.PayloadError {
-     return obj.create(this);
+  @SuppressWarnings("unchecked")
+  public <T extends ARMObject> T create(T obj) throws Exceptions.PayloadError {
+     return (T) obj.create(this);
   }
 
-  public pl.Customer create(pl.Customer obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.ProcessingAccount create(pl.ProcessingAccount obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.Org create(pl.Org obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.Transaction create(pl.Transaction obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.Payment create(pl.Payment obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.Refund create(pl.Refund obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.Credit create(pl.Credit obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.Deposit create(pl.Deposit obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.Ledger create(pl.Ledger obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.PaymentMethod create(pl.PaymentMethod obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.Card create(pl.Card obj) throws Exceptions.PayloadError {
-     return (pl.Card)obj.create(this);
-  }
-
-  public pl.BankAccount create(pl.BankAccount obj) throws Exceptions.PayloadError {
-     return (pl.BankAccount)obj.create(this);
-  }
-
-  public pl.BillingSchedule create(pl.BillingSchedule obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.BillingCharge create(pl.BillingCharge obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.Invoice create(pl.Invoice obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.LineItem create(pl.LineItem obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.ChargeItem create(pl.ChargeItem obj) throws Exceptions.PayloadError {
-     return (pl.ChargeItem)obj.create(this);
-  }
-
-  public pl.PaymentItem create(pl.PaymentItem obj) throws Exceptions.PayloadError {
-     return (pl.PaymentItem)obj.create(this);
-  }
-
-  public pl.Webhook create(pl.Webhook obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.PaymentLink create(pl.PaymentLink obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.PaymentActivation create(pl.PaymentActivation obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.Intent create(pl.Intent obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.Entity create(pl.Entity obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.Stakeholder create(pl.Stakeholder obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.Profile create(pl.Profile obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.BillingItem create(pl.BillingItem obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.InvoiceItem create(pl.InvoiceItem obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.PaymentAllocation create(pl.PaymentAllocation obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.ProcessingAgreement create(pl.ProcessingAgreement obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.ProcessingRule create(pl.ProcessingRule obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.Transfer create(pl.Transfer obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.TransactionOperation create(pl.TransactionOperation obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.WebhookLog create(pl.WebhookLog obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.CheckFront create(pl.CheckFront obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.CheckBack create(pl.CheckBack obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.Account create(pl.Account obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.ProcessingSettings create(pl.ProcessingSettings obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.OAuthToken create(pl.OAuthToken obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.User create(pl.User obj) throws Exceptions.PayloadError {
-     return obj.create(this);
-  }
-
-  public pl.InvoiceAttachment create(pl.InvoiceAttachment obj) throws Exceptions.PayloadError {
-     return obj.create(this);
+  @SafeVarargs
+  @SuppressWarnings("unchecked")
+  public final <T extends ARMObject> List<T> create(T... args) throws Exceptions.PayloadError {
+     Class<T> cls = (Class<T>) args[0].getClass();
+     return new ARMRequest<T>(cls, this).create(Arrays.asList(args));
   }
 
   public void delete(ARMObject obj) throws Exceptions.PayloadError {

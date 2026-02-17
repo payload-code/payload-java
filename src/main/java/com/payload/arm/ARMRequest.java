@@ -37,12 +37,18 @@ public class ARMRequest<T> {
 	private HashMap<String, Object> _filters = new HashMap<String, Object>();
 	private ArrayList<String> _orderBys = new ArrayList<String>();
 
+	@SuppressWarnings("unchecked")
 	public ARMRequest(Class<T> cls) {
+		while (cls.isAnonymousClass())
+			cls = (Class<T>) cls.getSuperclass();
 		this.cls = cls;
 		this.session = pl.default_session;
 	}
 
+	@SuppressWarnings("unchecked")
 	public ARMRequest(Class<T> cls, Session session) {
+		while (cls.isAnonymousClass())
+			cls = (Class<T>) cls.getSuperclass();
 		this.cls = cls;
 		this.session = session != null ? session : pl.default_session;
 	}
