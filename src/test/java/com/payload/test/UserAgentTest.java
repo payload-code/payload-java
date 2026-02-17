@@ -96,7 +96,7 @@ public class UserAgentTest {
   public void testUserAgentUsesRuntimeVersion() throws Exceptions.PayloadError, IOException {
     URL url = new URL("https://api.payload.com/dummy");
     RecordingHttpURLConnection conn = new RecordingHttpURLConnection(url);
-    Session session = new Session("test_key", "https://api.payload.com");
+    Session session = new Session("test_key").apiUrl("https://api.payload.com");
 
     TestARMRequest<DummyObject> req =
         new TestARMRequest<DummyObject>(DummyObject.class, session, conn);

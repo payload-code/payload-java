@@ -55,12 +55,14 @@ Session sess = new Session("secret_key_3bW9JMZtPVDOfFNzwRdfE");
 
 ### API Version
 
-To specify which version of the Payload API to use, set the `api_version` property. When set, all requests will include the `X-API-Version` header.
+To specify which version of the Payload API to use, pass it as the second argument to `Session` or use the `apiVersion` method.
 
 ```java
-import com.payload.pl;
+Session sess = new Session("secret_key_3bW9JMZtPVDOfFNzwRdfE", "2");
+```
 
-pl.api_version = "2";
+```java
+Session sess = new Session("secret_key_3bW9JMZtPVDOfFNzwRdfE").apiVersion("2");
 ```
 
 ### Creating an Object

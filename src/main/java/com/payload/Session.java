@@ -15,15 +15,19 @@ public class Session {
     this.api_key = api_key;
   }
 
-  public Session(String api_key, String api_url) {
+  public Session(String api_key, String api_version) {
     this.api_key = api_key;
-    this.api_url = api_url;
+    this.api_version = api_version;
   }
 
-  public Session(String api_key, String api_url, String api_version) {
-    this.api_key = api_key;
+  public Session apiUrl(String api_url) {
     this.api_url = api_url;
+    return this;
+  }
+
+  public Session apiVersion(String api_version) {
     this.api_version = api_version;
+    return this;
   }
 
   public String getApiKey() { return this.api_key != null ? this.api_key : pl.api_key; }

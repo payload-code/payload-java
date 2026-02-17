@@ -46,7 +46,7 @@ public class ApiVersionTest {
   @Test
   public void testSessionApiVersionOverridesGlobal() {
     pl.api_version = "1";
-    Session session = new Session("test_key", null, "2");
+    Session session = new Session("test_key", "2");
     assertEquals("2", session.getApiVersion());
   }
 
@@ -67,7 +67,7 @@ public class ApiVersionTest {
   @Test
   public void testSessionWithExplicitNullFallsBackToGlobal() {
     pl.api_version = "1";
-    Session session = new Session("test_key", null, null);
+    Session session = new Session("test_key", null);
     assertEquals("1", session.getApiVersion());
   }
 
