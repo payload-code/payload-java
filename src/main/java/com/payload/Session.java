@@ -51,6 +51,8 @@ public class Session {
   @SafeVarargs
   @SuppressWarnings("unchecked")
   public final <T extends ARMObject> List<T> create(T... args) throws Exceptions.PayloadError {
+     if (args.length == 0)
+        throw new IllegalArgumentException("create requires at least one argument");
      Class<T> cls = (Class<T>) args[0].getClass();
      return new ARMRequest<T>(cls, this).create(Arrays.asList(args));
   }
