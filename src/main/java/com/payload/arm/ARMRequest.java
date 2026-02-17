@@ -35,13 +35,20 @@ public class ARMRequest<T> {
 	public Session session;
 	private ArrayList<String> _attrs = new ArrayList<String>();
 	private HashMap<String, Object> _filters = new HashMap<String, Object>();
+	private ArrayList<String> _orderBys = new ArrayList<String>();
 
+	@SuppressWarnings("unchecked")
 	public ARMRequest(Class<T> cls) {
+		while (cls.isAnonymousClass())
+			cls = (Class<T>) cls.getSuperclass();
 		this.cls = cls;
 		this.session = pl.default_session;
 	}
 
+	@SuppressWarnings("unchecked")
 	public ARMRequest(Class<T> cls, Session session) {
+		while (cls.isAnonymousClass())
+			cls = (Class<T>) cls.getSuperclass();
 		this.cls = cls;
 		this.session = session != null ? session : pl.default_session;
 	}
@@ -99,6 +106,17 @@ public class ARMRequest<T> {
 			} catch( UnsupportedEncodingException exc ) {}
 		}
 
+		for ( int i = 0; i < _orderBys.size(); i++ ) {
+			if ( query.length() > 0 )
+				query += "&";
+
+			try {
+				query += String.format(
+					"order_by["+Integer.toString(i)+"]=%s",
+					URLEncoder.encode(_orderBys.get(i), "UTF8") );
+			} catch( UnsupportedEncodingException exc ) {}
+		}
+
 		if ( query.length() > 0 )
 			endpoint += "?" + query;
 
@@ -120,7 +138,7 @@ public class ARMRequest<T> {
 				con.setRequestProperty("Content-Type", "application/json");
 				con.setDoOutput(true);
 				try (DataOutputStream out = new DataOutputStream(con.getOutputStream())) {
-					out.writeBytes(json);
+					out.write(json.getBytes(StandardCharsets.UTF_8));
 					out.flush();
 				}
 			}
@@ -138,12 +156,13 @@ public class ARMRequest<T> {
 				JSONObject obj = new JSONObject(content.toString());
 
 				try {
-					if ( obj.getString("object").equals("list") ) {
+					String objectType = obj.optString("object");
+					if ( "list".equals(objectType) ) {
 						List<T> result = new ArrayList<T>();
 						JSONArray lst = obj.getJSONArray("values");
 
 						for (int i = 0 ; i < lst.length(); i++) {
-							ARMObject armObj = (ARMObject)this.cls.newInstance();
+							ARMObject armObj = (ARMObject)this.cls.getConstructor().newInstance();
 							armObj.setJson(lst.getJSONObject(i));
 							armObj.session = this.session;
 							result.add((T)armObj);
@@ -151,12 +170,12 @@ public class ARMRequest<T> {
 
 						return result;
 					} else {
-						ARMObject armObj = (ARMObject)this.cls.newInstance();
+						ARMObject armObj = (ARMObject)this.cls.getConstructor().newInstance();
 						armObj.setJson(obj);
 						armObj.session = this.session;
 						return (T)armObj;
 					}
-				} catch ( InstantiationException | IllegalAccessException exc ) {
+				} catch ( InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException exc ) {
 					System.out.println(exc);
 					return null;
 				}
@@ -193,27 +212,76 @@ public class ARMRequest<T> {
 		}
 	}
 
-	public ARMRequest select(String... args) {
+	public ARMRequest<T> select(String... args) {
 		for ( int i=0; i<args.length; i++)
 			this._attrs.add(args[i]);
 		return this;
 	}
 
-	public ARMRequest filter_by(String attr, Object val) {
+	public ARMRequest<T> select(Object... args) {
+		for ( Object arg : args )
+			this._attrs.add(arg.toString());
+		return this;
+	}
+
+	public ARMRequest<T> filter_by(String attr, Object val) {
 		_filters.put(attr, val);
 		return this;
 	}
 
 	@SafeVarargs
-	public final ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+	public final ARMRequest<T> filter_by(Map.Entry<String, Object>... attrs) {
 		for (Map.Entry<String, Object> entry : attrs) {
 			_filters.put(entry.getKey(), entry.getValue());
 		}
 		return this;
 	}
 
+	public ARMRequest<T> order_by(String... args) {
+		for ( String arg : args )
+			this._orderBys.add(arg);
+		return this;
+	}
+
+	public ARMRequest<T> order_by(Object... args) {
+		for ( Object arg : args )
+			this._orderBys.add(arg.toString());
+		return this;
+	}
+
+	public ARMRequest<T> limit(int n) {
+		_filters.put("limit", n);
+		return this;
+	}
+
+	public ARMRequest<T> offset(int n) {
+		_filters.put("offset", n);
+		return this;
+	}
+
+	public ARMRequest<T> group_by(Object... args) {
+		for ( int i = 0; i < args.length; i++ )
+			_filters.put("group_by[" + i + "]", args[i].toString());
+		return this;
+	}
+
 	public List<T> all() throws Exceptions.PayloadError {
 		return (List<T>)this._request("GET", null, null);
+	}
+
+	public T first() throws Exceptions.PayloadError {
+		Object oldLimit = _filters.get("limit");
+		_filters.put("limit", 1);
+		try {
+			List<T> results = all();
+			return results != null && !results.isEmpty() ? results.get(0) : null;
+		} finally {
+			if (oldLimit == null) {
+				_filters.remove("limit");
+			} else {
+				_filters.put("limit", oldLimit);
+			}
+		}
 	}
 
 	public T get(String id) throws Exceptions.PayloadError {
@@ -255,7 +323,7 @@ public class ARMRequest<T> {
 
 		JSONObject req = new JSONObject();
 		for ( Map.Entry<String,Object> upd : upds )
-			req.put(upd.getKey(), String.valueOf(upd.getValue()));
+			req.put(upd.getKey(), upd.getValue());
 
 		ARMObject new_obj = (ARMObject)this._request("PUT", obj.getStr("id"), req.toString());
 		((ARMObject)obj).obj = new_obj.obj;

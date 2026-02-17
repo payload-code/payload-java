@@ -9,7 +9,7 @@ on:
       - master
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     env:
       API_KEY: ${{ secrets.API_KEY }}

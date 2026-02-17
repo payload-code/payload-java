@@ -25,15 +25,12 @@ public class ApiVersionTest {
   @Test
   public void testApiVersionDefaultsToNull() {
     assertNull(pl.api_version);
-    Session session = new Session("test_key");
-    assertNull(session.getApiVersion());
   }
 
   @Test
   public void testApiVersionWhenSet() {
     pl.api_version = "2";
-    Session session = new Session("test_key");
-    assertEquals("2", session.getApiVersion());
+    assertEquals("2", pl.api_version);
   }
 
   @Test
@@ -42,26 +39,48 @@ public class ApiVersionTest {
 
     for (String version : versions) {
       pl.api_version = version;
-      Session session = new Session("test_key");
-      assertEquals(version, session.getApiVersion());
+      assertEquals(version, pl.api_version);
     }
   }
 
   @Test
-  public void testGlobalApiVersionAffectsAllSessions() {
-    pl.api_version = "2";
-
-    Session session1 = new Session("key1");
-    Session session2 = new Session("key2", "https://api.payload.com");
-
-    assertEquals("2", session1.getApiVersion());
-    assertEquals("2", session2.getApiVersion());
+  public void testSessionApiVersionOverridesGlobal() {
+    pl.api_version = "1";
+    Session session = new Session("test_key", "2");
+    assertEquals("2", session.getApiVersion());
   }
 
   @Test
-  public void testDefaultSessionUsesGlobalApiVersion() {
-    pl.api_version = "2";
-    assertEquals("2", pl.default_session.getApiVersion());
+  public void testSessionApiVersionFallsBackToGlobal() {
+    pl.api_version = "1";
+    Session session = new Session("test_key");
+    assertEquals("1", session.getApiVersion());
+  }
+
+  @Test
+  public void testSessionApiVersionNullWhenBothNull() {
+    pl.api_version = null;
+    Session session = new Session("test_key");
+    assertNull(session.getApiVersion());
+  }
+
+  @Test
+  public void testSessionWithExplicitNullFallsBackToGlobal() {
+    pl.api_version = "1";
+    Session session = new Session("test_key", null);
+    assertEquals("1", session.getApiVersion());
+  }
+
+  @Test
+  public void testEndpointAppendsS() {
+    pl.Customer customer = new pl.Customer();
+    assertEquals("/customers", customer.getEndpoint());
+  }
+
+  @Test
+  public void testEndpointDoesNotDoubleS() {
+    pl.ProcessingSettings settings = new pl.ProcessingSettings();
+    assertEquals("/processing_settings", settings.getEndpoint());
   }
 
 }

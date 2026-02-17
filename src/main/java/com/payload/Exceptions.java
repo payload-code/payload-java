@@ -84,22 +84,9 @@ public class Exceptions {
         }
     }
 
-    public static class TransactionDeclined extends PayloadError {
-        private String transactionId;
-        private String declineReason;
-
-        public TransactionDeclined(String message, String transactionId, String declineReason) {
-            super(message);
-            this.transactionId = transactionId;
-            this.declineReason = declineReason;
-        }
-
-        public String getTransactionId() {
-            return transactionId;
-        }
-
-        public String getDeclineReason() {
-            return declineReason;
+    public static class TransactionDeclined extends BadRequest {
+        public TransactionDeclined(JSONObject details) {
+            super(details);
         }
     }
 

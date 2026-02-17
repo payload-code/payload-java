@@ -326,6 +326,7 @@ public class PayloadTest {
     };
 
     List<pl.Payment> payments = (List<pl.Payment>) pl.Payment
+        .filter_by("type", "payment")
         .filter_by(
             pl.attr("amount").gt(99),
             pl.attr("amount").lt(200),

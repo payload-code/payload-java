@@ -31,7 +31,7 @@ public class PayloadSessionTest {
   @BeforeClass
   public static void setUpClass() throws Exception {
     if (System.getenv("API_URL") != null)
-      session = new Session(System.getenv("API_KEY"), System.getenv("API_URL"));
+      session = new Session(System.getenv("API_KEY")).apiUrl(System.getenv("API_URL"));
     else
       session = new Session(System.getenv("API_KEY"));
 

@@ -11,7 +11,10 @@ public class ARMObject<T> {
 	public String getObject(){ return ""; }
 	public String[] getPoly(){ return null; }
 	public Map<String,String> fieldmap(){ return null; }
-	public String getEndpoint() { return "/"+getObject()+"s"; }
+	public String getEndpoint() {
+		String obj = getObject();
+		return "/" + obj + (obj.endsWith("s") ? "" : "s");
+	}
 	public JSONObject obj;
 	public Session session;
 
@@ -57,8 +60,65 @@ public class ARMObject<T> {
 		return (float)mappedObj(key).getDouble(key);
 	}
 
+	public boolean getBool(String key) {
+		return mappedObj(key).getBoolean(key);
+	}
+
+	public boolean getBool(String key, boolean defaultVal) {
+		try {
+			return mappedObj(key).getBoolean(key);
+		} catch (JSONException exc) {
+			return defaultVal;
+		}
+	}
+
 	public JSONObject getJObj(String key) {
 		return mappedObj(key).getJSONObject(key);
+	}
+
+	public JSONArray getJArr(String key) {
+		return mappedObj(key).getJSONArray(key);
+	}
+
+	public ARMObject getObj(String key) {
+		try {
+			JSONObject nested = mappedObj(key).getJSONObject(key);
+			ARMObject wrapper = new ARMObject();
+			wrapper.setJson(nested);
+			return wrapper;
+		} catch (JSONException exc) {
+			return null;
+		}
+	}
+
+	public java.util.List<ARMObject> getList(String key) {
+		java.util.List<ARMObject> result = new java.util.ArrayList<>();
+		try {
+			JSONArray arr = mappedObj(key).getJSONArray(key);
+			for (int i = 0; i < arr.length(); i++) {
+				ARMObject item = new ARMObject();
+				item.setJson(arr.getJSONObject(i));
+				result.add(item);
+			}
+		} catch (JSONException exc) {
+			// Return empty list on error
+		}
+		return result;
+	}
+
+	public <E extends ARMObject> java.util.List<E> getList(String key, Class<E> clazz) {
+		java.util.List<E> result = new java.util.ArrayList<>();
+		try {
+			JSONArray arr = mappedObj(key).getJSONArray(key);
+			for (int i = 0; i < arr.length(); i++) {
+				E item = clazz.getDeclaredConstructor().newInstance();
+				item.setJson(arr.getJSONObject(i));
+				result.add(item);
+			}
+		} catch (JSONException | ReflectiveOperationException exc) {
+			// Return empty list on error
+		}
+		return result;
 	}
 
 	public T set(String key, Object value) {

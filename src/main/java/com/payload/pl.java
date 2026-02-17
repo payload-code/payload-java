@@ -32,6 +32,40 @@ public class pl {
     return new Attr(key);
   }
 
+  public static class Filter implements Map.Entry<String, Object> {
+    private final String attr;
+    private Object opval;
+
+    public Filter(String attr, Object opval) {
+      this.attr = attr;
+      this.opval = opval;
+    }
+
+    @Override
+    public String getKey() {
+      return attr;
+    }
+
+    @Override
+    public Object getValue() {
+      return opval;
+    }
+
+    @Override
+    public Object setValue(Object value) {
+      Object old = opval;
+      opval = value;
+      return old;
+    }
+
+    public Filter or(Filter other) {
+      if (!other.attr.equals(this.attr)) {
+        throw new IllegalArgumentException("`or` only works on the same attribute");
+      }
+      return new Filter(this.attr, String.valueOf(this.opval) + "|" + String.valueOf(other.opval));
+    }
+  }
+
   public static class Attr {
     private final String key;
 
@@ -39,28 +73,45 @@ public class pl {
       this.key = key;
     }
 
-    public Map.Entry<String, Object> gt(Object val) {
-      return new AbstractMap.SimpleEntry<String, Object>(key, ">" + val);
+    @Override
+    public String toString() {
+      return key;
     }
 
-    public Map.Entry<String, Object> lt(Object val) {
-      return new AbstractMap.SimpleEntry<String, Object>(key, "<" + val);
+    public Filter gt(Object val) {
+      return new Filter(key, ">" + val);
     }
 
-    public Map.Entry<String, Object> gte(Object val) {
-      return new AbstractMap.SimpleEntry<String, Object>(key, ">=" + val);
+    public Filter lt(Object val) {
+      return new Filter(key, "<" + val);
     }
 
-    public Map.Entry<String, Object> lte(Object val) {
-      return new AbstractMap.SimpleEntry<String, Object>(key, "<=" + val);
+    public Filter gte(Object val) {
+      return new Filter(key, ">=" + val);
     }
 
-    public Map.Entry<String, Object> contains(Object val) {
-      return new AbstractMap.SimpleEntry<String, Object>(key, "?*" + val);
+    public Filter lte(Object val) {
+      return new Filter(key, "<=" + val);
     }
 
-    public Map.Entry<String, Object> eq(Object val) {
-      return new AbstractMap.SimpleEntry<String, Object>(key, val);
+    public Filter contains(Object val) {
+      return new Filter(key, "?*" + val);
+    }
+
+    public Filter eq(Object val) {
+      return new Filter(key, val);
+    }
+
+    public Filter ne(Object val) {
+      return new Filter(key, "!" + val);
+    }
+
+    public Attr desc() {
+      return new Attr("desc(" + key + ")");
+    }
+
+    public Attr asc() {
+      return new Attr("asc(" + key + ")");
     }
   }
 
@@ -73,12 +124,21 @@ public class pl {
       return new ARMRequest<Customer>(Customer.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<Customer>(Customer.class).select(args);
+    }
+
     public static List<Customer> create(Customer... args) throws Exceptions.PayloadError {
       return new ARMRequest<Customer>(Customer.class).create(Arrays.asList(args));
     }
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<Customer>(Customer.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Customer>(Customer.class).filter_by(attrs);
     }
 
     public static List<Customer> all() throws Exceptions.PayloadError {
@@ -99,12 +159,21 @@ public class pl {
       return new ARMRequest<ProcessingAccount>(ProcessingAccount.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<ProcessingAccount>(ProcessingAccount.class).select(args);
+    }
+
     public static List<ProcessingAccount> create(ProcessingAccount... args) throws Exceptions.PayloadError {
       return new ARMRequest<ProcessingAccount>(ProcessingAccount.class).create(Arrays.asList(args));
     }
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<ProcessingAccount>(ProcessingAccount.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<ProcessingAccount>(ProcessingAccount.class).filter_by(attrs);
     }
 
     public static List<ProcessingAccount> all() throws Exceptions.PayloadError {
@@ -129,12 +198,21 @@ public class pl {
       return new ARMRequest<Org>(Org.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<Org>(Org.class).select(args);
+    }
+
     public static List<Org> create(Org... args) throws Exceptions.PayloadError {
       return new ARMRequest<Org>(Org.class).create(Arrays.asList(args));
     }
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<Org>(Org.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Org>(Org.class).filter_by(attrs);
     }
 
     public static List<Org> all() throws Exceptions.PayloadError {
@@ -155,12 +233,21 @@ public class pl {
       return new ARMRequest<Transaction>(Transaction.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<Transaction>(Transaction.class).select(args);
+    }
+
     public static List<Transaction> create(Transaction... args) throws Exceptions.PayloadError {
       return new ARMRequest<Transaction>(Transaction.class).create(Arrays.asList(args));
     }
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<Transaction>(Transaction.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Transaction>(Transaction.class).filter_by(attrs);
     }
 
     public static List<Transaction> all() throws Exceptions.PayloadError {
@@ -173,6 +260,7 @@ public class pl {
   }
 
   public static class Payment extends ARMObject<Payment> {
+
     public String getObject() {
       return "transaction";
     }
@@ -191,6 +279,10 @@ public class pl {
     }
 
     public static ARMRequest select(String... args) {
+      return new ARMRequest<Payment>(Payment.class).select(args);
+    }
+
+    public static ARMRequest select(Object... args) {
       return new ARMRequest<Payment>(Payment.class).select(args);
     }
 
@@ -238,12 +330,21 @@ public class pl {
       return new ARMRequest<Refund>(Refund.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<Refund>(Refund.class).select(args);
+    }
+
     public static List<Refund> create(Refund... args) throws Exceptions.PayloadError {
       return new ARMRequest<Refund>(Refund.class).create(Arrays.asList(args));
     }
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<Refund>(Refund.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Refund>(Refund.class).filter_by(attrs);
     }
 
     public static List<Refund> all() throws Exceptions.PayloadError {
@@ -268,12 +369,21 @@ public class pl {
       return new ARMRequest<Deposit>(Deposit.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<Deposit>(Deposit.class).select(args);
+    }
+
     public static List<Deposit> create(Deposit... args) throws Exceptions.PayloadError {
       return new ARMRequest<Deposit>(Deposit.class).create(Arrays.asList(args));
     }
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<Deposit>(Deposit.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Deposit>(Deposit.class).filter_by(attrs);
     }
 
     public static List<Deposit> all() throws Exceptions.PayloadError {
@@ -298,12 +408,21 @@ public class pl {
       return new ARMRequest<Credit>(Credit.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<Credit>(Credit.class).select(args);
+    }
+
     public static List<Credit> create(Credit... args) throws Exceptions.PayloadError {
       return new ARMRequest<Credit>(Credit.class).create(Arrays.asList(args));
     }
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<Credit>(Credit.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Credit>(Credit.class).filter_by(attrs);
     }
 
     public static List<Credit> all() throws Exceptions.PayloadError {
@@ -317,10 +436,14 @@ public class pl {
 
   public static class Ledger extends ARMObject<Ledger> {
     public String getObject() {
-      return "transaction";
+      return "transaction_ledger";
     }
 
     public static ARMRequest select(String... args) {
+      return new ARMRequest<Ledger>(Ledger.class).select(args);
+    }
+
+    public static ARMRequest select(Object... args) {
       return new ARMRequest<Ledger>(Ledger.class).select(args);
     }
 
@@ -330,6 +453,11 @@ public class pl {
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<Ledger>(Ledger.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Ledger>(Ledger.class).filter_by(attrs);
     }
 
     public static List<Ledger> all() throws Exceptions.PayloadError {
@@ -342,6 +470,7 @@ public class pl {
   }
 
   public static class PaymentMethod extends ARMObject<PaymentMethod> {
+
     public String getObject() {
       return "payment_method";
     }
@@ -356,7 +485,7 @@ public class pl {
           put("device_sn", "card");
           put("magne_print", "card");
           put("magne_print_status", "card");
-          put("card_number", "card");
+          put("card_code", "card");
           put("expiry", "card");
           put("account_number", "bank_account");
           put("routing_number", "bank_account");
@@ -369,12 +498,21 @@ public class pl {
       return new ARMRequest<PaymentMethod>(PaymentMethod.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<PaymentMethod>(PaymentMethod.class).select(args);
+    }
+
     public static List<PaymentMethod> create(PaymentMethod... args) throws Exceptions.PayloadError {
       return new ARMRequest<PaymentMethod>(PaymentMethod.class).create(Arrays.asList(args));
     }
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<PaymentMethod>(PaymentMethod.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<PaymentMethod>(PaymentMethod.class).filter_by(attrs);
     }
 
     public static List<PaymentMethod> all() throws Exceptions.PayloadError {
@@ -395,12 +533,21 @@ public class pl {
       return new ARMRequest<Card>(Card.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<Card>(Card.class).select(args);
+    }
+
     public static List<Card> create(Card... args) throws Exceptions.PayloadError {
       return new ARMRequest<Card>(Card.class).create(Arrays.asList(args));
     }
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<Card>(Card.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Card>(Card.class).filter_by(attrs);
     }
 
     public static Card get(String id) throws Exceptions.PayloadError {
@@ -417,12 +564,21 @@ public class pl {
       return new ARMRequest<BankAccount>(BankAccount.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<BankAccount>(BankAccount.class).select(args);
+    }
+
     public static List<BankAccount> create(BankAccount... args) throws Exceptions.PayloadError {
       return new ARMRequest<BankAccount>(BankAccount.class).create(Arrays.asList(args));
     }
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<BankAccount>(BankAccount.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<BankAccount>(BankAccount.class).filter_by(attrs);
     }
 
     public static BankAccount get(String id) throws Exceptions.PayloadError {
@@ -439,12 +595,21 @@ public class pl {
       return new ARMRequest<BillingSchedule>(BillingSchedule.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<BillingSchedule>(BillingSchedule.class).select(args);
+    }
+
     public static List<BillingSchedule> create(BillingSchedule... args) throws Exceptions.PayloadError {
       return new ARMRequest<BillingSchedule>(BillingSchedule.class).create(Arrays.asList(args));
     }
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<BillingSchedule>(BillingSchedule.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<BillingSchedule>(BillingSchedule.class).filter_by(attrs);
     }
 
     public static List<BillingSchedule> all() throws Exceptions.PayloadError {
@@ -465,12 +630,21 @@ public class pl {
       return new ARMRequest<BillingCharge>(BillingCharge.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<BillingCharge>(BillingCharge.class).select(args);
+    }
+
     public static List<BillingCharge> create(BillingCharge... args) throws Exceptions.PayloadError {
       return new ARMRequest<BillingCharge>(BillingCharge.class).create(Arrays.asList(args));
     }
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<BillingCharge>(BillingCharge.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<BillingCharge>(BillingCharge.class).filter_by(attrs);
     }
 
     public static List<BillingCharge> all() throws Exceptions.PayloadError {
@@ -491,12 +665,21 @@ public class pl {
       return new ARMRequest<Invoice>(Invoice.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<Invoice>(Invoice.class).select(args);
+    }
+
     public static List<Invoice> create(Invoice... args) throws Exceptions.PayloadError {
       return new ARMRequest<Invoice>(Invoice.class).create(Arrays.asList(args));
     }
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<Invoice>(Invoice.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Invoice>(Invoice.class).filter_by(attrs);
     }
 
     public static List<Invoice> all() throws Exceptions.PayloadError {
@@ -517,12 +700,21 @@ public class pl {
       return new ARMRequest<LineItem>(LineItem.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<LineItem>(LineItem.class).select(args);
+    }
+
     public static List<LineItem> create(LineItem... args) throws Exceptions.PayloadError {
       return new ARMRequest<LineItem>(LineItem.class).create(Arrays.asList(args));
     }
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<LineItem>(LineItem.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<LineItem>(LineItem.class).filter_by(attrs);
     }
 
     public static List<LineItem> all() throws Exceptions.PayloadError {
@@ -543,12 +735,21 @@ public class pl {
       return new ARMRequest<ChargeItem>(ChargeItem.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<ChargeItem>(ChargeItem.class).select(args);
+    }
+
     public static List<ChargeItem> create(ChargeItem... args) throws Exceptions.PayloadError {
       return new ARMRequest<ChargeItem>(ChargeItem.class).create(Arrays.asList(args));
     }
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<ChargeItem>(ChargeItem.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<ChargeItem>(ChargeItem.class).filter_by(attrs);
     }
 
     public static ChargeItem get(String id) throws Exceptions.PayloadError {
@@ -565,6 +766,10 @@ public class pl {
       return new ARMRequest<PaymentItem>(PaymentItem.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<PaymentItem>(PaymentItem.class).select(args);
+    }
+
     public static List<PaymentItem> create(PaymentItem... args) throws Exceptions.PayloadError {
       return new ARMRequest<PaymentItem>(PaymentItem.class).create(Arrays.asList(args));
     }
@@ -573,39 +778,27 @@ public class pl {
       return new ARMRequest<PaymentItem>(PaymentItem.class).filter_by(attr, val);
     }
 
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<PaymentItem>(PaymentItem.class).filter_by(attrs);
+    }
+
     public static PaymentItem get(String id) throws Exceptions.PayloadError {
       return new ARMRequest<PaymentItem>(PaymentItem.class).get(id);
     }
   }
 
-  public static class Reader extends ARMObject<LineItem> {
-    public String getObject() {
-      return "reader";
-    }
-
-    public static ARMRequest select(String... args) {
-      return new ARMRequest<Reader>(Reader.class).select(args);
-    }
-
-    public static List<Reader> create(Reader... args) throws Exceptions.PayloadError {
-      return new ARMRequest<Reader>(Reader.class).create(Arrays.asList(args));
-    }
-
-    public static ARMRequest filter_by(String attr, Object val) {
-      return new ARMRequest<Reader>(Reader.class).filter_by(attr, val);
-    }
-
-    public static Reader get(String id) throws Exceptions.PayloadError {
-      return new ARMRequest<Reader>(Reader.class).get(id);
-    }
-  }
-
   public static class Webhook extends ARMObject<Webhook> {
+
     public String getObject() {
       return "webhook";
     }
 
     public static ARMRequest select(String... args) {
+      return new ARMRequest<Webhook>(Webhook.class).select(args);
+    }
+
+    public static ARMRequest select(Object... args) {
       return new ARMRequest<Webhook>(Webhook.class).select(args);
     }
 
@@ -617,12 +810,53 @@ public class pl {
       return new ARMRequest<Webhook>(Webhook.class).filter_by(attr, val);
     }
 
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Webhook>(Webhook.class).filter_by(attrs);
+    }
+
     public static List<Webhook> all() throws Exceptions.PayloadError {
       return new ARMRequest<Webhook>(Webhook.class).all();
     }
 
     public static Webhook get(String id) throws Exceptions.PayloadError {
       return new ARMRequest<Webhook>(Webhook.class).get(id);
+    }
+  }
+
+  public static class WebhookLog extends ARMObject<WebhookLog> {
+
+    public String getObject() {
+      return "webhook_log";
+    }
+
+    public static ARMRequest select(String... args) {
+      return new ARMRequest<WebhookLog>(WebhookLog.class).select(args);
+    }
+
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<WebhookLog>(WebhookLog.class).select(args);
+    }
+
+    public static List<WebhookLog> create(WebhookLog... args) throws Exceptions.PayloadError {
+      return new ARMRequest<WebhookLog>(WebhookLog.class).create(Arrays.asList(args));
+    }
+
+    public static ARMRequest filter_by(String attr, Object val) {
+      return new ARMRequest<WebhookLog>(WebhookLog.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<WebhookLog>(WebhookLog.class).filter_by(attrs);
+    }
+
+    public static List<WebhookLog> all() throws Exceptions.PayloadError {
+      return new ARMRequest<WebhookLog>(WebhookLog.class).all();
+    }
+
+    public static WebhookLog get(String id) throws Exceptions.PayloadError {
+      return new ARMRequest<WebhookLog>(WebhookLog.class).get(id);
     }
   }
 
@@ -635,12 +869,21 @@ public class pl {
       return new ARMRequest<PaymentLink>(PaymentLink.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<PaymentLink>(PaymentLink.class).select(args);
+    }
+
     public static List<PaymentLink> create(PaymentLink... args) throws Exceptions.PayloadError {
       return new ARMRequest<PaymentLink>(PaymentLink.class).create(Arrays.asList(args));
     }
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<PaymentLink>(PaymentLink.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<PaymentLink>(PaymentLink.class).filter_by(attrs);
     }
 
     public static List<PaymentLink> all() throws Exceptions.PayloadError {
@@ -661,12 +904,21 @@ public class pl {
       return new ARMRequest<PaymentActivation>(PaymentActivation.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<PaymentActivation>(PaymentActivation.class).select(args);
+    }
+
     public static List<PaymentActivation> create(PaymentActivation... args) throws Exceptions.PayloadError {
       return new ARMRequest<PaymentActivation>(PaymentActivation.class).create(Arrays.asList(args));
     }
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<PaymentActivation>(PaymentActivation.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<PaymentActivation>(PaymentActivation.class).filter_by(attrs);
     }
 
     public static List<PaymentActivation> all() throws Exceptions.PayloadError {
@@ -687,12 +939,21 @@ public class pl {
       return new ARMRequest<AccessToken>(AccessToken.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<AccessToken>(AccessToken.class).select(args);
+    }
+
     public static List<AccessToken> create(AccessToken... args) throws Exceptions.PayloadError {
       return new ARMRequest<AccessToken>(AccessToken.class).create(Arrays.asList(args));
     }
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<AccessToken>(AccessToken.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<AccessToken>(AccessToken.class).filter_by(attrs);
     }
 
     public static List<AccessToken> all() throws Exceptions.PayloadError {
@@ -717,12 +978,21 @@ public class pl {
       return new ARMRequest<ClientToken>(ClientToken.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<ClientToken>(ClientToken.class).select(args);
+    }
+
     public static List<ClientToken> create(ClientToken... args) throws Exceptions.PayloadError {
       return new ARMRequest<ClientToken>(ClientToken.class).create(Arrays.asList(args));
     }
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<ClientToken>(ClientToken.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<ClientToken>(ClientToken.class).filter_by(attrs);
     }
 
     public static List<ClientToken> all() throws Exceptions.PayloadError {
@@ -743,12 +1013,21 @@ public class pl {
       return new ARMRequest<Profile>(Profile.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<Profile>(Profile.class).select(args);
+    }
+
     public static List<Profile> create(Profile... args) throws Exceptions.PayloadError {
       return new ARMRequest<Profile>(Profile.class).create(Arrays.asList(args));
     }
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<Profile>(Profile.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Profile>(Profile.class).filter_by(attrs);
     }
 
     public static List<Profile> all() throws Exceptions.PayloadError {
@@ -769,12 +1048,21 @@ public class pl {
       return new ARMRequest<BillingItem>(BillingItem.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<BillingItem>(BillingItem.class).select(args);
+    }
+
     public static List<BillingItem> create(BillingItem... args) throws Exceptions.PayloadError {
       return new ARMRequest<BillingItem>(BillingItem.class).create(Arrays.asList(args));
     }
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<BillingItem>(BillingItem.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<BillingItem>(BillingItem.class).filter_by(attrs);
     }
 
     public static List<BillingItem> all() throws Exceptions.PayloadError {
@@ -787,11 +1075,16 @@ public class pl {
   }
 
   public static class Intent extends ARMObject<Intent> {
+
     public String getObject() {
       return "intent";
     }
 
     public static ARMRequest select(String... args) {
+      return new ARMRequest<Intent>(Intent.class).select(args);
+    }
+
+    public static ARMRequest select(Object... args) {
       return new ARMRequest<Intent>(Intent.class).select(args);
     }
 
@@ -801,6 +1094,11 @@ public class pl {
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<Intent>(Intent.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Intent>(Intent.class).filter_by(attrs);
     }
 
     public static List<Intent> all() throws Exceptions.PayloadError {
@@ -821,12 +1119,21 @@ public class pl {
       return new ARMRequest<InvoiceItem>(InvoiceItem.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<InvoiceItem>(InvoiceItem.class).select(args);
+    }
+
     public static List<InvoiceItem> create(InvoiceItem... args) throws Exceptions.PayloadError {
       return new ARMRequest<InvoiceItem>(InvoiceItem.class).create(Arrays.asList(args));
     }
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<InvoiceItem>(InvoiceItem.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<InvoiceItem>(InvoiceItem.class).filter_by(attrs);
     }
 
     public static List<InvoiceItem> all() throws Exceptions.PayloadError {
@@ -847,12 +1154,21 @@ public class pl {
       return new ARMRequest<PaymentAllocation>(PaymentAllocation.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<PaymentAllocation>(PaymentAllocation.class).select(args);
+    }
+
     public static List<PaymentAllocation> create(PaymentAllocation... args) throws Exceptions.PayloadError {
       return new ARMRequest<PaymentAllocation>(PaymentAllocation.class).create(Arrays.asList(args));
     }
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<PaymentAllocation>(PaymentAllocation.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<PaymentAllocation>(PaymentAllocation.class).filter_by(attrs);
     }
 
     public static List<PaymentAllocation> all() throws Exceptions.PayloadError {
@@ -869,7 +1185,15 @@ public class pl {
       return "entity";
     }
 
+    public String getEndpoint() {
+      return "/entities";
+    }
+
     public static ARMRequest select(String... args) {
+      return new ARMRequest<Entity>(Entity.class).select(args);
+    }
+
+    public static ARMRequest select(Object... args) {
       return new ARMRequest<Entity>(Entity.class).select(args);
     }
 
@@ -879,6 +1203,11 @@ public class pl {
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<Entity>(Entity.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Entity>(Entity.class).filter_by(attrs);
     }
 
     public static List<Entity> all() throws Exceptions.PayloadError {
@@ -899,12 +1228,21 @@ public class pl {
       return new ARMRequest<Stakeholder>(Stakeholder.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<Stakeholder>(Stakeholder.class).select(args);
+    }
+
     public static List<Stakeholder> create(Stakeholder... args) throws Exceptions.PayloadError {
       return new ARMRequest<Stakeholder>(Stakeholder.class).create(Arrays.asList(args));
     }
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<Stakeholder>(Stakeholder.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Stakeholder>(Stakeholder.class).filter_by(attrs);
     }
 
     public static List<Stakeholder> all() throws Exceptions.PayloadError {
@@ -925,12 +1263,21 @@ public class pl {
       return new ARMRequest<ProcessingAgreement>(ProcessingAgreement.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<ProcessingAgreement>(ProcessingAgreement.class).select(args);
+    }
+
     public static List<ProcessingAgreement> create(ProcessingAgreement... args) throws Exceptions.PayloadError {
       return new ARMRequest<ProcessingAgreement>(ProcessingAgreement.class).create(Arrays.asList(args));
     }
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<ProcessingAgreement>(ProcessingAgreement.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<ProcessingAgreement>(ProcessingAgreement.class).filter_by(attrs);
     }
 
     public static List<ProcessingAgreement> all() throws Exceptions.PayloadError {
@@ -948,6 +1295,10 @@ public class pl {
     }
 
     public static ARMRequest select(String... args) {
+      return new ARMRequest<ProcessingRule>(ProcessingRule.class).select(args);
+    }
+
+    public static ARMRequest select(Object... args) {
       return new ARMRequest<ProcessingRule>(ProcessingRule.class).select(args);
     }
 
@@ -982,12 +1333,21 @@ public class pl {
       return new ARMRequest<Transfer>(Transfer.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<Transfer>(Transfer.class).select(args);
+    }
+
     public static List<Transfer> create(Transfer... args) throws Exceptions.PayloadError {
       return new ARMRequest<Transfer>(Transfer.class).create(Arrays.asList(args));
     }
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<Transfer>(Transfer.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Transfer>(Transfer.class).filter_by(attrs);
     }
 
     public static List<Transfer> all() throws Exceptions.PayloadError {
@@ -1008,12 +1368,21 @@ public class pl {
       return new ARMRequest<TransactionOperation>(TransactionOperation.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<TransactionOperation>(TransactionOperation.class).select(args);
+    }
+
     public static List<TransactionOperation> create(TransactionOperation... args) throws Exceptions.PayloadError {
       return new ARMRequest<TransactionOperation>(TransactionOperation.class).create(Arrays.asList(args));
     }
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<TransactionOperation>(TransactionOperation.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<TransactionOperation>(TransactionOperation.class).filter_by(attrs);
     }
 
     public static List<TransactionOperation> all() throws Exceptions.PayloadError {
@@ -1034,6 +1403,10 @@ public class pl {
       return new ARMRequest<CheckFront>(CheckFront.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<CheckFront>(CheckFront.class).select(args);
+    }
+
     public static List<CheckFront> create(CheckFront... args) throws Exceptions.PayloadError {
       return new ARMRequest<CheckFront>(CheckFront.class).create(Arrays.asList(args));
     }
@@ -1042,12 +1415,196 @@ public class pl {
       return new ARMRequest<CheckFront>(CheckFront.class).filter_by(attr, val);
     }
 
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<CheckFront>(CheckFront.class).filter_by(attrs);
+    }
+
     public static List<CheckFront> all() throws Exceptions.PayloadError {
       return new ARMRequest<CheckFront>(CheckFront.class).all();
     }
 
     public static CheckFront get(String id) throws Exceptions.PayloadError {
       return new ARMRequest<CheckFront>(CheckFront.class).get(id);
+    }
+  }
+
+  public static class Account extends ARMObject<Account> {
+    public String getObject() {
+      return "account";
+    }
+
+    public static ARMRequest select(String... args) {
+      return new ARMRequest<Account>(Account.class).select(args);
+    }
+
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<Account>(Account.class).select(args);
+    }
+
+    public static List<Account> create(Account... args) throws Exceptions.PayloadError {
+      return new ARMRequest<Account>(Account.class).create(Arrays.asList(args));
+    }
+
+    public static ARMRequest filter_by(String attr, Object val) {
+      return new ARMRequest<Account>(Account.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<Account>(Account.class).filter_by(attrs);
+    }
+
+    public static List<Account> all() throws Exceptions.PayloadError {
+      return new ARMRequest<Account>(Account.class).all();
+    }
+
+    public static Account get(String id) throws Exceptions.PayloadError {
+      return new ARMRequest<Account>(Account.class).get(id);
+    }
+  }
+
+  public static class ProcessingSettings extends ARMObject<ProcessingSettings> {
+    public String getObject() {
+      return "processing_settings";
+    }
+
+    public static ARMRequest select(String... args) {
+      return new ARMRequest<ProcessingSettings>(ProcessingSettings.class).select(args);
+    }
+
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<ProcessingSettings>(ProcessingSettings.class).select(args);
+    }
+
+    public static List<ProcessingSettings> create(ProcessingSettings... args) throws Exceptions.PayloadError {
+      return new ARMRequest<ProcessingSettings>(ProcessingSettings.class).create(Arrays.asList(args));
+    }
+
+    public static ARMRequest filter_by(String attr, Object val) {
+      return new ARMRequest<ProcessingSettings>(ProcessingSettings.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<ProcessingSettings>(ProcessingSettings.class).filter_by(attrs);
+    }
+
+    public static List<ProcessingSettings> all() throws Exceptions.PayloadError {
+      return new ARMRequest<ProcessingSettings>(ProcessingSettings.class).all();
+    }
+
+    public static ProcessingSettings get(String id) throws Exceptions.PayloadError {
+      return new ARMRequest<ProcessingSettings>(ProcessingSettings.class).get(id);
+    }
+  }
+
+  public static class OAuthToken extends ARMObject<OAuthToken> {
+    public String getObject() {
+      return "oauth_token";
+    }
+
+    public String getEndpoint() {
+      return "/oauth/token";
+    }
+
+    public static ARMRequest select(String... args) {
+      return new ARMRequest<OAuthToken>(OAuthToken.class).select(args);
+    }
+
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<OAuthToken>(OAuthToken.class).select(args);
+    }
+
+    public static List<OAuthToken> create(OAuthToken... args) throws Exceptions.PayloadError {
+      return new ARMRequest<OAuthToken>(OAuthToken.class).create(Arrays.asList(args));
+    }
+
+    public static ARMRequest filter_by(String attr, Object val) {
+      return new ARMRequest<OAuthToken>(OAuthToken.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<OAuthToken>(OAuthToken.class).filter_by(attrs);
+    }
+
+    public static List<OAuthToken> all() throws Exceptions.PayloadError {
+      return new ARMRequest<OAuthToken>(OAuthToken.class).all();
+    }
+
+    public static OAuthToken get(String id) throws Exceptions.PayloadError {
+      return new ARMRequest<OAuthToken>(OAuthToken.class).get(id);
+    }
+  }
+
+  public static class User extends ARMObject<User> {
+    public String getObject() {
+      return "user";
+    }
+
+    public static ARMRequest select(String... args) {
+      return new ARMRequest<User>(User.class).select(args);
+    }
+
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<User>(User.class).select(args);
+    }
+
+    public static List<User> create(User... args) throws Exceptions.PayloadError {
+      return new ARMRequest<User>(User.class).create(Arrays.asList(args));
+    }
+
+    public static ARMRequest filter_by(String attr, Object val) {
+      return new ARMRequest<User>(User.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<User>(User.class).filter_by(attrs);
+    }
+
+    public static List<User> all() throws Exceptions.PayloadError {
+      return new ARMRequest<User>(User.class).all();
+    }
+
+    public static User get(String id) throws Exceptions.PayloadError {
+      return new ARMRequest<User>(User.class).get(id);
+    }
+  }
+
+  public static class InvoiceAttachment extends ARMObject<InvoiceAttachment> {
+    public String getObject() {
+      return "invoice_attachment";
+    }
+
+    public static ARMRequest select(String... args) {
+      return new ARMRequest<InvoiceAttachment>(InvoiceAttachment.class).select(args);
+    }
+
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<InvoiceAttachment>(InvoiceAttachment.class).select(args);
+    }
+
+    public static List<InvoiceAttachment> create(InvoiceAttachment... args) throws Exceptions.PayloadError {
+      return new ARMRequest<InvoiceAttachment>(InvoiceAttachment.class).create(Arrays.asList(args));
+    }
+
+    public static ARMRequest filter_by(String attr, Object val) {
+      return new ARMRequest<InvoiceAttachment>(InvoiceAttachment.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<InvoiceAttachment>(InvoiceAttachment.class).filter_by(attrs);
+    }
+
+    public static List<InvoiceAttachment> all() throws Exceptions.PayloadError {
+      return new ARMRequest<InvoiceAttachment>(InvoiceAttachment.class).all();
+    }
+
+    public static InvoiceAttachment get(String id) throws Exceptions.PayloadError {
+      return new ARMRequest<InvoiceAttachment>(InvoiceAttachment.class).get(id);
     }
   }
 
@@ -1060,12 +1617,21 @@ public class pl {
       return new ARMRequest<CheckBack>(CheckBack.class).select(args);
     }
 
+    public static ARMRequest select(Object... args) {
+      return new ARMRequest<CheckBack>(CheckBack.class).select(args);
+    }
+
     public static List<CheckBack> create(CheckBack... args) throws Exceptions.PayloadError {
       return new ARMRequest<CheckBack>(CheckBack.class).create(Arrays.asList(args));
     }
 
     public static ARMRequest filter_by(String attr, Object val) {
       return new ARMRequest<CheckBack>(CheckBack.class).filter_by(attr, val);
+    }
+
+    @SafeVarargs
+    public static ARMRequest filter_by(Map.Entry<String, Object>... attrs) {
+      return new ARMRequest<CheckBack>(CheckBack.class).filter_by(attrs);
     }
 
     public static List<CheckBack> all() throws Exceptions.PayloadError {
